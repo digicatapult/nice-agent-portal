@@ -9,7 +9,7 @@ WORKDIR /nice-agent-portal
 
 # Install base dependencies
 COPY . .
-RUN npm ci
+RUN npm i
 
 # RUN Build
 RUN npm run build

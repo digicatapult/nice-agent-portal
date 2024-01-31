@@ -1,0 +1,43 @@
+{
+  "extends": [
+    "plugin:react/recommended",
+    "prettier"
+  ],
+  "plugins": ["react", "prettier", "react-hooks", "cypress"],
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "sourceType": "module",
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "process": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "no-console": "error",
+    "prettier/prettier": ["error", { "singleQuote": true }],
+    "react/jsx-filename-extension": 0,
+    "react/require-default-props": 0,
+    "react/sort-comp": 0,
+    "react/destructuring-assignment": 0,
+    "react/no-access-state-in-setstate": 0,
+    "react/no-danger": 0,
+    "no-useless-constructor": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/prop-types": "off",
+    "no-unused-vars": ["error", { "ignoreRestSiblings": true }]
+  }
+}

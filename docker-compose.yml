@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  ##################################################################################
+  ## Alice #########################################################################
+  ##################################################################################
+
+  agent0:
+    container_name: alice
+    image: digicatapult/veritable-cloudagent:latest
+    restart: always
+    depends_on:
+      ipfs0:
+        condition: service_healthy
+    volumes:
+      - ./cloudagentConfig.json:/config.json
+    ports:
+      - '5002:5002'
+      - '5003:5003'
+      - '3001:3001'
+    # or via command line arguments
+    command: --endpoint "http://alice:5002", "ws://alice:5003" --ipfs-origin http://ipfs0:5001 --opa-origin http://opa:8181 --config /config.json
+
+  ##################################################################################
+  ## IPFS ##########################################################################
+  ##################################################################################
+
+  ipfs0:
+    container_name: ipfs0
+    image: ipfs/kubo:release
+    ports:
+      #     - "4001:4001" # ipfs swarm - expose if needed/wanted
+      #     - "5001:5001" # ipfs api - expose if needed/wanted
+      - '8080:8080' # ipfs gateway - expose if needed/wanted
+    volumes:
+      - ipfs0:/data/ipfs
+
+  ##################################################################################
+  ## OPA ###########################################################################
+  ##################################################################################
+
+  opa:
+    container_name: opa
+    image: openpolicyagent/opa:0.60.0-static
+    ports:
+      - '8181:8181'
+    command: run --server --log-level debug
+
+volumes:
+  ipfs0:

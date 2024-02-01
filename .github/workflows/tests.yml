@@ -80,7 +80,7 @@ jobs:
         uses: digicatapult/check-version@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          npm_package_location: ./frontend
+          npm_package_location: ./frontend/
 
   # build-docker:
   #   name: "Build docker image"

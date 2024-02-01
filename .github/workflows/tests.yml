@@ -99,7 +99,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           builder: ${{ steps.buildx.outputs.name }}
-          context: .
-          file: ./frontend/Dockerfile
+          context: ./frontend
           platforms: linux/amd64, linux/arm64
           push: false

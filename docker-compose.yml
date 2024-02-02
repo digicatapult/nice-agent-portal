@@ -41,7 +41,7 @@ services:
 
   opa:
     container_name: opa
-    image: openpolicyagent/opa:0.60.0-static
+    image: openpolicyagent/opa:0.61.0-static
     ports:
       - '8181:8181'
     command: run --server --log-level debug

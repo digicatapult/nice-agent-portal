@@ -25,10 +25,13 @@ Below is the specific architecture for a Peer node (NICE participant, Supplier o
 The onboarding process for NICE allows users to enroll as members, verify their credentials, and add elements of their supply chain. There are 4 processes documented:
 
 1. **Application**: In this process, a prospective member has initialized their node through owned or shared infrastructure, and submits their identifying data to NICE for verification.
+   ![NICE Application Process architecture](./docs/images/application-process.png)
 
 2. **Confirmation**: In this process, a prospective member's identity has been confirmed by NICE and they have been given the cryptograhic material required to create a credential through an Issuer node.
+   ![NICE Confirmation Process architecture](./docs/images/confirmation-process.png)
 
 3. **Profile Management**: In this process, a fully-onboarded member is able to review their identity details, as well as adding elements to their immediate supply chain (consumers and/or suppliers).
+   ![NICE Profile Management Process architecture](./docs/images/profile-management-process.png)
 
 4. **Chained Onboarding**: In this process, a fully-onboarded member is able to invite elements of their supply chain to NICE, and verify them once these participants are onboarded.
 

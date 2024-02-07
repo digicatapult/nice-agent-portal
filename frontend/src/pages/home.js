@@ -16,7 +16,6 @@ export const NewHomePage = () => {
     border: '2px solid #000000', // Add a border for contrast
     borderRadius: '10px',
     color: '#333', // Set text color to a dark color for readability
-    // padding: '20px 32px',
     textAlign: 'center',
     textDecoration: 'none',
     display: 'flex',
@@ -28,6 +27,7 @@ export const NewHomePage = () => {
     cursor: 'pointer',
     width: '50%',
   }
+
   return (
     <>
       <div style={containerStyle}>
@@ -38,6 +38,8 @@ export const NewHomePage = () => {
         <button
           style={buttonStyle}
           onClick={() => handleButtonClick('sign-up')}
+          onMouseOver={(e) => (e.target.style.borderColor = 'red')} // Change border color on hover
+          onMouseOut={(e) => (e.target.style.borderColor = '#000000')}
         >
           <img
             src="images/sign_up.png" // Replace with the path to your image
@@ -56,6 +58,8 @@ export const NewHomePage = () => {
         <button
           style={buttonStyle}
           onClick={() => handleButtonClick('complete-onboarding')}
+          onMouseOver={(e) => (e.target.style.borderColor = 'red')} // Change border color on hover
+          onMouseOut={(e) => (e.target.style.borderColor = '#000000')}
         >
           <img
             src="/images/complete_onboarding.png" // Replace with the path to your image
@@ -74,6 +78,8 @@ export const NewHomePage = () => {
         <button
           style={buttonStyle}
           onClick={() => handleButtonClick('ssi-profile')}
+          onMouseOver={(e) => (e.target.style.borderColor = 'red')} // Change border color on hover
+          onMouseOut={(e) => (e.target.style.borderColor = '#000000')}
         >
           <img
             src="/images/ssi_profile.png" // Replace with the path to your image

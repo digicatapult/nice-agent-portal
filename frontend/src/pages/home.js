@@ -2,22 +2,21 @@ import React from 'react'
 class NewHomePage extends React.Component {
   render() {
     const handleButtonClick = (buttonName) => {
-      // Use history.push to navigate to a different page
       window.location.href = `/${buttonName.toLowerCase()}`
     }
     const containerStyle = {
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center', // Center items horizontally
-      justifyContent: 'center', // Center items vertically
+      alignItems: 'center',
+      justifyContent: 'center',
       height: '100vh',
       fontFamily: 'Roboto, sans-serif',
     }
     const buttonStyle = {
-      backgroundColor: '#FFFFFF', // Set background color to white
-      border: '2px solid #000000', // Add a border for contrast
+      backgroundColor: '#FFFFFF',
+      border: '2px solid #000000',
       borderRadius: '10px',
-      color: '#333', // Set text color to a dark color for readability
+      color: '#333',
       textAlign: 'center',
       textDecoration: 'none',
       display: 'flex',
@@ -45,11 +44,11 @@ class NewHomePage extends React.Component {
           <button
             style={buttonStyle}
             onClick={() => handleButtonClick('sign-up')}
-            onMouseOver={(e) => (e.target.style.borderColor = 'red')} // Change border color on hover
+            onMouseOver={(e) => (e.target.style.borderColor = 'red')}
             onMouseOut={(e) => (e.target.style.borderColor = '#000000')}
           >
             <img
-              src="images/sign_up.png" // Replace with the path to your image
+              src="images/sign_up.png"
               alt="Button Image Sign Up"
               style={imageStyle}
             />
@@ -60,11 +59,11 @@ class NewHomePage extends React.Component {
           <button
             style={buttonStyle}
             onClick={() => handleButtonClick('complete-onboarding')}
-            onMouseOver={(e) => (e.target.style.borderColor = 'red')} // Change border color on hover
+            onMouseOver={(e) => (e.target.style.borderColor = 'red')}
             onMouseOut={(e) => (e.target.style.borderColor = '#000000')}
           >
             <img
-              src="/images/complete_onboarding.png" // Replace with the path to your image
+              src="/images/complete_onboarding.png"
               alt="Button Complete Onboarding"
               style={imageStyle}
             />
@@ -75,11 +74,11 @@ class NewHomePage extends React.Component {
           <button
             style={buttonStyle}
             onClick={() => handleButtonClick('ssi-profile')}
-            onMouseOver={(e) => (e.target.style.borderColor = 'red')} // Change border color on hover
+            onMouseOver={(e) => (e.target.style.borderColor = 'red')}
             onMouseOut={(e) => (e.target.style.borderColor = '#000000')}
           >
             <img
-              src="/images/ssi_profile.png" // Replace with the path to your image
+              src="/images/ssi_profile.png"
               alt="Button SSI profile"
               style={imageStyle}
             />

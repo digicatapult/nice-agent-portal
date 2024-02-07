@@ -29,12 +29,17 @@ class NewHomePage extends React.Component {
       cursor: 'pointer',
       width: '50%',
     }
+    const imageStyle = {
+      padding: '10px',
+      verticalAlign: 'middle',
+      display: 'block',
+    }
 
     return (
       <>
         <div style={containerStyle}>
           <p style={{ margin: '0px', fontWeight: 'bold' }}>Welcome to the</p>
-          <h1 style={{ margin: '10px 0px 50px 0px' }}>NICE network</h1>
+          <h1 style={{ margin: '10px 0px 50px 0px' }}>NICE Network</h1>
 
           {/* Sign Up */}
           <button
@@ -46,12 +51,7 @@ class NewHomePage extends React.Component {
             <img
               src="images/sign_up.png" // Replace with the path to your image
               alt="Button Image Sign Up"
-              style={{
-                padding: '10px',
-                verticalAlign: 'middle',
-
-                display: 'block',
-              }}
+              style={imageStyle}
             />
             Sign Up
           </button>
@@ -66,12 +66,7 @@ class NewHomePage extends React.Component {
             <img
               src="/images/complete_onboarding.png" // Replace with the path to your image
               alt="Button Complete Onboarding"
-              style={{
-                padding: '10px',
-                verticalAlign: 'middle',
-
-                display: 'block',
-              }}
+              style={imageStyle}
             />
             Complete Onboarding
           </button>
@@ -86,11 +81,7 @@ class NewHomePage extends React.Component {
             <img
               src="/images/ssi_profile.png" // Replace with the path to your image
               alt="Button SSI profile"
-              style={{
-                padding: '10px',
-                verticalAlign: 'middle',
-                display: 'block',
-              }}
+              style={imageStyle}
             />
             SSI Profile
           </button>

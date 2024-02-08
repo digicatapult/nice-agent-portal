@@ -39,7 +39,7 @@ const NewHomePage = () => {
           altText={'Button Complete Onboarding'}
         />
 
-        {/* SSI Profile */}
+        {/* SSI Profile  */}
         <BigButton
           buttonClick={'ssi-profile'}
           buttonName={'SSI Profile'}

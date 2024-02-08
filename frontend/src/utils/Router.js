@@ -1,9 +1,9 @@
 import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
-import CompleteOnboardingPage from '../pages/complete-onboarding'
-import SignUpPage from '../pages/sign-up'
-import SSIProfilePagePage from '../pages/ssi-profile'
-import NewHomePage from '../pages/home'
+import CompleteOnboardingPage from '../pages/CompleteOnboarding'
+import SignUpPage from '../pages/SignUp'
+import SSIProfilePagePage from '../pages/SSIProfile'
+import NewHomePage from '../pages/Home'
 
 export const router = createBrowserRouter([
   { path: '*', element: <NewHomePage /> },

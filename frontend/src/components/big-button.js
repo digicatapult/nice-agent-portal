@@ -1,40 +1,40 @@
 import React from 'react'
+import styled from 'styled-components'
 
 const BigButton = ({ buttonClick, buttonName, imageSrc, altText }) => {
   const handleButtonClick = (buttonClick) => {
     window.location.href = `/${buttonClick.toLowerCase()}`
   }
-  const buttonStyle = {
-    backgroundColor: '#FFFFFF',
-    border: '2px solid #000000',
-    borderRadius: '10px',
-    color: '#333',
-    textAlign: 'center',
-    textDecoration: 'none',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    fontSize: '20px',
-    margin: '4px 2px',
-    padding: '5px',
-    cursor: 'pointer',
-    width: '50%',
-  }
-  const imageStyle = {
-    padding: '10px',
-    verticalAlign: 'middle',
-    display: 'block',
-  }
+  const ButtonStyle = styled.button`
+    background-color: #ffffff;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    color: #333;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 20px;
+    margin: 4px 2px;
+    padding: 5px;
+    cursor: pointer;
+    width: 50%;
+  `
+  const ImageStyle = styled.img`
+    padding: 10px;
+    vertical-align: middle;
+    display: block;
+  `
   return (
-    <button
-      style={buttonStyle}
+    <ButtonStyle
       onClick={() => handleButtonClick(buttonClick)}
       onMouseOver={(e) => (e.target.style.borderColor = 'red')}
       onMouseOut={(e) => (e.target.style.borderColor = '#000000')}
     >
-      <img src={imageSrc} alt={altText} style={imageStyle} />
+      <ImageStyle src={imageSrc} alt={altText} />
       {buttonName}
-    </button>
+    </ButtonStyle>
   )
 }
 export default BigButton

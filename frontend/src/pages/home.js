@@ -1,20 +1,29 @@
 import React from 'react'
+import styled from 'styled-components'
 import BigButton from '../components/big-button'
 const NewHomePage = () => {
-  const containerStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    fontFamily: 'Roboto, sans-serif',
-  }
+  const ContainerStyle = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: Roboto, sans-serif;
+  `
+
+  const SmallText = styled.p`
+    margin: 0px;
+    font-weight: bold;
+  `
+  const HeadingText = styled.h1`
+    margin: 10px 0px 50px 0px;
+  `
 
   return (
     <>
-      <div style={containerStyle}>
-        <p style={{ margin: '0px', fontWeight: 'bold' }}>Welcome to the</p>
-        <h1 style={{ margin: '10px 0px 50px 0px' }}>NICE Network</h1>
+      <ContainerStyle>
+        <SmallText>Welcome to the</SmallText>
+        <HeadingText>NICE Network</HeadingText>
         {/* Sign Up */}
         <BigButton
           buttonClick={'sign-up'}
@@ -37,7 +46,7 @@ const NewHomePage = () => {
           imageSrc={'/images/ssi_profile.png'}
           altText={'Button SSI profile'}
         />
-      </div>
+      </ContainerStyle>
     </>
   )
 }

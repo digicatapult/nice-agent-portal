@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import BigButton from '../components/big-button'
+import BigButton from '../components/BigButton'
 const NewHomePage = () => {
   const ContainerStyle = styled.div`
     display: flex;

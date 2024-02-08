@@ -20,6 +20,9 @@ const BigButton = ({ buttonClick, buttonName, imageSrc, altText }) => {
     padding: 5px;
     cursor: pointer;
     width: 50%;
+
+    &:hover {
+      border-color: red;
   `
   const ImageStyle = styled.img`
     padding: 10px;
@@ -27,11 +30,7 @@ const BigButton = ({ buttonClick, buttonName, imageSrc, altText }) => {
     display: block;
   `
   return (
-    <ButtonStyle
-      onClick={() => handleButtonClick(buttonClick)}
-      onMouseOver={(e) => (e.target.style.borderColor = 'red')}
-      onMouseOut={(e) => (e.target.style.borderColor = '#000000')}
-    >
+    <ButtonStyle onClick={() => handleButtonClick(buttonClick)}>
       <ImageStyle src={imageSrc} alt={altText} />
       {buttonName}
     </ButtonStyle>

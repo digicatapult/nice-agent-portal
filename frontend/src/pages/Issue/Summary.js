@@ -6,7 +6,7 @@ import {
   SmallText,
   HeadingText,
   ContainerStyle,
-  SmallItallicisedText,
+  SmallCenteredThinText,
   SmallThinText,
 } from '../../components/shared'
 
@@ -23,17 +23,17 @@ export default function Summary({ inputs, setStage }) {
         <SmallText>
           <b>Company Name: </b>
         </SmallText>
-        <SmallItallicisedText>{inputs.name}</SmallItallicisedText>
+        <SmallThinText>{inputs.name}</SmallThinText>
 
         <SmallText>
           <b>Company House No.: </b>
         </SmallText>
-        <SmallItallicisedText>{inputs.houseNo}</SmallItallicisedText>
+        <SmallThinText>{inputs.houseNo}</SmallThinText>
 
         <SmallText>
           <b>Company Email: </b>
         </SmallText>
-        <SmallItallicisedText>{inputs.email}</SmallItallicisedText>
+        <SmallThinText>{inputs.email}</SmallThinText>
       </div>
       <Section
         margin={'2px 0px'}
@@ -41,10 +41,10 @@ export default function Summary({ inputs, setStage }) {
         background={'#FFF'}
         padding={'0px 40px 20px 40px'}
       >
-        <SmallThinText style={{ fontFamily: 'Roboto Mono, sans-serif' }}>
+        <SmallCenteredThinText>
           *Ensure your details are valid to receive the onboarding QR codes from
           your mail (Companies House Number address) and contact email.
-        </SmallThinText>
+        </SmallCenteredThinText>
       </Section>
 
       <div>

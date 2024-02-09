@@ -43,6 +43,7 @@ export const SmallItallicisedText = styled.p`
   margin: 0px;
   padding: 4px;
   font-style: italic;
+  font-family: 'Roboto Thin', sans-serif;
   color: black;
   font-size: 14px;
 `
@@ -50,8 +51,15 @@ export const SmallItallicisedText = styled.p`
 export const SmallThinText = styled.p`
   margin: 0px;
   font-weight: regular;
-  font-size: 12px;
-  text-align: center;
+  font-size: 14px;
   font-family: 'Roboto Thin', sans-serif;
   font-weight: normal;
+`
+export const SmallCenteredThinText = styled.p`
+  margin: 0px;
+  font-weight: regular;
+  font-size: 14px;
+  font-family: 'Roboto Thin', sans-serif;
+  font-weight: normal;
+  text-align: center;
 `

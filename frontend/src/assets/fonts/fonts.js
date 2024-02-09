@@ -12,7 +12,7 @@ export default createGlobalStyle`
     @font-face {
         font-family: 'Roboto Thin';
         src: local('Roboto Thin'), local('RobotoThin'),
-        url(${RobotoThin}) format('ttf');
+        url(${RobotoThin}) format('woff');
         font-style: normal;
     }
 `

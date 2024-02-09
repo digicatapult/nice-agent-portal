@@ -1,18 +1,12 @@
 import React from 'react'
 import { Section } from '@digicatapult/ui-component-library'
 import {
-  Input,
   Button,
   HeadingText,
-  SmallItallicisedText,
   ContainerStyle,
   SmallThinText,
 } from '../../components/shared'
-export default function ThankYouPage({
-  inputs,
-  setStage,
-  handleBackToHomepage,
-}) {
+export default function ThankYouPage({ handleBackToHomepage }) {
   return (
     <ContainerStyle>
       <Section

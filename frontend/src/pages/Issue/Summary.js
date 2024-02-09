@@ -1,48 +1,16 @@
 import React from 'react'
-import styled from 'styled-components'
 
-import { Grid, Section } from '@digicatapult/ui-component-library'
+import { Section } from '@digicatapult/ui-component-library'
 import {
   Button,
   SmallText,
   HeadingText,
   ContainerStyle,
   SmallItallicisedText,
-  Note,
   SmallThinText,
 } from '../../components/shared'
 
-const Row = styled('div')`
-  display: flex;
-  flex-direction: row;
-  justify-content: ${({ justify }) => justify || 'center'};
-`
-
-const WarnBox = styled('div')`
-  display: flex;
-  height: 28px;
-  flex-direction: row;
-  justify-content: center;
-  flex-shrink: 0;
-  color: #000;
-  font-family: Roboto Mono;
-  font-size: 8px;
-  font-style: italic;
-  font-weight: 400;
-  line-height: normal;
-`
-
-const Th = styled('th')`
-  font-style: italic;
-  font-size: 10px;
-`
-
-const Td = styled('td')`
-  font-size: 10px;
-  align-text: center;
-`
-
-export default function Summary({ inputs, setStage, handleSubmit }) {
+export default function Summary({ inputs, setStage }) {
   return (
     <ContainerStyle>
       <SmallText>- NICE Network - </SmallText>

@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Spinner from '../../components/Spinner'
-import ChecksForm from './ChecksForm'
 import CompanyDetailsForm from './CompanyDetailsForm'
 import Summary from './Summary'
 import ThankYouPage from './ThankYou'

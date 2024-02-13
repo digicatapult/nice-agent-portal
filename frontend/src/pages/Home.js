@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import BigButton from '../components/BigButton'
+import { SmallText } from '../components/shared'
+
 const NewHomePage = () => {
   const ContainerStyle = styled.div`
     display: flex;
@@ -11,10 +13,6 @@ const NewHomePage = () => {
     font-family: Roboto, sans-serif;
   `
 
-  const SmallText = styled.p`
-    margin: 0px;
-    font-weight: bold;
-  `
   const HeadingText = styled.h1`
     margin: 10px 0px 50px 0px;
   `

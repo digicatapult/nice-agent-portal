@@ -8,7 +8,18 @@ import {
   ContainerStyle,
 } from '../../components/shared'
 
-export default function CompanyDetailsForm({ handleSubmit, inputs, readOnly }) {
+export default function CompanyDetailsForm({
+  handleSubmit,
+  inputs,
+  setInputs,
+}) {
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setInputs((inputs) => ({
+      ...inputs,
+      [name]: value,
+    }))
+  }
   return (
     <div>
       <ContainerStyle>
@@ -35,7 +46,7 @@ export default function CompanyDetailsForm({ handleSubmit, inputs, readOnly }) {
               name="name"
               value={inputs.name}
               placeholder="Company name"
-              readOnly={readOnly}
+              onChange={handleChange}
             />
             <SmallItallicisedText>
               Enter your Companies House Number
@@ -47,7 +58,7 @@ export default function CompanyDetailsForm({ handleSubmit, inputs, readOnly }) {
               name={'houseNo'}
               value={inputs.houseNo}
               placeholder="Company house no."
-              readOnly={readOnly}
+              onChange={handleChange}
             />
             <SmallItallicisedText>
               We will send your onboarding QR code here
@@ -58,7 +69,7 @@ export default function CompanyDetailsForm({ handleSubmit, inputs, readOnly }) {
               value={inputs.email}
               name="email"
               placeholder="Contact email"
-              readOnly={readOnly}
+              onChange={handleChange}
             />
             <div>
               <Button

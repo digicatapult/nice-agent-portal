@@ -39,7 +39,13 @@ export default function Issue() {
     window.location.href = `/home`
   }
 
-  const sharedProps = { setStage, inputs, handleSubmit, handleBackToHomepage }
+  const sharedProps = {
+    setStage,
+    inputs,
+    handleSubmit,
+    handleBackToHomepage,
+    setInputs,
+  }
   if (fetching)
     return (
       <ContainerStyle>

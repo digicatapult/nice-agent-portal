@@ -12,7 +12,7 @@ export const Button = styled('button')`
 
 export const Input = styled('input')`
   border-radius: 3px;
-  width: 90%;
+  width: 100%;
   height: 3em;
   font-size: 1em;
   margin: 5px 0px 10px 0px;

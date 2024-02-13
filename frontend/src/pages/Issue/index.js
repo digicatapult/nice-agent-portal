@@ -5,6 +5,7 @@ import Spinner from '../../components/Spinner'
 import CompanyDetailsForm from './CompanyDetailsForm'
 import Summary from './Summary'
 import ThankYouPage from './ThankYou'
+import { ContainerStyle } from '../../components/shared'
 
 const Content = styled('Grid')`
   padding: 20px 0px;
@@ -31,7 +32,6 @@ export default function Issue() {
     setInputs((prev) => ({
       ...prev,
       ...data,
-      checks: checks ? JSON.parse(checks) : undefined,
     }))
     setStage((prev) => prev + 1)
   }
@@ -40,11 +40,16 @@ export default function Issue() {
   }
 
   const sharedProps = { setStage, inputs, handleSubmit, handleBackToHomepage }
-  if (fetching) return <Spinner />
+  if (fetching)
+    return (
+      <ContainerStyle>
+        <Spinner />
+      </ContainerStyle>
+    )
 
   return (
     <Content>
-      {stage === 0 && <CompanyDetailsForm {...sharedProps} />}
+      {stage === 0 && <CompanyDetailsForm {...sharedProps} readOnly={false} />}
       {stage === 1 && <Summary {...sharedProps} />}
       {stage === 2 && <ThankYouPage {...sharedProps} />}
     </Content>

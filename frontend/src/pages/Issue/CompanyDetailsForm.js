@@ -60,6 +60,7 @@ export default function CompanyDetailsForm({
               value={inputs.houseNo}
               placeholder="Company house no."
               onChange={handleChange}
+              title="Eight alphanumeric characters."
             />
             <SmallItallicisedText>
               We will send your onboarding QR code here

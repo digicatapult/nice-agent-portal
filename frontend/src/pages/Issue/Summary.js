@@ -79,7 +79,7 @@ export default function Summary({ inputs, setStage }) {
               onClick={(e) => {
                 e.preventDefault()
                 setStage((prev) => prev + 1)
-                console.log(inputs)
+                console.log(Math.floor(1000 + Math.random() * 9000).toString())
                 // should be doing sth to send the qr text
               }}
             >

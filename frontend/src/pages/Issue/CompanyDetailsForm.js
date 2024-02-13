@@ -12,6 +12,7 @@ export default function CompanyDetailsForm({
   handleSubmit,
   inputs,
   setInputs,
+  handleBackToHomepage,
 }) {
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -73,8 +74,8 @@ export default function CompanyDetailsForm({
             />
             <div>
               <Button
-                onClick={() => {
-                  window.location.href = `/home`
+                onClick={(e) => {
+                  handleBackToHomepage(e)
                 }}
               >
                 {'<'}

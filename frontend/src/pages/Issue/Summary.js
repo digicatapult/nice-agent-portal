@@ -8,6 +8,7 @@ import {
   ContainerStyle,
   SmallCenteredThinText,
   SmallThinText,
+  InformatioinArea,
 } from '../../components/shared'
 
 export default function Summary({ inputs, setStage }) {
@@ -19,21 +20,24 @@ export default function Summary({ inputs, setStage }) {
         <SmallThinText style={{ paddingBottom: '20px' }}>
           Review Your Details before submission:
         </SmallThinText>
-
-        <SmallText>
-          <b>Company Name: </b>
-        </SmallText>
-        <SmallThinText>{inputs.name}</SmallThinText>
-
-        <SmallText>
-          <b>Company House No.: </b>
-        </SmallText>
-        <SmallThinText>{inputs.houseNo}</SmallThinText>
-
-        <SmallText>
-          <b>Company Email: </b>
-        </SmallText>
-        <SmallThinText>{inputs.email}</SmallThinText>
+        <InformatioinArea>
+          <SmallText>
+            <b>Company Name: </b>
+          </SmallText>
+          <SmallThinText>{inputs.name}</SmallThinText>
+        </InformatioinArea>
+        <InformatioinArea>
+          <SmallText>
+            <b>Company House No.: </b>
+          </SmallText>
+          <SmallThinText>{inputs.houseNo}</SmallThinText>
+        </InformatioinArea>
+        <InformatioinArea>
+          <SmallText>
+            <b>Company Email: </b>
+          </SmallText>
+          <SmallThinText>{inputs.email}</SmallThinText>
+        </InformatioinArea>
       </div>
       <Section
         margin={'2px 0px'}

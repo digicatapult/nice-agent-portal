@@ -15,4 +15,5 @@ export default createGlobalStyle`
         url(${RobotoThin}) format('woff');
         font-style: normal;
     }
+
 `

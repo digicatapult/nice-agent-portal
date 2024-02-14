@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { Section } from '@digicatapult/ui-component-library'
 import {
@@ -8,10 +9,13 @@ import {
   ContainerStyle,
   SmallCenteredThinText,
   SmallThinText,
-  InformatioinArea,
 } from '../../components/shared'
 
 export default function Summary({ inputs, setStage }) {
+  const InformatioinArea = styled.div`
+    padding: 10px;
+  `
+
   return (
     <div>
       <ContainerStyle>

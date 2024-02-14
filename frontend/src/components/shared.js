@@ -6,7 +6,7 @@ export const Button = styled('button')`
   border: 1px solid #000;
   padding: 0px 15px;
   background: #fff;
-  margin-right: 3px;
+  margin: 5px;
   box-shadow: 0px 2px 0px 0px #000;
 `
 
@@ -37,7 +37,8 @@ export const ContainerStyle = styled.div`
   justify-content: center;
   height: 100vh;
   font-family: Roboto, sans-serif;
-  padding: 20px;
+  padding: 50px 20px;
+  overflow: scroll;
 `
 
 export const SmallItallicisedText = styled.p`

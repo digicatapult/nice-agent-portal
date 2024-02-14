@@ -1,34 +1,75 @@
-import React from 'react'
-import { Section, QRReader } from '@digicatapult/ui-component-library'
-import { ContainerStyle, SmallThinText } from '../components/shared'
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import { QRReader } from '@digicatapult/ui-component-library'
 
-const handleQrCode = (qr) => {
-  console.log(qr)
-}
+import {
+  ContainerStyle,
+  SmallThinText,
+  SmallText,
+  Button,
+} from '../components/shared'
+
+const QRReaderWrapper = styled.div`
+  height: 100%;
+  align-items: center;
+  display: grid;
+`
 
 const CompleteOnboardingPage = () => {
+  const [hasScanned, setHasScanned] = useState(false)
+
+  const handleQrCode = (qr) => {
+    // eslint-disable-next-line
+    console.log(`Scanned: ${qr}`)
+    setHasScanned(true)
+  }
+
+  const handleBackToHomepage = () => {
+    window.location.href = `/home`
+  }
+
+  const ScanQR = () => {
+    return (
+      <>
+        <SmallThinText>Complete the onboarding process</SmallThinText>
+        <h2>Scan first QR code</h2>
+        <SmallThinText>
+          You will find this in your email sent to you from the NICE Network.
+        </SmallThinText>
+        <QRReaderWrapper>
+          <QRReader
+            viewFinderColor="#fff"
+            viewFinderVariant="viewfinder-cross-med"
+            onResult={handleQrCode}
+            mirror={true}
+          />
+        </QRReaderWrapper>
+        <SmallThinText>
+          Please enable the camera access to scan the QR codes.
+        </SmallThinText>
+        <Button onClick={handleBackToHomepage}>{'<'}</Button>
+      </>
+    )
+  }
+
+  const Success = () => {
+    return (
+      <>
+        <h2>Congratulations!</h2>
+        <SmallThinText>
+          Your organisation has now been onboarded into the NICE Network. You
+          may now utilise your verified credentials in the SSI Profile to verify
+          your identity with other organisations.
+        </SmallThinText>
+        <Button onClick={handleBackToHomepage}>Back to Homepage</Button>
+      </>
+    )
+  }
+
   return (
     <ContainerStyle>
-      <Section
-        margin={'40px 0px 0px 0px'}
-        headingLevel={1}
-        background={'#FFF'}
-        title={'- NICE Network -'}
-      ></Section>
-      <SmallThinText>Complete the onboarding process</SmallThinText>
-      <h1>Scan first QR code</h1>
-      <SmallThinText>
-        You will find this in your email sent to you from the NICE Network.
-      </SmallThinText>
-      <QRReader
-        viewFinderColor="#fff"
-        viewFinderVariant="viewfinder-cross-med"
-        onResult={handleQrCode}
-        mirror="true"
-      />
-      <SmallThinText>
-        Please enable the camera access to scan the QR codes.
-      </SmallThinText>
+      <SmallText>- NICE Network -</SmallText>
+      {hasScanned ? <Success /> : <ScanQR />}
     </ContainerStyle>
   )
 }

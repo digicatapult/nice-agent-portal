@@ -1,6 +1,6 @@
 import React from 'react'
 import { Section } from '@digicatapult/ui-component-library'
-import { ContainerStyle, Button, SmallThinText } from '../components/shared'
+import { ContainerStyle, SmallThinText } from '../components/shared'
 import OwnCredential from '../components/Credentials'
 import ButtonWithImage from '../components/ButtonWithImage'
 const SSIProfilePagePage = () => {

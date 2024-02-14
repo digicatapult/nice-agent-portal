@@ -8,10 +8,12 @@ import {
   ContainerStyle,
   SmallCenteredThinText,
   SmallThinText,
-  InformationArea,
 } from '../../components/shared'
 
 export default function Summary({ inputs, setStage }) {
+  const InformationArea = styled.div`
+    padding: 10px;
+  `
   return (
     <div>
       <ContainerStyle>

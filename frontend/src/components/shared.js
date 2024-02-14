@@ -64,6 +64,3 @@ export const SmallCenteredThinText = styled.p`
   font-weight: normal;
   text-align: center;
 `
-export const InformationArea = styled.div`
-  padding: 10px;
-`

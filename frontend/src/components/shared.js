@@ -1,13 +1,14 @@
 import styled from 'styled-components'
 
 export const Button = styled('button')`
-  height: 30px;
+  height: 40px;
   border-radius: 8px;
   border: 1px solid #000;
   padding: 0px 15px;
   background: #fff;
   margin-right: 3px;
   box-shadow: 0px 2px 0px 0px #000;
+  max-width: 200px;
 `
 
 export const Input = styled('input')`
@@ -38,6 +39,12 @@ export const ContainerStyle = styled.div`
   height: 100vh;
   font-family: Roboto, sans-serif;
 `
+export const CenteredContainer = styled.div`
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+`
 
 export const SmallItallicisedText = styled.p`
   margin: 0px;
@@ -62,4 +69,7 @@ export const SmallCenteredThinText = styled.p`
   font-family: 'Roboto Thin', sans-serif;
   font-weight: normal;
   text-align: center;
+`
+export const InformationArea = styled.div`
+  padding: 10px;
 `

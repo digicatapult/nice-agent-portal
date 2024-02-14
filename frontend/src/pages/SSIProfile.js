@@ -1,12 +1,8 @@
 import React from 'react'
 import { Section } from '@digicatapult/ui-component-library'
-import {
-  ContainerStyle,
-  Button,
-  SmallThinText,
-  CenteredContainer,
-  InformationArea,
-} from '../components/shared'
+import { ContainerStyle, Button, SmallThinText } from '../components/shared'
+import OwnCredential from '../components/Credentials'
+import ButtonWithImage from '../components/ButtonWithImage'
 const SSIProfilePagePage = () => {
   return (
     <div>
@@ -25,92 +21,67 @@ const SSIProfilePagePage = () => {
             flexDirection: 'column',
           }}
         >
-          <CenteredContainer>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <img
-                src={'/images/profile_icon.svg'}
-                style={{ height: '70px', marginRight: '10px' }}
-              ></img>
-              <Button
-                type="submit"
-                style={{
-                  marginLeft: '2px',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <img src={'/images/share_icon.svg'}></img>
-                Share my NICE id
-              </Button>
-            </div>
-          </CenteredContainer>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <img
+              src={'/images/profile_icon.svg'}
+              style={{ height: '70px', marginRight: '10px' }}
+            ></img>
+
+            <ButtonWithImage
+              title={'Share my NICE id'}
+              imagePath={'/images/share_icon.svg'}
+            ></ButtonWithImage>
+          </div>
 
           <Section headingLevel={1} title="Your Profile" background={'#FFF'}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex' }}>
-                <b style={{ marginRight: '10px' }}>Your Company Name: </b>
-                <SmallThinText>SamSam&apos;ss Batteries</SmallThinText>
-              </div>
-              <div style={{ display: 'flex' }}>
-                <b style={{ marginRight: '10px' }}>Companies House Number: </b>
-                <SmallThinText>12345678</SmallThinText>
-              </div>
-              <div style={{ display: 'flex' }}>
-                <b style={{ marginRight: '10px' }}>Contact Email: </b>
-                <SmallThinText>sam@batterie.xyz</SmallThinText>
-              </div>
+              <OwnCredential
+                title={'Your Company Name'}
+                value={`Sam's Batteries`}
+              ></OwnCredential>
+
+              <OwnCredential
+                title={'Companies House Number'}
+                value={`12345678`}
+              ></OwnCredential>
+
+              <OwnCredential
+                title={'Contact Email'}
+                value={`sam@batterie.xyz`}
+              ></OwnCredential>
             </div>
           </Section>
 
-          <InformationArea>
-            <div
-              style={{
-                border: '1px solid black ',
-                padding: '10px',
-                marginTop: '10px',
-                marginBottom: '90px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <img
-                src={'/images/check_icon.svg'}
-                style={{ height: '15px', marginRight: '10px' }}
-              ></img>
-              <SmallThinText>
-                Your Profile is verified by the nice network{' '}
-              </SmallThinText>
-            </div>
-          </InformationArea>
+          <div
+            style={{
+              border: '1px solid black ',
+              padding: '10px',
+              marginTop: '10px',
+              marginBottom: '90px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <img
+              src={'/images/check_icon.svg'}
+              style={{ height: '15px', marginRight: '10px' }}
+            ></img>
+            <SmallThinText>
+              Your Profile is verified by the nice network{' '}
+            </SmallThinText>
+          </div>
 
-          <Button
-            type="submit"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginBottom: '10px',
-            }}
-          >
-            <img
-              src={'/images/contact_icon.svg'}
-              style={{ height: '20px', marginRight: '10px' }}
-            ></img>
-            View your NICE connections
-          </Button>
-          <Button
-            type="submit"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginBottom: '10px',
-            }}
-          >
-            <img
-              src={'/images/add_contact.svg'}
-              style={{ height: '20px', marginRight: '10px' }}
-            ></img>
-            Add connection
-          </Button>
+          <ButtonWithImage
+            title={'View your NICE connections'}
+            imagePath={'/images/contact_icon.svg'}
+            optionalMargin="10px"
+          ></ButtonWithImage>
+
+          <ButtonWithImage
+            title={'Add connection'}
+            imagePath={'/images/add_contact.svg'}
+            optionalMargin="10px"
+          ></ButtonWithImage>
         </div>
       </ContainerStyle>
     </div>

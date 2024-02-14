@@ -39,12 +39,6 @@ export const ContainerStyle = styled.div`
   height: 100vh;
   font-family: Roboto, sans-serif;
 `
-export const CenteredContainer = styled.div`
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-`
 
 export const SmallItallicisedText = styled.p`
   margin: 0px;

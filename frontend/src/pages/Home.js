@@ -1,22 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
 import BigButton from '../components/BigButton'
-import { SmallText } from '../components/shared'
-
+import { ContainerStyle, SmallText, HeadingText } from '../components/shared'
 const NewHomePage = () => {
-  const ContainerStyle = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    font-family: Roboto, sans-serif;
-  `
-
-  const HeadingText = styled.h1`
-    margin: 10px 0px 50px 0px;
-  `
-
   return (
     <>
       <ContainerStyle>

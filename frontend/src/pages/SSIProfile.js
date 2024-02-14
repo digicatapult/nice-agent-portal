@@ -48,15 +48,15 @@ const SSIProfilePagePage = () => {
           <Section headingLevel={1} title="Your Profile" background={'#FFF'}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex' }}>
-                <b>Your Company Name: </b>
+                <b style={{ marginRight: '10px' }}>Your Company Name: </b>
                 <SmallThinText>SamSam&apos;ss Batteries</SmallThinText>
               </div>
               <div style={{ display: 'flex' }}>
-                <b>Companies House Number: </b>
+                <b style={{ marginRight: '10px' }}>Companies House Number: </b>
                 <SmallThinText>12345678</SmallThinText>
               </div>
               <div style={{ display: 'flex' }}>
-                <b>Contact Email: </b>
+                <b style={{ marginRight: '10px' }}>Contact Email: </b>
                 <SmallThinText>sam@batterie.xyz</SmallThinText>
               </div>
             </div>

@@ -49,7 +49,7 @@ const SSIProfilePagePage = () => {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex' }}>
                 <b>Your Company Name: </b>
-                <SmallThinText>Sam's Batteries</SmallThinText>
+                <SmallThinText>SamSam&apos;ss Batteries</SmallThinText>
               </div>
               <div style={{ display: 'flex' }}>
                 <b>Companies House Number: </b>

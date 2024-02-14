@@ -7,7 +7,7 @@ const BigButton = ({ buttonClick, buttonName, imageSrc, altText }) => {
   }
   const ButtonStyle = styled.button`
     background-color: #ffffff;
-    border: 2px solid #000000;
+    border: 1px solid #000000;
     border-radius: 10px;
     color: #333;
     text-align: center;

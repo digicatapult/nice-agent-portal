@@ -38,8 +38,6 @@ export const ContainerStyle = styled.div`
   justify-content: center;
   height: 100vh;
   font-family: Roboto, sans-serif;
-  padding: 50px 20px;
-  overflow: scroll;
 `
 
 export const SmallItallicisedText = styled.p`
@@ -56,7 +54,7 @@ export const SmallThinText = styled.p`
   font-size: 14px;
   font-family: 'Roboto Thin', sans-serif;
   font-weight: normal;
-  text-align: center;
+  margin: 0px;
 `
 
 export const SmallCenteredThinText = styled.p`

@@ -16,6 +16,7 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100%;
+  text-align: center;
 `
 
 const CompleteOnboardingPage = () => {

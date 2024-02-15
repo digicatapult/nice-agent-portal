@@ -5,11 +5,27 @@ import SSIProfilePagePage from '../pages/SSIProfile'
 import NewHomePage from '../pages/Home'
 import Issue from '../pages/Issue'
 import InviteCompany from '../pages/Invite/AddCompany'
+import InviteThemToNice from '../pages/Invite/InviteThemToNice'
+import ScanTheirNiceId from '../pages/Invite/ScanTheirNiceId'
+import ShareNiceId from '../pages/Invite/ShareNiceId'
 
 export const router = createBrowserRouter([
   { path: '*', element: <NewHomePage /> },
   { path: '/sign-up', element: <Issue /> },
   { path: '/complete-onboarding', element: <CompleteOnboardingPage /> },
-  { path: '/ssi-profile', element: <SSIProfilePagePage /> },
-  { path: '/add', element: <InviteCompany /> },
+  {
+    path: '/ssi-profile',
+    element: <SSIProfilePagePage />,
+    children: [
+      {
+        path: 'add',
+        element: <InviteCompany />,
+        children: [
+          { path: 'invite-to-nice', element: <InviteThemToNice /> },
+          { path: 'scan-nice-id', element: <ScanTheirNiceId /> },
+          { path: 'share-nice-id', element: <ShareNiceId /> },
+        ],
+      },
+    ],
+  },
 ])

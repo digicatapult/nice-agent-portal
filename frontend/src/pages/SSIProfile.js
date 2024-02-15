@@ -3,6 +3,7 @@ import { Section } from '@digicatapult/ui-component-library'
 import { ContainerStyle, SmallThinText } from '../components/shared'
 import OwnCredential from '../components/Credentials'
 import ButtonWithImage from '../components/ButtonWithImage'
+
 const SSIProfilePagePage = () => {
   return (
     <ContainerStyle>
@@ -80,6 +81,7 @@ const SSIProfilePagePage = () => {
           title={'Add connection'}
           imagePath={'/images/add_contact.svg'}
           optionalMargin="10px"
+          buttonClick={'ssi-profile/add/'}
         ></ButtonWithImage>
       </div>
     </ContainerStyle>

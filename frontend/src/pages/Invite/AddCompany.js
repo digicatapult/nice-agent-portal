@@ -1,7 +1,8 @@
 import React from 'react'
 import { Section } from '@digicatapult/ui-component-library'
-import { ContainerStyle, HeadingText } from '../../components/shared'
+import { ContainerStyle, HeadingText, Button } from '../../components/shared'
 import ButtonWithImage from '../../components/ButtonWithImage'
+
 const InviteCompany = () => {
   return (
     <ContainerStyle>
@@ -22,7 +23,7 @@ const InviteCompany = () => {
           alignItems: 'center',
           display: 'flex',
           flexDirection: 'column',
-          width: '45%',
+          width: '180px',
         }}
       >
         <ButtonWithImage
@@ -30,19 +31,30 @@ const InviteCompany = () => {
           imagePath={'/images/share_icon.svg'}
           optionalMargin="10px"
           optionalImageHeight="30px"
+          buttonClick={'/ssi-profile/add/share-nice-id'}
         ></ButtonWithImage>
         <ButtonWithImage
           title={'Scan their NICE ID QR code'}
           imagePath={'/images/complete_onboarding.svg'}
           optionalMargin="10px"
           optionalImageHeight="30px"
+          buttonClick={'/ssi-profile/add/scan-nice-id'}
         ></ButtonWithImage>
         <ButtonWithImage
           title={'Invite them to NICE'}
           imagePath={'/images/invite_icon.svg'}
           optionalMargin="10px"
           optionalImageHeight="20px"
+          buttonClick={'/ssi-profile/add/invite-to-nice'}
         ></ButtonWithImage>
+        <Button
+          onClick={() => {
+            window.location.href = `/ssi-profile`
+          }}
+        >
+          {' '}
+          {'<'}
+        </Button>
       </div>
     </ContainerStyle>
   )

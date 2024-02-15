@@ -11,14 +11,14 @@ const NewHomePage = () => {
         <BigButton
           buttonClick={'sign-up'}
           buttonName={'Sign Up'}
-          imageSrc={'images/sign_up.png'}
+          imageSrc={'images/sign_up.svg'}
           altText={'Button Image Sign Up'}
         />
         {/* Complete Onboarding */}
         <BigButton
           buttonClick={'complete-onboarding'}
           buttonName={'Complete Onboarding'}
-          imageSrc={'/images/complete_onboarding.png'}
+          imageSrc={'/images/complete_onboarding.svg'}
           altText={'Button Complete Onboarding'}
         />
 
@@ -26,7 +26,7 @@ const NewHomePage = () => {
         <BigButton
           buttonClick={'ssi-profile'}
           buttonName={'SSI Profile'}
-          imageSrc={'/images/ssi_profile.png'}
+          imageSrc={'/images/profile_icon.svg'}
           altText={'Button SSI profile'}
         />
       </ContainerStyle>

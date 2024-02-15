@@ -12,10 +12,9 @@ import {
 } from '../../components/shared'
 
 export default function Summary({ inputs, setStage }) {
-  const InformatioinArea = styled.div`
+  const InformationArea = styled.div`
     padding: 10px;
   `
-
   return (
     <div>
       <ContainerStyle>
@@ -38,24 +37,24 @@ export default function Summary({ inputs, setStage }) {
             <SmallThinText style={{ paddingBottom: '20px' }}>
               Review Your Details before submission:
             </SmallThinText>
-            <InformatioinArea>
+            <InformationArea>
               <SmallText>
                 <b>Company Name: </b>
               </SmallText>
               <SmallThinText>{inputs.name}</SmallThinText>
-            </InformatioinArea>
-            <InformatioinArea>
+            </InformationArea>
+            <InformationArea>
               <SmallText>
                 <b>Company House No.: </b>
               </SmallText>
               <SmallThinText>{inputs.houseNo}</SmallThinText>
-            </InformatioinArea>
-            <InformatioinArea>
+            </InformationArea>
+            <InformationArea>
               <SmallText>
                 <b>Company Email: </b>
               </SmallText>
               <SmallThinText>{inputs.email}</SmallThinText>
-            </InformatioinArea>
+            </InformationArea>
           </div>
           <Section
             margin={'2px 0px'}

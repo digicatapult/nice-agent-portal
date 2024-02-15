@@ -8,6 +8,7 @@ export const Button = styled('button')`
   background: #fff;
   margin-right: 3px;
   box-shadow: 0px 2px 0px 0px #000;
+  max-width: 200px;
 `
 
 export const Input = styled('input')`

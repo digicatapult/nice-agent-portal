@@ -28,6 +28,7 @@ const BigButton = ({ buttonClick, buttonName, imageSrc, altText }) => {
     padding: 10px;
     vertical-align: middle;
     display: block;
+    max-height: 60px;
   `
   return (
     <ButtonStyle onClick={() => handleButtonClick(buttonClick)}>

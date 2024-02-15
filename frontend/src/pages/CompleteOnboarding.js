@@ -2,17 +2,20 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { QRReader } from '@digicatapult/ui-component-library'
 
-import {
-  ContainerStyle,
-  SmallThinText,
-  SmallText,
-  Button,
-} from '../components/shared'
+import { SmallThinText, Button } from '../components/shared'
+import WrapperWithHeader from '../components/Header'
 
 const QRReaderWrapper = styled.div`
-  height: 100%;
+  display: flex;
   align-items: center;
-  display: grid;
+  flex-grow: 1;
+`
+
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
 `
 
 const CompleteOnboardingPage = () => {
@@ -67,10 +70,9 @@ const CompleteOnboardingPage = () => {
   }
 
   return (
-    <ContainerStyle>
-      <SmallText>- NICE Network -</SmallText>
-      {hasScanned ? <Success /> : <ScanQR />}
-    </ContainerStyle>
+    <WrapperWithHeader>
+      <ContentWrapper>{hasScanned ? <Success /> : <ScanQR />}</ContentWrapper>
+    </WrapperWithHeader>
   )
 }
 

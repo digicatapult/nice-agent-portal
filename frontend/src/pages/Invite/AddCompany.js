@@ -31,21 +31,21 @@ const InviteCompany = () => {
           imagePath={'/images/share_icon.svg'}
           optionalMargin="10px"
           optionalImageHeight="30px"
-          buttonClick={'/ssi-profile/add/share-nice-id'}
+          buttonClick={'ssi-profile/add/share-nice-id'}
         ></ButtonWithImage>
         <ButtonWithImage
           title={'Scan their NICE ID QR code'}
           imagePath={'/images/complete_onboarding.svg'}
           optionalMargin="10px"
           optionalImageHeight="30px"
-          buttonClick={'/ssi-profile/add/scan-nice-id'}
+          buttonClick={'ssi-profile/add/scan-nice-id'}
         ></ButtonWithImage>
         <ButtonWithImage
           title={'Invite them to NICE'}
           imagePath={'/images/invite_icon.svg'}
           optionalMargin="10px"
           optionalImageHeight="20px"
-          buttonClick={'/ssi-profile/add/invite-to-nice'}
+          buttonClick={'ssi-profile/add/invite-to-nice'}
         ></ButtonWithImage>
         <Button
           onClick={() => {

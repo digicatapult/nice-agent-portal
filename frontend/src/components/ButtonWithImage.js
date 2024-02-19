@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from './shared'
+import { useNavigate } from 'react-router-dom'
 
 const ButtonWithImage = ({
   title,
@@ -8,18 +9,18 @@ const ButtonWithImage = ({
   optionalMargin = '0px',
   optionalImageHeight = 'auto',
 }) => {
-  const handleButtonClick = (buttonClick) => {
-    window.location.href = `/${buttonClick}`
+  const navigate = useNavigate()
+  const handleButtonClick = (e, buttonClick) => {
+    navigate(`/${buttonClick}`)
   }
   return (
     <Button
-      // type="submit"
       style={{
         display: 'flex',
         alignItems: 'center',
         marginBottom: optionalMargin,
       }}
-      onClick={() => handleButtonClick(buttonClick)}
+      onClick={(e) => handleButtonClick(e, buttonClick)}
     >
       <img
         src={imagePath}

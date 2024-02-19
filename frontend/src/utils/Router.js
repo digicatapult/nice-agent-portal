@@ -16,16 +16,10 @@ export const router = createBrowserRouter([
   {
     path: '/ssi-profile',
     element: <SSIProfilePagePage />,
-    children: [
-      {
-        path: 'add',
-        element: <InviteCompany />,
-        children: [
-          { path: 'invite-to-nice', element: <InviteThemToNice /> },
-          { path: 'scan-nice-id', element: <ScanTheirNiceId /> },
-          { path: 'share-nice-id', element: <ShareNiceId /> },
-        ],
-      },
-    ],
   },
+
+  { path: '/ssi-profile/add', element: <InviteCompany /> },
+  { path: '/ssi-profile/add/invite-to-nice', element: <InviteThemToNice /> },
+  { path: '/ssi-profile/add/scan-nice-id', element: <ScanTheirNiceId /> },
+  { path: '/ssi-profile/add/share-nice-id', element: <ShareNiceId /> },
 ])

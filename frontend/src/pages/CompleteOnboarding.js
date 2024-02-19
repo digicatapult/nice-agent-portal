@@ -1,23 +1,13 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import { QRReader } from '@digicatapult/ui-component-library'
 
-import { SmallThinText, Button } from '../components/shared'
+import {
+  QRReaderWrapper,
+  SmallThinText,
+  Button,
+  ContentWrapper,
+} from '../components/shared'
 import WrapperWithHeader from '../components/Header'
-
-const QRReaderWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  flex-grow: 1;
-`
-
-const ContentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  text-align: center;
-`
 
 const CompleteOnboardingPage = () => {
   const [hasScanned, setHasScanned] = useState(false)

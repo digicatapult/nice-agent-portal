@@ -1,17 +1,11 @@
 import React from 'react'
-import { Section } from '@digicatapult/ui-component-library'
-import { ContainerStyle, HeadingText, Button } from '../../components/shared'
+import { HeadingText, Button } from '../../components/shared'
 import ButtonWithImage from '../../components/ButtonWithImage'
+import WrapperWithHeader from '../../components/Header'
 
 const InviteCompany = () => {
   return (
-    <ContainerStyle>
-      <Section
-        margin={'40px 0px 0px 0px'}
-        headingLevel={1}
-        background={'#FFF'}
-        title={'- NICE Network - '}
-      ></Section>
+    <WrapperWithHeader>
       <img
         src={'/images/add_contact.svg'}
         style={{ height: '100px', margin: '10px' }}
@@ -56,7 +50,7 @@ const InviteCompany = () => {
           {'<'}
         </Button>
       </div>
-    </ContainerStyle>
+    </WrapperWithHeader>
   )
 }
 

@@ -1,18 +1,13 @@
 import React from 'react'
 import { Section } from '@digicatapult/ui-component-library'
-import { ContainerStyle, SmallThinText } from '../components/shared'
+import { SmallThinText } from '../components/shared'
 import OwnCredential from '../components/Credentials'
 import ButtonWithImage from '../components/ButtonWithImage'
+import WrapperWithHeader from '../components/Header'
 
 const SSIProfilePagePage = () => {
   return (
-    <ContainerStyle>
-      <Section
-        margin={'40px 0px 0px 0px'}
-        headingLevel={1}
-        background={'#FFF'}
-        title={'- NICE Network - '}
-      ></Section>
+    <WrapperWithHeader>
       <div
         style={{
           flex: '1',
@@ -47,7 +42,7 @@ const SSIProfilePagePage = () => {
 
             <OwnCredential
               title={'Contact Email'}
-              value={`sam@batterie.xyz`}
+              value={`sam@batteries.xyz`}
             ></OwnCredential>
           </div>
         </Section>
@@ -83,7 +78,7 @@ const SSIProfilePagePage = () => {
           buttonClick={'ssi-profile/add'}
         ></ButtonWithImage>
       </div>
-    </ContainerStyle>
+    </WrapperWithHeader>
   )
 }
 

@@ -6,7 +6,7 @@ export const Button = styled('button')`
   border: 1px solid #000;
   padding: 10px 15px;
   background: #fff;
-  margin-right: 3px;
+  margin: 5px;
   box-shadow: 0px 2px 0px 0px #000;
   max-width: 200px;
 `
@@ -50,12 +50,13 @@ export const SmallItallicisedText = styled.p`
 `
 
 export const SmallThinText = styled.p`
-  margin: 0px;
   font-weight: regular;
   font-size: 14px;
   font-family: 'Roboto Thin', sans-serif;
   font-weight: normal;
+  margin: 0px;
 `
+
 export const SmallCenteredThinText = styled.p`
   margin: 0px;
   font-weight: regular;

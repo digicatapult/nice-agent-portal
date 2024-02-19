@@ -71,11 +71,11 @@ const SSIProfilePagePage = () => {
           imagePath={'/images/contact_icon.svg'}
           optionalMargin="10px"
         ></ButtonWithImage>
-
         <ButtonWithImage
           title={'Add connection'}
           imagePath={'/images/add_contact.svg'}
           optionalMargin="10px"
+          buttonClick={'ssi-profile/add'}
         ></ButtonWithImage>
       </div>
     </WrapperWithHeader>

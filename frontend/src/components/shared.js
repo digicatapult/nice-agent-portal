@@ -65,3 +65,15 @@ export const SmallCenteredThinText = styled.p`
   font-weight: normal;
   text-align: center;
 `
+export const QRReaderWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+`
+export const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+`

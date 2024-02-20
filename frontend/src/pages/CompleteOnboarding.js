@@ -1,22 +1,11 @@
 import React, { useState } from 'react'
-import { QRReader } from '@digicatapult/ui-component-library'
 
-import {
-  QRReaderWrapper,
-  SmallThinText,
-  Button,
-  ContentWrapper,
-} from '../components/shared'
+import { SmallThinText, Button, ContentWrapper } from '../components/shared'
 import WrapperWithHeader from '../components/Header'
+import QRReaderSection from '../components/QRCode'
 
 const CompleteOnboardingPage = () => {
   const [hasScanned, setHasScanned] = useState(false)
-
-  const handleQrCode = (qr) => {
-    // eslint-disable-next-line
-    console.log(`Scanned: ${qr}`)
-    setHasScanned(true)
-  }
 
   const handleBackToHomepage = () => {
     window.location.href = `/home`
@@ -27,20 +16,11 @@ const CompleteOnboardingPage = () => {
       <>
         <SmallThinText>Complete the onboarding process</SmallThinText>
         <h2>Scan first QR code</h2>
-        <SmallThinText>
-          You will find this in your email sent to you from the NICE Network.
-        </SmallThinText>
-        <QRReaderWrapper>
-          <QRReader
-            viewFinderColor="#fff"
-            viewFinderVariant="viewfinder-cross-med"
-            onResult={handleQrCode}
-            mirror={true}
-          />
-        </QRReaderWrapper>
-        <SmallThinText>
-          Please enable the camera access to scan the QR codes.
-        </SmallThinText>
+        <QRReaderSection
+          instructionText={`   You will find this in your email sent to you from the NICE Network.`}
+          setHasScanned={setHasScanned}
+        ></QRReaderSection>
+
         <Button onClick={handleBackToHomepage}>{'<'}</Button>
       </>
     )

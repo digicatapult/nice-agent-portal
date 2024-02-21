@@ -52,7 +52,7 @@ const ViewConnections = () => {
         >
           <ContentWrapper style={{ padding: '50px 20px', width: '100%' }}>
             <SmallThinText>
-              Received message from Ethan's Exhaust Company:{' '}
+              Received message from Ethan&apos;s Exhaust Company:
             </SmallThinText>
             <SmallText>{message}</SmallText>
           </ContentWrapper>
@@ -65,27 +65,30 @@ const ViewConnections = () => {
         <Border>
           <StyledTable
             headers={[
-              <SmallText>Company Name</SmallText>,
-              <SmallText> NICE-Verified</SmallText>,
+              <SmallText key={crypto.randomUUID()}>Company Name</SmallText>,
+              <SmallText key={crypto.randomUUID()}> NICE-Verified</SmallText>,
             ]}
             rows={[
               [
-                'Ethan Exhaust Company',
+                `Ethan's Exhaust Company`,
                 <img
+                  key={crypto.randomUUID()}
                   src={'/images/check_icon.svg'}
                   style={{ height: '15px' }}
                 ></img>,
               ],
               [
-                'Sams Batteries Company',
+                `Sam's Batteries Company`,
                 <img
+                  key={crypto.randomUUID()}
                   src={'/images/cross_icon.svg'}
                   style={{ height: '15px' }}
                 ></img>,
               ],
               [
-                'Bransons Breaks Company',
+                `Branson's Breaks Company`,
                 <img
+                  key={crypto.randomUUID()}
                   src={'/images/check_icon.svg'}
                   style={{ height: '15px' }}
                 ></img>,

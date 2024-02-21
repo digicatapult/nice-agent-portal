@@ -14,6 +14,7 @@ import {
   Dialog as DialogComponent,
 } from '@digicatapult/ui-component-library'
 import SendMessageButton from '../../components/Dialog'
+import { styled } from 'styled-components'
 
 const ViewConnections = () => {
   const handleBackToProfile = () => {
@@ -62,7 +63,7 @@ const ViewConnections = () => {
           My Connected Companies
         </HeadingText>
         <Border>
-          <Table
+          <StyledTable
             headers={[
               <SmallText>Company Name</SmallText>,
               <SmallText> NICE-Verified</SmallText>,
@@ -113,5 +114,11 @@ const ViewConnections = () => {
     </div>
   )
 }
+
+const StyledTable = styled(Table)`
+  td:nth-child(2) {
+    text-align: center;
+  }
+`
 
 export default ViewConnections

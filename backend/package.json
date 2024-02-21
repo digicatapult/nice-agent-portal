@@ -1,5 +1,5 @@
 {
-  "name": "@digicatapult/nice-agent-portal",
+  "name": "@digicatapult/nice-agent-portal-backend",
   "version": "0.0.7",
   "description": "OpenAPI service to manage profiles for the NICE agent and communication with veritable-cloudagent",
   "main": "src/index.ts",
@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "eslint .",
     "depcheck": "depcheck",
-    "build:tsoa": "tsoa spec-and-routes && ./node_modules/node-jq/bin/jq '. | {openapi: .openapi, info: .info, servers: .servers, paths: .paths, components: .components}' src/swagger.json > src/swagger.json.tmp && mv src/swagger.json.tmp src/swagger.json",
+    "build:tsoa": "tsoa spec-and-routes",
     "build": "npm run build:tsoa && tsc",
     "start": "node build/index.js",
     "dev": "concurrently \"NODE_ENV=dev nodemon | pino-colada\" \"nodemon -x tsoa spec-and-routes --ignore src/routes.ts --ignore src/swagger.json\"",
@@ -53,7 +53,6 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "mocha": "^10.3.0",
-    "node-jq": "^4.3.0",
     "nodemon": "^3.0.3",
     "pino-colada": "^2.2.2",
     "prettier": "^3.2.5",

@@ -25,11 +25,6 @@ jobs:
   lint:
     name: Run lint
     runs-on: ubuntu-latest
-    strategy:
-      matrix: { dir: ['./frontend', './backend'] }
-    defaults: 
-        run:
-          working-directory: ${{ matrix.dir }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -51,11 +46,6 @@ jobs:
   dependency-check:
     name: Run dependency check
     runs-on: ubuntu-latest
-    strategy:
-      matrix: { dir: ['./frontend', './backend'] }
-    defaults: 
-        run:
-          working-directory: ${{ matrix.dir }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -77,8 +67,6 @@ jobs:
   check-version:
     name: "Check version"
     runs-on: ubuntu-latest
-    strategy:
-      matrix: { dir: ['./frontend', './backend'] }
     steps:
       - uses: actions/checkout@v4
       - name: Check version
@@ -86,7 +74,6 @@ jobs:
         uses: digicatapult/check-version@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          npm_package_location: ${{ matrix.dir }}/
 
   # build-docker:
   #   name: "Build docker image"

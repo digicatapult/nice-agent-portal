@@ -19,22 +19,13 @@ const ViewConnections = () => {
   const handleBackToProfile = () => {
     window.location.href = `/ssi-profile`
   }
-  const dialogRef = useRef(null)
   const dialogToastRef = useRef(null)
-  const [isOpen, setIsOpen] = useState(false)
   const [isToastOpen, setIsToastOpen] = useState(false)
-  const [message, setMessage] = useState('')
-  useEffect(() => {
-    const listener = () => {
-      setIsOpen(false)
-    }
-    const dialog = dialogRef.current
-    dialog?.addEventListener('close', listener)
-    return () => dialog?.removeEventListener('close', listener)
-  })
+  const [message, setMessage] = useState('HARDCODED MESSAGE') //to be changed
   useEffect(() => {
     const listener = () => {
       setIsToastOpen(false)
+      setMessage('')
     }
     const dialog = dialogToastRef.current
     dialog?.addEventListener('close', listener)
@@ -53,16 +44,16 @@ const ViewConnections = () => {
       >
         <DialogComponent
           width="100%"
-          height="200px"
+          maxHeight="150px"
           border="1px solid black"
           ref={dialogToastRef}
           includeClose={true}
         >
           <ContentWrapper style={{ padding: '50px 20px', width: '100%' }}>
-            <SmallText>Your message:</SmallText>
-            <SmallThinText>{message}</SmallThinText>
-
-            <Button>Close</Button>
+            <SmallThinText>
+              Received message from Ethan's Exhaust Company:{' '}
+            </SmallThinText>
+            <SmallText>{message}</SmallText>
           </ContentWrapper>
         </DialogComponent>
       </div>
@@ -75,7 +66,6 @@ const ViewConnections = () => {
             headers={[
               <SmallText>Company Name</SmallText>,
               <SmallText> NICE-Verified</SmallText>,
-              <SmallText>Message</SmallText>,
             ]}
             rows={[
               [
@@ -84,16 +74,6 @@ const ViewConnections = () => {
                   src={'/images/check_icon.svg'}
                   style={{ height: '15px' }}
                 ></img>,
-                <SendMessageButton
-                  imagePath={'/images/secure_message_icon.svg'}
-                  title={''}
-                  optionalImageHeight="15px"
-                  isOpen={isOpen}
-                  setIsOpen={setIsOpen}
-                  dialogRef={dialogRef}
-                >
-                  {' '}
-                </SendMessageButton>,
               ],
               [
                 'Sams Batteries Company',
@@ -101,75 +81,34 @@ const ViewConnections = () => {
                   src={'/images/cross_icon.svg'}
                   style={{ height: '15px' }}
                 ></img>,
-                <SendMessageButton
-                  imagePath={'/images/secure_message_icon.svg'}
-                  title={''}
-                  optionalImageHeight="15px"
-                  isOpen={isOpen}
-                  setIsOpen={setIsOpen}
-                  dialogRef={dialogRef}
-                >
-                  {' '}
-                </SendMessageButton>,
+              ],
+              [
+                'Bransons Breaks Company',
+                <img
+                  src={'/images/check_icon.svg'}
+                  style={{ height: '15px' }}
+                ></img>,
               ],
             ]}
           />
         </Border>
+        <SendMessageButton
+          imagePath={'/images/secure_message_icon.svg'}
+          title={''}
+          optionalImageHeight="15px"
+          isOpen={isToastOpen}
+          setIsOpen={setIsToastOpen}
+          dialogRef={dialogToastRef}
+        >
+          {' '}
+        </SendMessageButton>
+
         <ButtonWithImage
           imagePath={'/images/share_icon.svg'}
           title={'Add Connection'}
-          buttonClick={'ssi-profile/view-connections'}
+          buttonClick={'ssi-profile/add'}
         ></ButtonWithImage>
         <Button onClick={handleBackToProfile}>Back to Profile</Button>
-
-        <DialogComponent
-          width="90%"
-          height="300px"
-          border="1px solid black"
-          ref={dialogRef}
-          includeClose={true}
-        >
-          <ContentWrapper style={{ padding: '50px 20px' }}>
-            <SmallThinText>
-              Send a Message Query to Ethans Exhaust Company.
-            </SmallThinText>
-            <textarea
-              placeholder="Add your secured and encrypted query here..."
-              style={{ height: '70px', width: '90%', margin: '20px 0px' }}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            ></textarea>
-
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row', // Change to 'row' for displaying buttons in a row
-                alignItems: 'center',
-                justifyContent: 'center', // Optional: Adjust based on your alignment preference
-                textAlign: 'center',
-              }}
-            >
-              <SendMessageButton
-                title={'Close'}
-                optionalImageHeight="15px"
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
-                dialogRef={dialogRef}
-              >
-                {' '}
-              </SendMessageButton>
-              <SendMessageButton
-                title={'Send'}
-                optionalImageHeight="15px"
-                isOpen={isToastOpen}
-                setIsOpen={setIsToastOpen}
-                dialogRef={dialogToastRef}
-              >
-                {' '}
-              </SendMessageButton>
-            </div>
-          </ContentWrapper>
-        </DialogComponent>
       </WrapperWithHeader>
     </div>
   )

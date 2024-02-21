@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button } from './shared'
-import styled from 'styled-components'
 
 const SendMessageButton = ({
   title,

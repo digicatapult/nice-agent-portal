@@ -23,25 +23,26 @@ export default async (): Promise<Express> => {
   app.use(bodyParser.json())
   app.use(cors())
 
+  RegisterRoutes(app)
+  app.use(errorHandler)
+  app.get('/api/api-docs', (_req, res) => res.json(swaggerJson))
+  app.use(
+    '/api/docs',
+    serve,
+    setup(undefined, {
+      swaggerOptions: {
+        url: '/api/api-docs',
+      },
+    })
+  )
+
   const root = path.join(__dirname, '../..', 'frontend', 'build')
+
   app.use(express.static(root))
 
   app.get('*', (_req, res) => {
     res.sendFile(`${root}/index.html`)
   })
-
-  RegisterRoutes(app)
-  app.use(errorHandler)
-  app.get('/api-docs', (_req, res) => res.json(swaggerJson))
-  app.use(
-    '/docs',
-    serve,
-    setup(undefined, {
-      swaggerOptions: {
-        url: '/api-docs',
-      },
-    })
-  )
 
   return app
 }

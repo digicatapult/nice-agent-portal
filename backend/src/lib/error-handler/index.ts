@@ -1,4 +1,8 @@
-import { Response as ExResponse, Request as ExRequest, NextFunction } from 'express'
+import {
+  Response as ExResponse,
+  Request as ExRequest,
+  NextFunction,
+} from 'express'
 import { ValidateError } from 'tsoa'
 
 import { logger } from '../logger.js'
@@ -48,7 +52,10 @@ export const errorHandler = function errorHandler(
   next: NextFunction
 ): ExResponse | void {
   if (err instanceof ValidateError) {
-    logger.warn(`Handled Validation Error for ${req.path}: %s`, JSON.stringify(err.fields))
+    logger.warn(
+      `Handled Validation Error for ${req.path}: %s`,
+      JSON.stringify(err.fields)
+    )
 
     const { status, ...rest } = err
 

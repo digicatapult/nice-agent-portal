@@ -20,7 +20,7 @@ Below is the specific architecture for a Peer node (NICE participant, Supplier o
 
 ![NICE Peer node architecture](./docs/images/nice-arch-node-peer.png)
 
-### NICE Oboarding Processes
+### NICE Onboarding Processes
 
 The onboarding process for NICE allows users to enroll as members, verify their credentials, and add elements of their supply chain. There are 4 processes documented:
 
@@ -39,12 +39,42 @@ The onboarding process for NICE allows users to enroll as members, verify their 
 
 ## Repo structure
 
-This repo contains a React frontend in the `/frontend` directory.
+This repo contains a React frontend in the `/frontend` directory and a TSOA backend in the `/backend` directory.
 
 Bring up dependences with
 
 ```
 docker compose up -d
+```
+
+Build both frontend and backend:
+
+```
+npm run build
+```
+
+Build the frontend and run the backend with nodemon:
+
+```
+npm run dev
+```
+
+View OpenAPI documentation for all routes with Swagger:
+
+```
+localhost:3000/api/docs
+```
+
+View frontend:
+
+```
+localhost:3000
+```
+
+Run tests
+
+```
+npm run test
 ```
 
 ## License

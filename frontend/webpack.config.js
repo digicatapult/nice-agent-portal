@@ -65,6 +65,10 @@ module.exports = (vars) => {
       new CopyPlugin({
         patterns: [
           { from: path.resolve(__dirname, 'public', '*'), to: '[name][ext]' },
+          {
+            from: path.resolve(__dirname, 'public', 'images'),
+            to: 'images/[name][ext]',
+          },
         ],
       }),
       new BundleAnalyzerPlugin({

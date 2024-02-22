@@ -9,6 +9,7 @@ import InviteThemToNice from '../pages/Invite/InviteThemToNice'
 import ScanTheirNiceId from '../pages/Invite/ScanTheirNiceId'
 import ShareNiceId from '../pages/Invite/ShareNiceId'
 import AdminPortal from '../pages/Admin/AdminPortal'
+import ViewConnections from '../pages/View/ViewConnections'
 
 export const router = createBrowserRouter([
   { path: '*', element: <NewHomePage /> },
@@ -24,4 +25,5 @@ export const router = createBrowserRouter([
   { path: '/ssi-profile/add/invite-to-nice', element: <InviteThemToNice /> },
   { path: '/ssi-profile/add/scan-nice-id', element: <ScanTheirNiceId /> },
   { path: '/ssi-profile/add/share-nice-id', element: <ShareNiceId /> },
+  { path: '/ssi-profile/view-connections', element: <ViewConnections /> },
 ])

@@ -24,7 +24,10 @@ const ButtonWithImage = ({
     >
       <img
         src={imagePath}
-        style={{ marginRight: '5px', height: optionalImageHeight }}
+        style={{
+          marginRight: title == '' ? '0px' : '5px',
+          height: optionalImageHeight,
+        }}
       ></img>
       {title}
     </Button>

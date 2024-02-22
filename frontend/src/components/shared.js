@@ -77,3 +77,11 @@ export const ContentWrapper = styled.div`
   height: 100%;
   text-align: center;
 `
+export const Border = styled.div`
+  border: 1px solid black;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 90px;
+  display: flex;
+  align-items: center;
+`

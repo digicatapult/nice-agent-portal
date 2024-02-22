@@ -11,7 +11,7 @@ export default envalid.cleanEnv(process.env, {
   PORT: envalid.port({ default: 3000 }),
   LOG_LEVEL: envalid.str({ default: 'info', devDefault: 'debug' }),
   CLOUDAGENT_HOST: envalid.host({ devDefault: 'localhost' }),
-  CLOUDAGENT_PORT: envalid.port({ default: 3001 }),
+  CLOUDAGENT_PORT: envalid.port({ default: 3000, devDefault: 3001 }),
   STATIC_ROOT: envalid.str({
     default: '/www',
     devDefault: '../frontend/build',

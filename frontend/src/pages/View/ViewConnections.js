@@ -108,7 +108,7 @@ const ViewConnections = () => {
         </SendMessageButton>
 
         <ButtonWithImage
-          imagePath={'/images/share_icon.svg'}
+          imagePath={'/images/add_contact.svg'}
           title={'Add Connection'}
           buttonClick={'ssi-profile/add'}
         ></ButtonWithImage>

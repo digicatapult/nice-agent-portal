@@ -3,6 +3,7 @@ import { injectable } from 'tsyringe'
 
 import { logger } from '../../lib/logger.js'
 import CloudagentManager from '../../lib/services/cloudagent.js'
+import { ServiceUnavailable } from '../../lib/error-handler/index.js'
 
 const packageVersion = process.env.npm_package_version
   ? process.env.npm_package_version
@@ -24,10 +25,14 @@ export class HealthController extends Controller {
   public async get() {
     logger.debug({ msg: 'new request received', controller: '/health' })
 
-    return {
-      status: 'ok',
-      version: packageVersion,
-      cloudagentIsInitialized: (await this.cloudagent.getAgent()).isInitialized,
+    try {
+      return {
+        status: 'ok',
+        version: packageVersion,
+        cloudagentIsInitialized: (await this.cloudagent.getAgent()).isInitialized,
+      }
+    } catch (e) {
+      throw new ServiceUnavailable('veritable-cloudagent unavailable')
     }
   }
 }

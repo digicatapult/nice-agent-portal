@@ -6,8 +6,8 @@ ENV NODE_ENV=${NODE_ENV}
 WORKDIR /build
 
 RUN mkdir frontend backend
-COPY frontend/package.json frontend/package-lock.json ./frontend
-COPY backend/package.json backend/package-lock.json ./backend
+COPY frontend/package.json ./frontend
+COPY backend/package.json ./backend
 COPY package.json package-lock.json ./
 RUN npm ci && npm cache clean --force
 
@@ -42,7 +42,7 @@ COPY --from=build /build/frontend/build /www
 
 COPY --from=build \
 	/build/backend/package.json \
-	/build/backend/package-lock.json \
+	/build/package-lock.json \
 	.
 COPY --from=build /build/backend/node_modules ./node_modules
 COPY --from=build /build/backend/build ./build

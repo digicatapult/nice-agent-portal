@@ -14,41 +14,42 @@ import {
 } from '@digicatapult/ui-component-library'
 import { RoundButton } from '../../components/Dialog'
 import { getApprovedMemebers } from '../../services/admin'
+import QRCode from 'react-qr-code'
 const AdminPortal = () => {
   const dialogRef = useRef(null)
   const [isOpen, setIsOpen] = useState(false)
   const [message, setMessage] = useState('HARDCODED MESSAGE') //to be changed
   const [approvedMembers, setApprovedMembers] = useState([])
 
-  useEffect(() => {
-    const fetchDataFromBackend = async () => {
-      try {
-        const approvedMembersData = await getApprovedMemebers()
-        const members = []
-        for (let i = 0; i < approvedMembersData.length; i++) {
-          let member = approvedMembersData[i]
-          members.push([
-            { member },
-            <RoundButton
-              key={i}
-              imagePath={'images/check_icon.svg'}
-              title={''}
-              optionalImageHeight="15px"
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              dialogRef={dialogRef}
-            >
-              {' '}
-            </RoundButton>,
-          ])
-        }
-        setApprovedMembers(members)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      }
-    }
-    fetchDataFromBackend()
-  })
+  // useEffect(() => {
+  //   const fetchDataFromBackend = async () => {
+  //     try {
+  //       const approvedMembersData = await getApprovedMemebers()
+  //       const members = []
+  //       for (let i = 0; i < approvedMembersData.length; i++) {
+  //         let member = approvedMembersData[i]
+  //         members.push([
+  //           { member },
+  //           <RoundButton
+  //             key={i}
+  //             imagePath={'images/check_icon.svg'}
+  //             title={''}
+  //             optionalImageHeight="15px"
+  //             isOpen={isOpen}
+  //             setIsOpen={setIsOpen}
+  //             dialogRef={dialogRef}
+  //           >
+  //             {' '}
+  //           </RoundButton>,
+  //         ])
+  //       }
+  //       setApprovedMembers(members)
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error)
+  //     }
+  //   }
+  //   fetchDataFromBackend()
+  // })
   useEffect(() => {
     const listener = () => {
       setIsOpen(false)
@@ -75,7 +76,22 @@ const AdminPortal = () => {
               </SmallText>,
               <SmallThinText key={crypto.randomUUID()}> Approve</SmallThinText>,
             ]}
-            rows={approvedMembers}
+            rows={[
+              [
+                `Some name`,
+                <RoundButton
+                  key={crypto.randomUUID()}
+                  imagePath={'images/check_icon.svg'}
+                  title={''}
+                  optionalImageHeight="15px"
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                  dialogRef={dialogRef}
+                >
+                  {' '}
+                </RoundButton>,
+              ],
+            ]}
           />
         </div>
         <div style={{ width: '100%' }}>
@@ -94,17 +110,24 @@ const AdminPortal = () => {
         </div>
       </Border>
       <DialogComponent
-        width="100%"
-        maxHeight="150px"
+        width="90%"
+        maxHeight="400px"
         border="1px solid black"
         ref={dialogRef}
         includeClose={true}
       >
         <ContentWrapper style={{ padding: '50px 20px', width: '100%' }}>
           <SmallThinText>
-            Received message from Ethan&apos;s Exhaust Company:
+            Scan QR Code to complete the onboarding please:
           </SmallThinText>
-          <SmallText>{message}</SmallText>
+          <div style={{ padding: '40px 20px' }}>
+            <QRCode
+              size={256}
+              style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+              value={'Some Random Value'}
+              viewBox={`0 0 256 256`}
+            />
+          </div>
         </ContentWrapper>
       </DialogComponent>
     </WrapperWithHeader>

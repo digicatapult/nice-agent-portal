@@ -46,5 +46,22 @@ services:
       - '8181:8181'
     command: run --server --log-level debug
 
+  ##################################################################################
+  ## Postgres ######################################################################
+  ##################################################################################
+
+  postgres:
+    container_name: postgres
+    image: postgres:16.2-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - nice-storage:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=nice-agent-portal
+
 volumes:
+  nice-storage:
   ipfs0:

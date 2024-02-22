@@ -18,6 +18,11 @@ interface IBadRequest {
   name: string
 }
 
+interface IServiceUnavailable {
+  message?: string
+  name: string
+}
+
 export class HttpResponse extends Error {
   public code: number
   public message: string
@@ -42,6 +47,15 @@ export class NotFound extends HttpResponse implements INotFound {
 export class BadRequest extends HttpResponse implements IBadRequest {
   constructor(message = 'bad request') {
     super({ code: 400, message })
+  }
+}
+
+export class ServiceUnavailable
+  extends HttpResponse
+  implements IServiceUnavailable
+{
+  constructor(message = 'bad request') {
+    super({ code: 503, message })
   }
 }
 

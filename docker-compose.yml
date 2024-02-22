@@ -5,46 +5,60 @@ services:
   ## Alice #########################################################################
   ##################################################################################
 
-  agent0:
-    container_name: alice
-    image: digicatapult/veritable-cloudagent:latest
+  nice-agent:
+    build:
+      context: .
+    image: digicatapult/nice-agent-portal:${NICE_AGENT_VER-latest}
     restart: always
     depends_on:
-      ipfs0:
+      veritable-agent:
+        condition: service_healthy
+    ports:
+      - '3000:3000'
+    environment:
+      - CLOUDAGENT_HOST=${CLOUDAGENT_HOST-veritable-agent}
+
+  ##################################################################################
+  ## Alice #########################################################################
+  ##################################################################################
+
+  veritable-agent:
+    image: digicatapult/veritable-cloudagent:${VERITABLE_AGENT_VER-latest}
+    restart: always
+    depends_on:
+      ipfs:
         condition: service_healthy
     volumes:
       - ./cloudagentConfig.json:/config.json
     ports:
-      - '5002:5002'
-      - '5003:5003'
-      - '3001:3001'
+    #  - '5002:5002'
+    #  - '5003:5003'
+      - '3001:3000'
     # or via command line arguments
-    command: --endpoint "http://alice:5002", "ws://alice:5003" --ipfs-origin http://ipfs0:5001 --opa-origin http://opa:8181 --config /config.json
+    command: --endpoint "http://veritable-agent:5002", "ws://veritable-agent:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --config /config.json
 
   ##################################################################################
   ## IPFS ##########################################################################
   ##################################################################################
 
-  ipfs0:
-    container_name: ipfs0
-    image: ipfs/kubo:release
+  ipfs:
+    image: ipfs/kubo:${KUBO_AGENT_VER-release}
     ports:
       #     - "4001:4001" # ipfs swarm - expose if needed/wanted
       #     - "5001:5001" # ipfs api - expose if needed/wanted
       - '8080:8080' # ipfs gateway - expose if needed/wanted
     volumes:
-      - ipfs0:/data/ipfs
+      - ipfs-data:/data/ipfs
 
   ##################################################################################
   ## OPA ###########################################################################
   ##################################################################################
 
   opa:
-    container_name: opa
     image: openpolicyagent/opa:0.61.0-static
     ports:
       - '8181:8181'
     command: run --server --log-level debug
 
 volumes:
-  ipfs0:
+  ipfs-data:

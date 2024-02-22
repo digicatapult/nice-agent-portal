@@ -50,7 +50,10 @@ export class BadRequest extends HttpResponse implements IBadRequest {
   }
 }
 
-export class ServiceUnavailable extends HttpResponse implements IServiceUnavailable {
+export class ServiceUnavailable
+  extends HttpResponse
+  implements IServiceUnavailable
+{
   constructor(message = 'bad request') {
     super({ code: 503, message })
   }

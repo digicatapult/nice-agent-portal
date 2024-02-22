@@ -29,7 +29,8 @@ export class HealthController extends Controller {
       return {
         status: 'ok',
         version: packageVersion,
-        cloudagentIsInitialized: (await this.cloudagent.getAgent()).isInitialized,
+        cloudagentIsInitialized: (await this.cloudagent.getAgent())
+          .isInitialized,
       }
     } catch (e) {
       throw new ServiceUnavailable('veritable-cloudagent unavailable')

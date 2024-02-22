@@ -1,15 +1,12 @@
-class ApiService {
-  constructor(baseUrl) {
-    this.baseUrl = baseUrl
-  }
+const BASE_URL = 'https://your-backend-api-url.com'
 
-  async doSTH(endpoint, options = {}) {
-    const response = await fetch(`${BASE_URL}${endpoint}`, options)
-    const data = await response.json()
-    return data
-  }
+export const getApprovedMemebers = async () => {
+  // const response = await fetch(`${BASE_URL}/get-approved-members`, options)
+  // const data = await response.json()
+  const exampleData = [
+    `Ethan's Exhaust Company`,
+    `Sam's Batteries Company`,
+    `Branson's Breaks Company`,
+  ]
+  return exampleData
 }
-
-const apiService = new ApiService('https://your-backend-api-url.com')
-
-export default apiService

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import WrapperWithHeader from '../../components/Header'
 import styled from 'styled-components'
 import {
@@ -6,9 +6,59 @@ import {
   SmallThinText,
   SmallText,
   HeadingText,
+  ContentWrapper,
 } from '../../components/shared'
-import { Table } from '@digicatapult/ui-component-library'
+import {
+  Table,
+  Dialog as DialogComponent,
+} from '@digicatapult/ui-component-library'
+import { RoundButton } from '../../components/Dialog'
+import { getApprovedMemebers } from '../../services/admin'
 const AdminPortal = () => {
+  const dialogRef = useRef(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [message, setMessage] = useState('HARDCODED MESSAGE') //to be changed
+  const [approvedMembers, setApprovedMembers] = useState([])
+
+  useEffect(() => {
+    const fetchDataFromBackend = async () => {
+      try {
+        const approvedMembersData = await getApprovedMemebers()
+        const members = []
+        for (let i = 0; i < approvedMembersData.length; i++) {
+          let member = approvedMembersData[i]
+          members.push([
+            { member },
+            <RoundButton
+              key={i}
+              imagePath={'images/check_icon.svg'}
+              title={''}
+              optionalImageHeight="15px"
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              dialogRef={dialogRef}
+            >
+              {' '}
+            </RoundButton>,
+          ])
+        }
+        setApprovedMembers(members)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+    fetchDataFromBackend()
+  })
+  useEffect(() => {
+    const listener = () => {
+      setIsOpen(false)
+      setMessage('')
+    }
+    const dialog = dialogRef.current
+    dialog?.addEventListener('close', listener)
+    return () => dialog?.removeEventListener('close', listener)
+  })
+
   return (
     <WrapperWithHeader>
       <HeadingText style={{ textDecoration: 'underline' }}>
@@ -25,32 +75,7 @@ const AdminPortal = () => {
               </SmallText>,
               <SmallThinText key={crypto.randomUUID()}> Approve</SmallThinText>,
             ]}
-            rows={[
-              [
-                `Ethan's Exhaust Company`,
-                <img
-                  key={crypto.randomUUID()}
-                  src={'/images/check_icon.svg'}
-                  style={{ height: '15px' }}
-                ></img>,
-              ],
-              [
-                `Sam's Batteries Company`,
-                <img
-                  key={crypto.randomUUID()}
-                  src={'/images/check_icon.svg'}
-                  style={{ height: '15px' }}
-                ></img>,
-              ],
-              [
-                `Branson's Breaks Company`,
-                <img
-                  key={crypto.randomUUID()}
-                  src={'/images/check_icon.svg'}
-                  style={{ height: '15px' }}
-                ></img>,
-              ],
-            ]}
+            rows={approvedMembers}
           />
         </div>
         <div style={{ width: '100%' }}>
@@ -68,6 +93,20 @@ const AdminPortal = () => {
           />
         </div>
       </Border>
+      <DialogComponent
+        width="100%"
+        maxHeight="150px"
+        border="1px solid black"
+        ref={dialogRef}
+        includeClose={true}
+      >
+        <ContentWrapper style={{ padding: '50px 20px', width: '100%' }}>
+          <SmallThinText>
+            Received message from Ethan&apos;s Exhaust Company:
+          </SmallThinText>
+          <SmallText>{message}</SmallText>
+        </ContentWrapper>
+      </DialogComponent>
     </WrapperWithHeader>
   )
 }

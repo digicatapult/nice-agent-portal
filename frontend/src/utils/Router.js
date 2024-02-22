@@ -8,9 +8,11 @@ import InviteCompany from '../pages/Invite/AddCompany'
 import InviteThemToNice from '../pages/Invite/InviteThemToNice'
 import ScanTheirNiceId from '../pages/Invite/ScanTheirNiceId'
 import ShareNiceId from '../pages/Invite/ShareNiceId'
+import AdminPortal from '../pages/Admin/AdminPortal'
 
 export const router = createBrowserRouter([
   { path: '*', element: <NewHomePage /> },
+  { path: '/admin', element: <AdminPortal /> },
   { path: '/sign-up', element: <Issue /> },
   { path: '/complete-onboarding', element: <CompleteOnboardingPage /> },
   {

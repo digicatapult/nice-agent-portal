@@ -1,17 +1,22 @@
 import React from 'react'
 import { Button } from './shared'
-import { useNavigate } from 'react-router-dom'
 
-const ButtonWithImage = ({
+const SendMessageButton = ({
   title,
+  setIsOpen,
+  isOpen,
+  dialogRef,
   imagePath,
-  buttonClick,
   optionalMargin = '0px',
   optionalImageHeight = 'auto',
 }) => {
-  const navigate = useNavigate()
-  const handleButtonClick = (e, buttonClick) => {
-    navigate(`/${buttonClick}`)
+  const handleOnClick = () => {
+    setIsOpen(!isOpen)
+    if (!isOpen) {
+      dialogRef.current?.show()
+    } else {
+      dialogRef.current?.close()
+    }
   }
   return (
     <Button
@@ -20,12 +25,11 @@ const ButtonWithImage = ({
         alignItems: 'center',
         marginBottom: optionalMargin,
       }}
-      onClick={(e) => handleButtonClick(e, buttonClick)}
+      onClick={handleOnClick}
     >
       <img
         src={imagePath}
         style={{
-          marginRight: title == '' ? '0px' : '5px',
           height: optionalImageHeight,
         }}
       ></img>
@@ -33,4 +37,5 @@ const ButtonWithImage = ({
     </Button>
   )
 }
-export default ButtonWithImage
+
+export default SendMessageButton

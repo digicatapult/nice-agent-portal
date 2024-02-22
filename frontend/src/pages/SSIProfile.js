@@ -1,6 +1,6 @@
 import React from 'react'
 import { Section } from '@digicatapult/ui-component-library'
-import { SmallThinText } from '../components/shared'
+import { Border, SmallThinText } from '../components/shared'
 import OwnCredential from '../components/Credentials'
 import ButtonWithImage from '../components/ButtonWithImage'
 import WrapperWithHeader from '../components/Header'
@@ -47,16 +47,7 @@ const SSIProfilePagePage = () => {
           </div>
         </Section>
 
-        <div
-          style={{
-            border: '1px solid black ',
-            padding: '10px',
-            marginTop: '10px',
-            marginBottom: '90px',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
+        <Border>
           <img
             src={'/images/check_icon.svg'}
             style={{ height: '15px', marginRight: '10px' }}
@@ -64,12 +55,13 @@ const SSIProfilePagePage = () => {
           <SmallThinText>
             Your Profile is verified by the nice network{' '}
           </SmallThinText>
-        </div>
+        </Border>
 
         <ButtonWithImage
           title={'View your NICE connections'}
           imagePath={'/images/contact_icon.svg'}
           optionalMargin="10px"
+          buttonClick={'ssi-profile/view-connections'}
         ></ButtonWithImage>
         <ButtonWithImage
           title={'Add connection'}

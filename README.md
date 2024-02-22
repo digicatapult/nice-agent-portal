@@ -53,7 +53,7 @@ This repo contains a React frontend in the `/frontend` directory and a TSOA back
 Bring up dependences with
 
 ```
-docker compose up veritable-agent ipfs opa -d
+docker compose up -d veritable-agent ipfs opa
 ```
 
 Build both frontend and backend:

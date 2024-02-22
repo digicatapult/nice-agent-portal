@@ -107,7 +107,7 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
       - name: Setup dependencies
-        run: docker-compose up veritable-agent ipfs opa -d
+        run: docker-compose up -d veritable-agent ipfs opa
       - name: Install Node Packages
         run: npm ci
       - name: Run tests

@@ -13,52 +13,59 @@ import {
   Dialog as DialogComponent,
 } from '@digicatapult/ui-component-library'
 import { RoundButton } from '../../components/Dialog'
-import { getApprovedMemebers } from '../../services/admin'
+import {
+  getApprovedMemebers,
+  getNotApprovedMemebers,
+} from '../../services/admin'
 import QRCode from 'react-qr-code'
 const AdminPortal = () => {
   const dialogRef = useRef(null)
   const [isOpen, setIsOpen] = useState(false)
-  const [message, setMessage] = useState('HARDCODED MESSAGE') //to be changed
+  const [notApprovedMembers, setNotApprovedMembers] = useState([])
   const [approvedMembers, setApprovedMembers] = useState([])
 
-  // useEffect(() => {
-  //   const fetchDataFromBackend = async () => {
-  //     try {
-  //       const approvedMembersData = await getApprovedMemebers()
-  //       const members = []
-  //       for (let i = 0; i < approvedMembersData.length; i++) {
-  //         let member = approvedMembersData[i]
-  //         members.push([
-  //           { member },
-  //           <RoundButton
-  //             key={i}
-  //             imagePath={'images/check_icon.svg'}
-  //             title={''}
-  //             optionalImageHeight="15px"
-  //             isOpen={isOpen}
-  //             setIsOpen={setIsOpen}
-  //             dialogRef={dialogRef}
-  //           >
-  //             {' '}
-  //           </RoundButton>,
-  //         ])
-  //       }
-  //       setApprovedMembers(members)
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error)
-  //     }
-  //   }
-  //   fetchDataFromBackend()
-  // })
+  useEffect(() => {
+    const fetchDataFromBackend = async () => {
+      try {
+        const notApprovedMembersData = await getNotApprovedMemebers()
+        const approvedMembersData = await getApprovedMemebers()
+        const notApprovedMembers = []
+        const approvedMembers = []
+        for (let i = 0; i < notApprovedMembersData.length; i++) {
+          let member = notApprovedMembersData[i]
+          notApprovedMembers.push([
+            <>{member}</>,
+            <RoundButton
+              key={i}
+              imagePath={'images/check_icon.svg'}
+              title={''}
+              optionalImageHeight="15px"
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              dialogRef={dialogRef}
+            ></RoundButton>,
+          ])
+        }
+
+        for (let i = 0; i < approvedMembers.length; i++) {
+          let member = approvedMembersData[i]
+          approvedMembers.push(<>{member}</>)
+        }
+        setNotApprovedMembers(notApprovedMembers)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+    fetchDataFromBackend()
+  }, [])
   useEffect(() => {
     const listener = () => {
       setIsOpen(false)
-      setMessage('')
     }
     const dialog = dialogRef.current
     dialog?.addEventListener('close', listener)
     return () => dialog?.removeEventListener('close', listener)
-  })
+  }, [])
 
   return (
     <WrapperWithHeader>
@@ -66,7 +73,7 @@ const AdminPortal = () => {
         NICE Admin Portal
       </HeadingText>
       <Border
-        style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+        style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%' }}
       >
         <div style={{ width: '100%', marginBottom: '40px' }}>
           <StyledTable
@@ -76,22 +83,7 @@ const AdminPortal = () => {
               </SmallText>,
               <SmallThinText key={crypto.randomUUID()}> Approve</SmallThinText>,
             ]}
-            rows={[
-              [
-                `Some name`,
-                <RoundButton
-                  key={crypto.randomUUID()}
-                  imagePath={'images/check_icon.svg'}
-                  title={''}
-                  optionalImageHeight="15px"
-                  isOpen={isOpen}
-                  setIsOpen={setIsOpen}
-                  dialogRef={dialogRef}
-                >
-                  {' '}
-                </RoundButton>,
-              ],
-            ]}
+            rows={notApprovedMembers}
           />
         </div>
         <div style={{ width: '100%' }}>
@@ -110,7 +102,6 @@ const AdminPortal = () => {
         </div>
       </Border>
       <DialogComponent
-        width="90%"
         maxHeight="400px"
         border="1px solid black"
         ref={dialogRef}

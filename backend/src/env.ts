@@ -11,10 +11,14 @@ export default envalid.cleanEnv(process.env, {
   PORT: envalid.port({ default: 3000 }),
   LOG_LEVEL: envalid.str({ default: 'info', devDefault: 'debug' }),
   CLOUDAGENT_HOST: envalid.host({ devDefault: 'localhost' }),
-  CLOUDAGENT_PORT: envalid.port({ default: 3001 }),
+  CLOUDAGENT_PORT: envalid.port({ default: 3000, devDefault: 3001 }),
   DB_HOST: envalid.str({ devDefault: 'localhost' }),
   DB_PORT: envalid.port({ default: 5432 }),
   DB_USERNAME: envalid.str({ devDefault: 'postgres' }),
   DB_PASSWORD: envalid.str({ devDefault: 'postgres' }),
   DB_NAME: envalid.str({ default: 'nice-agent-portal' }),
+  STATIC_ROOT: envalid.str({
+    default: '/www',
+    devDefault: '../frontend/build',
+  }),
 })

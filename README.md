@@ -6,6 +6,15 @@ This repository contains the code for the front-end portal to the NICE (Network 
 
 The [Network Insight Collaboration Environment](https://digitalsupplychainhub.uk/showcase/critical-minerals-flagship/) aims to demonstrate that an innovative approach, based on new and existing technology, will allow supply chains to share insights and data across multiple data platforms, enhancing the efficiency of the supply chain network. It forms part of Critical Minerals, one of the flagships of the Digital Supply Chain Hub run by Made Smarter Innovation.
 
+### Usage
+
+To run the full stack, use:
+```
+docker-compose up --build
+```
+
+Environment variables can be set using a `.env` file in the project root (see example file [`.env.example`](./.env.example))
+
 ### Architecture
 
 The NICE Agent is built on top of the Veritable agent, and this repo describes the portal that allows the Veritable agent to be utilized. The following diagram shows the entire architecture, although the NICE Agent will include different components depending on role (Issuer vs Peer).
@@ -44,7 +53,7 @@ This repo contains a React frontend in the `/frontend` directory and a TSOA back
 Bring up dependences with
 
 ```
-docker compose up -d
+docker compose up -d veritable-agent ipfs opa
 ```
 
 Build both frontend and backend:

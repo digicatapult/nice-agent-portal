@@ -20,7 +20,7 @@ Use a `.env` at root of this directory to set values for the following environme
 
 ## Database
 
-Make sure postgres is running with`docker-compose up -d` at root of the repository. The database schema is managed using `prisma` located at `/prisma/schema.prisma`.
+Make sure postgres is running with`docker compose up -d` at root of the repository. The database schema is managed using `prisma` located at `/prisma/schema.prisma`.
 
 ```sh
 # apply migrations to the database

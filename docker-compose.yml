@@ -31,8 +31,8 @@ services:
     volumes:
       - ./cloudagentConfig.json:/config.json
     ports:
-    #  - '5002:5002'
-    #  - '5003:5003'
+      #  - '5002:5002'
+      #  - '5003:5003'
       - '3001:3000'
     # or via command line arguments
     command: --endpoint "http://veritable-agent:5002", "ws://veritable-agent:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --config /config.json
@@ -60,5 +60,22 @@ services:
       - '8181:8181'
     command: run --server --log-level debug
 
+  ##################################################################################
+  ## Postgres ######################################################################
+  ##################################################################################
+
+  postgres:
+    container_name: postgres
+    image: postgres:16.2-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - nice-storage:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=nice-agent-portal
+
 volumes:
+  nice-storage:
   ipfs-data:

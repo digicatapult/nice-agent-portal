@@ -21,5 +21,8 @@ export default envalid.cleanEnv(process.env, {
     default: '/www',
     devDefault: '../frontend/build',
   }),
-  NICE_AGENT_ROLE: envalid.str({ choices: ['peer', 'issuer'], default: 'peer' }),
+  NICE_AGENT_ROLE: envalid.str({
+    choices: ['peer', 'issuer'],
+    default: 'peer',
+  }),
 })

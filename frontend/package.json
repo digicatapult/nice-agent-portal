@@ -10,7 +10,7 @@
     "lint:fix": "eslint --ext .js ./src --fix",
     "dev": "webpack-dev-server --mode=development",
     "start": "serve -s ./build",
-    "build": "./node_modules/.bin/webpack --mode=production",
+    "build": "webpack --mode=production",
     "depcheck": "depcheck",
     "test": "echo \"No tests specified\" && exit 0"
   },

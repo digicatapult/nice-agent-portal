@@ -4,8 +4,7 @@ x-env-files:
   &env-files
   env_file:
     - .env
-    - path: .env.${COMPOSE_PROJECT_NAME}
-      required: false
+    - .env.${COMPOSE_PROJECT_NAME}
 
 services:
   portal:

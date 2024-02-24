@@ -11,6 +11,7 @@ The [Network Insight Collaboration Environment](https://digitalsupplychainhub.uk
 #### Prerequisites
 
 - docker 19.03.0+
+- docker-compose v2.23.0+
 - npm 10.0.0+
 - node 20.0.0+
 

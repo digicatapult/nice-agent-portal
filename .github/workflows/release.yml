@@ -107,7 +107,7 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
       - name: Setup dependencies
-        run: docker  compose up -d veritable-agent ipfs opa postgres
+        run: docker  compose up -d veritable ipfs opa postgres
       - name: Install Node Packages
         run: npm ci
       - name: Run tests
@@ -119,6 +119,10 @@ jobs:
     runs-on: ubuntu-latest
     # comment the line above to force publish
     if: ${{ needs.check-version.outputs.is_new_version == 'true' }}
+
+    strategy:
+      matrix:
+        nice-agent-role: [peer, issuer]
 
     steps:
       - uses: actions/checkout@v4
@@ -145,11 +149,11 @@ jobs:
         # add the following in run to force publish: IS_NEW_VERSION="true"; VERSION=0.2.0
         run: |
           if [ "$IS_NEW_VERSION" == "true" ]; then
-            echo "GHCR_VERSION_TAG=ghcr.io/${{ needs.preconditions.outputs.org_name }}/${{ needs.preconditions.outputs.repo_name }}:$VERSION" >> $GITHUB_OUTPUT
-            echo "DOCKERHUB_VERSION_TAG=${{ needs.preconditions.outputs.org_name }}/${{ needs.preconditions.outputs.repo_name }}:$VERSION" >> $GITHUB_OUTPUT
+            echo "GHCR_VERSION_TAG=ghcr.io/${{ needs.preconditions.outputs.org_name }}/${{ needs.preconditions.outputs.repo_name }}-${{ matrix.nice-agent-role }}:$VERSION" >> $GITHUB_OUTPUT
+            echo "DOCKERHUB_VERSION_TAG=${{ needs.preconditions.outputs.org_name }}/${{ needs.preconditions.outputs.repo_name }}-${{ matrix.nice-agent-role }}:$VERSION" >> $GITHUB_OUTPUT
             if [ "$IS_PRERELEASE" == "false" ]; then
-              echo "GHCR_LATEST_TAG=ghcr.io/${{ needs.preconditions.outputs.org_name }}/${{ needs.preconditions.outputs.repo_name }}:latest" >> $GITHUB_OUTPUT
-              echo "DOCKERHUB_LATEST_TAG=${{ needs.preconditions.outputs.org_name }}/${{ needs.preconditions.outputs.repo_name }}:latest" >> $GITHUB_OUTPUT
+              echo "GHCR_LATEST_TAG=ghcr.io/${{ needs.preconditions.outputs.org_name }}/${{ needs.preconditions.outputs.repo_name }}-${{ matrix.nice-agent-role }}:latest" >> $GITHUB_OUTPUT
+              echo "DOCKERHUB_LATEST_TAG=${{ needs.preconditions.outputs.org_name }}/${{ needs.preconditions.outputs.repo_name }}-${{ matrix.nice-agent-role }}:latest" >> $GITHUB_OUTPUT
             else
               echo "GHCR_LATEST_TAG=" >> $GITHUB_OUTPUT
               echo "DOCKERHUB_LATEST_TAG=" >> $GITHUB_OUTPUT
@@ -176,17 +180,18 @@ jobs:
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
+          build-args: NICE_AGENT_ROLE=${{ matrix.nice-agent-role }}
           platforms: linux/amd64, linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ needs.preconditions.outputs.org_name }}/${{ needs.preconditions.outputs.repo_name }}:${{ github.sha }}
+            ghcr.io/${{ needs.preconditions.outputs.org_name }}/${{ needs.preconditions.outputs.repo_name }}-${{ matrix.nice-agent-role }}:${{ github.sha }}
             ${{ steps.generate-tags.outputs.GHCR_VERSION_TAG }}
             ${{ steps.generate-tags.outputs.GHCR_LATEST_TAG }}
-            ${{ needs.preconditions.outputs.org_name }}/${{ needs.preconditions.outputs.repo_name }}:${{ github.sha }}
+            ${{ needs.preconditions.outputs.org_name }}/${{ needs.preconditions.outputs.repo_name }}-${{ matrix.nice-agent-role }}:${{ github.sha }}
             ${{ steps.generate-tags.outputs.DOCKERHUB_VERSION_TAG }}
             ${{ steps.generate-tags.outputs.DOCKERHUB_LATEST_TAG }}
           labels: |
-            org.opencontainers.image.title=${{ needs.preconditions.outputs.repo_name }}
+            org.opencontainers.image.title=${{ needs.preconditions.outputs.repo_name }}-${{ matrix.nice-agent-role }}
             org.opencontainers.image.description=${{ github.event.repository.description }}
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
             org.opencontainers.image.url=${{ github.event.repository.html_url }}

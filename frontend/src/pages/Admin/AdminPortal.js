@@ -23,16 +23,19 @@ const AdminPortal = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [notApprovedMembers, setNotApprovedMembers] = useState([])
   const [approvedMembers, setApprovedMembers] = useState([])
+  const [QRcontent, setQRcontent] = useState('')
 
   useEffect(() => {
     const fetchDataFromBackend = async () => {
       try {
         const notApprovedMembersData = await getNotApprovedMemebers()
         const approvedMembersData = await getApprovedMemebers()
+
         const notApprovedMembers = []
         const approvedMembers = []
         for (let i = 0; i < notApprovedMembersData.length; i++) {
           let member = notApprovedMembersData[i]
+
           notApprovedMembers.push([
             <>{member}</>,
             <RoundButton
@@ -43,15 +46,20 @@ const AdminPortal = () => {
               isOpen={isOpen}
               setIsOpen={setIsOpen}
               dialogRef={dialogRef}
+              setQRContent={setQRcontent}
+              contentKey={i}
             ></RoundButton>,
           ])
         }
 
-        for (let i = 0; i < approvedMembers.length; i++) {
+        for (let i = 0; i < approvedMembersData.length; i++) {
           let member = approvedMembersData[i]
-          approvedMembers.push(<>{member}</>)
+
+          approvedMembers.push([<>{member}</>])
         }
+
         setNotApprovedMembers(notApprovedMembers)
+        setApprovedMembers(approvedMembers)
       } catch (error) {
         console.error('Error fetching data:', error)
       }
@@ -93,11 +101,7 @@ const AdminPortal = () => {
                 Approved Companies
               </SmallText>,
             ]}
-            rows={[
-              [`Ethan's Exhaust Company`],
-              [`Sam's Batteries Company`],
-              [`Branson's Breaks Company`],
-            ]}
+            rows={approvedMembers}
           />
         </div>
       </Border>
@@ -111,11 +115,12 @@ const AdminPortal = () => {
           <SmallThinText>
             Scan QR Code to complete the onboarding please:
           </SmallThinText>
+
           <div style={{ padding: '40px 20px' }}>
             <QRCode
               size={256}
               style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-              value={'Some Random Value'}
+              value={QRcontent}
               viewBox={`0 0 256 256`}
             />
           </div>

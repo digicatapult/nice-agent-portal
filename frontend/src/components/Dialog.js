@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from './shared'
+import { approveMember, getQRContentToOnboard } from '../services/admin'
 
 export const SendMessageButton = ({
   title,
@@ -45,6 +46,8 @@ export const RoundButton = ({
   imagePath,
   optionalMargin = '0px',
   optionalImageHeight = 'auto',
+  setQRContent = function () {},
+  contentKey = null,
 }) => {
   const handleOnClick = () => {
     setIsOpen(!isOpen)
@@ -52,6 +55,13 @@ export const RoundButton = ({
       dialogRef.current?.show()
     } else {
       dialogRef.current?.close()
+    }
+
+    if (contentKey) {
+      const qrContent = getQRContentToOnboard(contentKey)
+      console.log(qrContent)
+      setQRContent(qrContent)
+      approveMember(contentKey) //approves member
     }
   }
   return (

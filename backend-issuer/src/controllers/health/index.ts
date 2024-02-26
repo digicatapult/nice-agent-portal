@@ -23,7 +23,7 @@ export class HealthController extends Controller {
   @SuccessResponse(200)
   @Get('/')
   public async get() {
-    logger.debug({ msg: 'new request received', controller: '/health' })
+    logger.info({ msg: 'new request received', controller: '/health' })
 
     try {
       return {

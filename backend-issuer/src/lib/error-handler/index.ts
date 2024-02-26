@@ -23,6 +23,11 @@ interface IServiceUnavailable {
   name: string
 }
 
+interface IInternalError {
+  message?: string
+  name: string
+}
+
 export class HttpResponse extends Error {
   public code: number
   public message: string
@@ -54,8 +59,14 @@ export class ServiceUnavailable
   extends HttpResponse
   implements IServiceUnavailable
 {
-  constructor(message = 'bad request') {
+  constructor(message = 'service unavailable') {
     super({ code: 503, message })
+  }
+}
+
+export class InternalError extends HttpResponse implements IInternalError {
+  constructor(message = 'internal server error') {
+    super({ code: 500, message })
   }
 }
 

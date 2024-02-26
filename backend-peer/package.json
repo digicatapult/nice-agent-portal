@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "depcheck": "depcheck",
     "build:tsoa": "tsoa spec-and-routes",
-    "build": "npm run build:tsoa && tsc",
+    "build:prisma": "prisma generate",
+    "build": "npm run build:prisma && npm run build:tsoa && tsc",
     "start": "node build/index.js",
     "dev": "concurrently \"NODE_ENV=dev nodemon | pino-colada\" \"nodemon -x tsoa spec-and-routes --ignore src/routes.ts --ignore src/swagger.json\"",
     "test": "npm run build && npm run test:integration && npm run test:unit",
@@ -58,6 +59,7 @@
     "nodemon": "^3.0.3",
     "pino-colada": "^2.2.2",
     "prettier": "^3.2.5",
+    "prisma": "^5.10.2",
     "supertest": "^6.3.4",
     "tsimp": "^2.0.11",
     "typescript": "^5.3.3"

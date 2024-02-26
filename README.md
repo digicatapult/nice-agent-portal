@@ -42,6 +42,11 @@ export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --e
 export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d
 ```
 
+Or:
+```
+for agent_name in alice bob issuer; do (export COMPOSE_PROJECT_NAME=nice-agent-"$agent_name" && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d); done
+```
+
 With the default configurations defined in this repo's `.env.*` files, the portals will be available at:
 - Peer 1 (Alice): http://localhost:3000
 - Peer 2 (Bob): http://localhost:3001

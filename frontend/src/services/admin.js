@@ -53,17 +53,6 @@ export const getMemebers = async () => {
   return exampleData
 }
 
-// export const getNotApprovedMemebers = async () => {
-//   // const response = await fetch(`${BASE_URL}/get-not-approved-members`, options)
-//   // const data = await response.json()
-//   const exampleData = [
-//     `Ethan's Exhaust Company`,
-//     `Sam's Batteries Company`,
-//     `Branson's Breaks Company`,
-//   ]
-//   return exampleData
-// }
-
 export const getQRContentToOnboard = async (id) => {
   // const response = await fetch(`${BASE_URL}/get-qr-code-content/{id}`, options)
   // const data = await response.json()

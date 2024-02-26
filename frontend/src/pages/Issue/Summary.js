@@ -17,7 +17,7 @@ export default function Summary({ inputs, setStage }) {
     padding: 10px;
   `
 
-  const handleClick = async () => {
+  const handleSubmitApplication = async () => {
     try {
       const requestBody = {
         companyName: inputs.name,
@@ -25,14 +25,11 @@ export default function Summary({ inputs, setStage }) {
         email: inputs.email,
       }
       const response = await postSubmitApplication(requestBody)
+      console.log(response)
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`)
+      if (response.status !== 204) {
+        throw new Error(`Response status: ${response.status}`)
       }
-
-      // Handle the response or perform additional actions as needed
-      const responseData = await response.json()
-      console.log('Data sent successfully:', responseData)
     } catch (error) {
       console.error('Error sending data:', error)
     }
@@ -100,7 +97,7 @@ export default function Summary({ inputs, setStage }) {
               // eslint-disable-next-line
               console.log(Math.floor(1000 + Math.random() * 9000).toString())
               // should be doing sth to send the qr text
-              handleClick()
+              handleSubmitApplication()
             }}
           >
             {'Submit'}

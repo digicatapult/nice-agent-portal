@@ -13,7 +13,7 @@ import {
   Table,
   Dialog as DialogComponent,
 } from '@digicatapult/ui-component-library'
-import SendMessageButton from '../../components/Dialog'
+import { SendMessageButton } from '../../components/Dialog'
 import { styled } from 'styled-components'
 
 const ViewConnections = () => {

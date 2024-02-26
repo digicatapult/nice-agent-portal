@@ -1,4 +1,4 @@
-const BASE_URL = 'https://your-backend-api-url.com'
+// const BASE_URL = 'https://your-backend-api-url.com'
 
 export const getMemebers = async () => {
   // const response = await fetch(`${BASE_URL}/admin/members`, options)
@@ -65,6 +65,6 @@ export const approveMember = async (id) => {
   //   `${BASE_URL}/admin/members/{id}/approve`,
   //   options
   // )
-  const response = {}
+  const response = { id }
   return response
 }

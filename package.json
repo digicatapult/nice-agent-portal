@@ -26,5 +26,9 @@
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/digicatapult/nice-agent-portal/issues"
+  },
+  "devDependencies": {
+    "@aries-framework/core": "^0.4.2",
+    "did-resolver": "^4.1.0"
   }
 }

@@ -6,17 +6,21 @@ OpenAPI service to manage profiles for the NICE agent and communication with [`v
 
 Use a `.env` at root of this directory to set values for the following environment variables:
 
-| variable        | required |       default       | description                                                                          |
-| :-------------- | :------: | :-----------------: | :----------------------------------------------------------------------------------- |
-| PORT            |    N     |       `3000`        | The port for the API to listen on                                                    |
-| LOG_LEVEL       |    N     |       `debug`       | Logging level. Valid values are [`trace`, `debug`, `info`, `warn`, `error`, `fatal`] |
-| CLOUDAGENT_HOST |    Y     |          -          | The hostname / host of `veritable-cloudagent`                                        |
-| CLOUDAGENT_PORT |    N     |       `3001`        | The port of `veritable-cloudagent`                                                   |
-| DB_PORT         |    N     |       `5432`        | The port for the database                                                            |
-| DB_HOST         |    Y     |          -          | The database hostname / host                                                         |
-| DB_NAME         |    N     | `nice-agent-portal` | The database name                                                                    |
-| DB_USERNAME     |    Y     |          -          | The database username                                                                |
-| DB_PASSWORD     |    Y     |          -          | The database password                                                                |
+| variable            | required |       default       | description                                                                          |
+| :------------------ | :------: | :-----------------: | :----------------------------------------------------------------------------------- |
+| PORT                |    N     |       `3000`        | The port for the API to listen on                                                    |
+| LOG_LEVEL           |    N     |       `debug`       | Logging level. Valid values are [`trace`, `debug`, `info`, `warn`, `error`, `fatal`] |
+| CLOUDAGENT_HOST     |    Y     |          -          | The hostname / host of `veritable-cloudagent`                                        |
+| CLOUDAGENT_PORT     |    N     |       `3001`        | The port of `veritable-cloudagent`                                                   |
+| ISSUER_HOST         |    Y     |          -          | The hostname / host of an issuer's `nice-agent-portal` API                           |
+| ISSUER_PORT         |    N     |       `3002`        | The port of of an issuer's `nice-agent-portal` API                                   |
+| DB_PORT             |    N     |       `5432`        | The port for the database                                                            |
+| DB_HOST             |    Y     |          -          | The database hostname / host                                                         |
+| DB_NAME             |    N     | `nice-agent-portal` | The database name                                                                    |
+| DB_USERNAME         |    Y     |          -          | The database username                                                                |
+| DB_PASSWORD         |    Y     |          -          | The database password                                                                |
+| WEB_DID             |    Y     |          -          | Web DID used for applications                                                        |
+| WEB_DID_PRIVATE_KEY |    Y     |          -          | Private key for the web DID                                                          |
 
 ## Database
 

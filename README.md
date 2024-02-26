@@ -9,6 +9,7 @@ The [Network Insight Collaboration Environment](https://digitalsupplychainhub.uk
 ### Usage
 
 To run the full stack, use:
+
 ```
 docker-compose up --build
 ```
@@ -53,7 +54,7 @@ This repo contains a React frontend in the `/frontend` directory and a TSOA back
 Bring up dependences with
 
 ```
-docker compose up -d veritable-agent ipfs opa
+docker compose up -d veritable-agent ipfs opa postgres
 ```
 
 Build both frontend and backend:

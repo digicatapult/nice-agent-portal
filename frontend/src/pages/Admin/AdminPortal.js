@@ -33,7 +33,7 @@ const AdminPortal = () => {
           (item) => item.status === 'approved'
         )
 
-        const notApprovedMembers = notApprovedMembersData.map((member, i) => [
+        const notApprovedMembers = notApprovedMembersData.map((member) => [
           <>{member.companyName}</>,
           <RoundButton
             key={member.id}
@@ -54,6 +54,7 @@ const AdminPortal = () => {
         setNotApprovedMembers(notApprovedMembers)
         setApprovedMembers(approvedMembers)
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Error fetching data:', error)
       }
     }

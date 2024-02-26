@@ -5,12 +5,14 @@ import bodyParser from 'body-parser'
 import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import env from './env.js'
 
 import { errorHandler } from './lib/error-handler/index.js'
 import { RegisterRoutes } from './routes.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+const static_root_abs = path.resolve(env.STATIC_ROOT)
 
 export default async (): Promise<Express> => {
   const swaggerBuffer = await fs.readFile(
@@ -36,12 +38,10 @@ export default async (): Promise<Express> => {
     })
   )
 
-  const root = path.join(__dirname, '../..', 'frontend', 'build')
-
-  app.use(express.static(root))
+  app.use(express.static(static_root_abs))
 
   app.get('*', (_req, res) => {
-    res.sendFile(`${root}/index.html`)
+    res.sendFile(`${static_root_abs}/index.html`)
   })
 
   return app

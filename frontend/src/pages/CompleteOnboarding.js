@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { SmallThinText, Button, ContentWrapper } from '../components/shared'
 import WrapperWithHeader from '../components/Header'
@@ -12,20 +12,20 @@ const CompleteOnboardingPage = () => {
   const handleBackToHomepage = () => {
     window.location.href = `/home`
   }
-  const handleValueChange = async () => {
+  const handleValueChange = useCallback(async () => {
     try {
       const response = await postConfirmApplication(QrCodeContent)
-      console.log(response)
+
       if (response.status != 204) {
         throw new Error(`Status code: ${response.status}`)
       }
     } catch (error) {
       throw new Error(`${error}`)
     }
-  }
+  }, [QrCodeContent])
   useEffect(() => {
     handleValueChange()
-  }, [QrCodeContent])
+  }, [handleValueChange])
 
   const ScanQR = () => {
     return (

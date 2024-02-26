@@ -25,13 +25,12 @@ export default function Summary({ inputs, setStage }) {
         email: inputs.email,
       }
       const response = await postSubmitApplication(requestBody)
-      console.log(response)
 
       if (response.status !== 204) {
         throw new Error(`Response status: ${response.status}`)
       }
     } catch (error) {
-      console.error('Error sending data:', error)
+      throw new Error(`${error}`)
     }
   }
   return (
@@ -96,7 +95,7 @@ export default function Summary({ inputs, setStage }) {
               setStage((prev) => prev + 1)
               // eslint-disable-next-line
               console.log(Math.floor(1000 + Math.random() * 9000).toString())
-              // should be doing sth to send the qr text
+
               handleSubmitApplication()
             }}
           >

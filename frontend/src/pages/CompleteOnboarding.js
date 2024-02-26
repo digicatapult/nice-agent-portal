@@ -1,15 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { SmallThinText, Button, ContentWrapper } from '../components/shared'
 import WrapperWithHeader from '../components/Header'
 import QRReaderSection from '../components/QRCode'
+import { postConfirmApplication } from '../services/member/Onboarding'
 
 const CompleteOnboardingPage = () => {
   const [hasScanned, setHasScanned] = useState(false)
+  const [QrCodeContent, setQRCodeContent] = useState('')
 
   const handleBackToHomepage = () => {
     window.location.href = `/home`
   }
+  const handleValueChange = async () => {
+    try {
+      const response = await postConfirmApplication(QrCodeContent)
+      console.log(response)
+      if (response.status != 204) {
+        throw new Error(`Status code: ${response.status}`)
+      }
+    } catch (error) {
+      throw new Error(`${error}`)
+    }
+  }
+  useEffect(() => {
+    handleValueChange()
+  }, [QrCodeContent])
 
   const ScanQR = () => {
     return (
@@ -19,6 +35,7 @@ const CompleteOnboardingPage = () => {
         <QRReaderSection
           instructionText={`   You will find this in your email sent to you from the NICE Network.`}
           setHasScanned={setHasScanned}
+          setQRCodeContent={setQRCodeContent}
         ></QRReaderSection>
 
         <Button onClick={handleBackToHomepage}>{'<'}</Button>

@@ -7,7 +7,7 @@
     "rootDir": "./src",
     "baseUrl": "./",
     "moduleResolution": "node",
-    "typeRoots": ["types/*", "node_modules/@types"],
+    "typeRoots": ["types/*", "node_modules/@types", "../node_modules/@types"],
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

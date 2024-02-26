@@ -21,7 +21,7 @@ export interface Member {
   /**
    * @pattern ^[-A-Za-z0-9+/]*={0,3}$
    */
-  verificationCode?: string
+  verificationCode: string
   createdAt: Date
   updatedAt: Date
 }

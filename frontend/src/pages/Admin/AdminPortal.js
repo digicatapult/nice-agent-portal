@@ -54,7 +54,7 @@ const AdminPortal = () => {
         setNotApprovedMembers(notApprovedMembers)
         setApprovedMembers(approvedMembers)
       } catch (error) {
-        // eslint-disable-next-line no-console
+        // eslint-disable-next-line
         console.error('Error fetching data:', error)
       }
     }

@@ -58,7 +58,7 @@ export const RoundButton = ({
     }
 
     const qrContent = await getQRContentToOnboard(contentKey)
-    console.log(qrContent)
+
     setQRContent(qrContent)
     await approveMember(contentKey) //approves member
   }

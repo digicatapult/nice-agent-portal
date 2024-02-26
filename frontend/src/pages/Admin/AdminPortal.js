@@ -13,10 +13,7 @@ import {
   Dialog as DialogComponent,
 } from '@digicatapult/ui-component-library'
 import { RoundButton } from '../../components/Dialog'
-import {
-  getApprovedMemebers,
-  getNotApprovedMemebers,
-} from '../../services/admin'
+import { getMemebers } from '../../services/admin'
 import QRCode from 'react-qr-code'
 const AdminPortal = () => {
   const dialogRef = useRef(null)
@@ -28,35 +25,31 @@ const AdminPortal = () => {
   useEffect(() => {
     const fetchDataFromBackend = async () => {
       try {
-        const notApprovedMembersData = await getNotApprovedMemebers()
-        const approvedMembersData = await getApprovedMemebers()
+        const membersData = await getMemebers()
+        const notApprovedMembersData = membersData.filter(
+          (item) => item.status === 'pending'
+        )
+        const approvedMembersData = membersData.filter(
+          (item) => item.status === 'approved'
+        )
 
-        const notApprovedMembers = []
-        const approvedMembers = []
-        for (let i = 0; i < notApprovedMembersData.length; i++) {
-          let member = notApprovedMembersData[i]
-
-          notApprovedMembers.push([
-            <>{member}</>,
-            <RoundButton
-              key={i}
-              imagePath={'images/check_icon.svg'}
-              title={''}
-              optionalImageHeight="15px"
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              dialogRef={dialogRef}
-              setQRContent={setQRcontent}
-              contentKey={i}
-            ></RoundButton>,
-          ])
-        }
-
-        for (let i = 0; i < approvedMembersData.length; i++) {
-          let member = approvedMembersData[i]
-
-          approvedMembers.push([<>{member}</>])
-        }
+        const notApprovedMembers = notApprovedMembersData.map((member, i) => [
+          <>{member.companyName}</>,
+          <RoundButton
+            key={member.id}
+            imagePath={'images/check_icon.svg'}
+            title={''}
+            optionalImageHeight="15px"
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            dialogRef={dialogRef}
+            setQRContent={setQRcontent}
+            contentKey={member.id}
+          ></RoundButton>,
+        ])
+        const approvedMembers = approvedMembersData.map((member) => [
+          <>{member.companyName}</>,
+        ])
 
         setNotApprovedMembers(notApprovedMembers)
         setApprovedMembers(approvedMembers)

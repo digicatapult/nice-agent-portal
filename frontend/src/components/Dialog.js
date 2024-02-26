@@ -46,10 +46,10 @@ export const RoundButton = ({
   imagePath,
   optionalMargin = '0px',
   optionalImageHeight = 'auto',
-  setQRContent = function () {},
-  contentKey = null,
+  setQRContent,
+  contentKey,
 }) => {
-  const handleOnClick = () => {
+  const handleOnClick = async () => {
     setIsOpen(!isOpen)
     if (!isOpen) {
       dialogRef.current?.show()
@@ -57,12 +57,10 @@ export const RoundButton = ({
       dialogRef.current?.close()
     }
 
-    if (contentKey) {
-      const qrContent = getQRContentToOnboard(contentKey)
-      console.log(qrContent)
-      setQRContent(qrContent)
-      approveMember(contentKey) //approves member
-    }
+    const qrContent = await getQRContentToOnboard(contentKey)
+    console.log(qrContent)
+    setQRContent(qrContent)
+    await approveMember(contentKey) //approves member
   }
   return (
     <Button

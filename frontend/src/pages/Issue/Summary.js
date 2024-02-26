@@ -10,11 +10,33 @@ import {
   SmallThinText,
 } from '../../components/shared'
 import WrapperWithHeader from '../../components/Header'
+import { postSubmitApplication } from '../../services/member/Onboarding'
 
 export default function Summary({ inputs, setStage }) {
   const InformationArea = styled.div`
     padding: 10px;
   `
+
+  const handleClick = async () => {
+    try {
+      const requestBody = {
+        companyName: inputs.name,
+        companiesHouseNumber: inputs.companiesHouseNumber,
+        email: inputs.email,
+      }
+      const response = await postSubmitApplication(requestBody)
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+
+      // Handle the response or perform additional actions as needed
+      const responseData = await response.json()
+      console.log('Data sent successfully:', responseData)
+    } catch (error) {
+      console.error('Error sending data:', error)
+    }
+  }
   return (
     <WrapperWithHeader>
       <HeadingText>Welcome to the NICE Network</HeadingText>
@@ -78,6 +100,7 @@ export default function Summary({ inputs, setStage }) {
               // eslint-disable-next-line
               console.log(Math.floor(1000 + Math.random() * 9000).toString())
               // should be doing sth to send the qr text
+              handleClick()
             }}
           >
             {'Submit'}

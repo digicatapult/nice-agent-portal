@@ -1,6 +1,6 @@
 // const BASE_URL = 'https://your-backend-api-url.com'
 
-export const getMemebers = async () => {
+export const getMembers = async () => {
   // const response = await fetch(`${BASE_URL}/admin/members`, options)
   // const data = await response.json()
   const exampleData = [
@@ -14,7 +14,7 @@ export const getMemebers = async () => {
       verificationCode: `someverificationCodeFORETHAN`,
     },
     {
-      id: 123456,
+      id: 123457,
       companyName: `Sam's Batteries Company`,
       companiesHouseNumber: `XYZ234`,
       email: `email@email.com`,
@@ -23,7 +23,7 @@ export const getMemebers = async () => {
       verificationCode: `someverificationCodeFORSAM`,
     },
     {
-      id: 123456,
+      id: 123458,
       companyName: `Branson's Breaks Company`,
       companiesHouseNumber: `XYZ234`,
       email: `email@email.com`,
@@ -32,7 +32,7 @@ export const getMemebers = async () => {
       verificationCode: `someverificationCodeFORBRANSON`,
     },
     {
-      id: 123456,
+      id: 123459,
       companyName: `Kevin's Company`,
       companiesHouseNumber: `XYZ234`,
       email: `email@email.com`,
@@ -41,7 +41,7 @@ export const getMemebers = async () => {
       verificationCode: `someverificationCodeFORKevin`,
     },
     {
-      id: 123456,
+      id: 123410,
       companyName: `Eva's Company`,
       companiesHouseNumber: `XYZ234`,
       email: `email@email.com`,

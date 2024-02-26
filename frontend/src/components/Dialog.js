@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button } from './shared'
-import { approveMember, getQRContentToOnboard } from '../services/admin'
 
 export const SendMessageButton = ({
   title,
@@ -40,28 +39,12 @@ export const SendMessageButton = ({
 }
 
 export const RoundButton = ({
-  setIsOpen,
-  isOpen,
-  dialogRef,
   imagePath,
   optionalMargin = '0px',
   optionalImageHeight = 'auto',
-  setQRContent,
-  contentKey,
+
+  handleOnClick,
 }) => {
-  const handleOnClick = async () => {
-    setIsOpen(!isOpen)
-    if (!isOpen) {
-      dialogRef.current?.show()
-    } else {
-      dialogRef.current?.close()
-    }
-
-    const qrContent = await getQRContentToOnboard(contentKey)
-
-    setQRContent(qrContent)
-    await approveMember(contentKey) //approves member
-  }
   return (
     <Button
       style={{

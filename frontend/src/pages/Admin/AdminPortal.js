@@ -13,7 +13,11 @@ import {
   Dialog as DialogComponent,
 } from '@digicatapult/ui-component-library'
 import { RoundButton } from '../../components/Dialog'
-import { getMemebers } from '../../services/admin'
+import {
+  approveMember,
+  getMembers,
+  getQRContentToOnboard,
+} from '../../services/admin'
 import QRCode from 'react-qr-code'
 const AdminPortal = () => {
   const dialogRef = useRef(null)
@@ -21,11 +25,24 @@ const AdminPortal = () => {
   const [notApprovedMembers, setNotApprovedMembers] = useState([])
   const [approvedMembers, setApprovedMembers] = useState([])
   const [QRcontent, setQRcontent] = useState('')
+  const handleOnClick = async (memberId) => {
+    setIsOpen(!isOpen)
+    if (!isOpen) {
+      dialogRef.current?.show()
+    } else {
+      dialogRef.current?.close()
+    }
+
+    const qrContent = await getQRContentToOnboard(memberId)
+
+    setQRcontent(qrContent)
+    await approveMember(memberId) //approves member
+  }
 
   useEffect(() => {
     const fetchDataFromBackend = async () => {
       try {
-        const membersData = await getMemebers()
+        const membersData = await getMembers()
         const notApprovedMembersData = membersData.filter(
           (item) => item.status === 'pending'
         )
@@ -38,13 +55,8 @@ const AdminPortal = () => {
           <RoundButton
             key={member.id}
             imagePath={'images/check_icon.svg'}
-            title={''}
             optionalImageHeight="15px"
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            dialogRef={dialogRef}
-            setQRContent={setQRcontent}
-            contentKey={member.id}
+            handleOnClick={() => handleOnClick(member.id)}
           ></RoundButton>,
         ])
         const approvedMembers = approvedMembersData.map((member) => [

@@ -25,21 +25,21 @@ const AdminPortal = () => {
   const [notApprovedMembers, setNotApprovedMembers] = useState([])
   const [approvedMembers, setApprovedMembers] = useState([])
   const [QRcontent, setQRcontent] = useState('')
-  const handleOnClick = async (memberId) => {
-    setIsOpen(!isOpen)
-    if (!isOpen) {
-      dialogRef.current?.show()
-    } else {
-      dialogRef.current?.close()
-    }
-
-    const qrContent = await getQRContentToOnboard(memberId)
-
-    setQRcontent(qrContent)
-    await approveMember(memberId) //approves member
-  }
 
   useEffect(() => {
+    const handleOnClick = async (memberId) => {
+      setIsOpen(!isOpen)
+      if (!isOpen) {
+        dialogRef.current?.show()
+      } else {
+        dialogRef.current?.close()
+      }
+
+      const qrContent = await getQRContentToOnboard(memberId)
+
+      setQRcontent(qrContent)
+      await approveMember(memberId) //approves member
+    }
     const fetchDataFromBackend = async () => {
       try {
         const membersData = await getMembers()
@@ -71,7 +71,7 @@ const AdminPortal = () => {
       }
     }
     fetchDataFromBackend()
-  }, [])
+  }, [isOpen])
   useEffect(() => {
     const listener = () => {
       setIsOpen(false)

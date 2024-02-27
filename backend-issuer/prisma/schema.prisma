@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+  id                    Int           @id @default(autoincrement())
+  companyName           String
+  companiesHouseNumber  String
+  email                 String
+  status                MemberStatus  @default(pending)
+  did                   String        @unique
+  verificationCode      String        @default(uuid())
+  createdAt             DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime      @updatedAt @db.Timestamptz(6)
+}
+
+enum MemberStatus {
+  pending
+  approved
+  verified
+}

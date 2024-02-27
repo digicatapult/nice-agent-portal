@@ -4,14 +4,14 @@ import { KeyType } from '@aries-framework/core'
 
 import { logger } from '../../lib/logger.js'
 import CloudagentManager from '../../lib/services/cloudagent.js'
-import type { Application, VerificationCode } from '../types.js'
+import type { Application } from '../types.js'
 
 import IssuerManager from '../../lib/services/issuer.js'
 import { HttpResponse } from '../../lib/error-handler/index.js'
 import env from '../../env.js'
 
 @Route('api/application')
-@Tags('health')
+@Tags('application')
 @injectable()
 export class ApplicationController extends Controller {
   constructor(
@@ -54,18 +54,5 @@ export class ApplicationController extends Controller {
       ...body,
       did: didDocument.id,
     })
-  }
-
-  /**
-   * @summary Confirm an application
-   */
-  @SuccessResponse(204)
-  @Post('/confirmation')
-  public async postConfirmation(@Body() body: VerificationCode) {
-    logger.debug({ msg: 'new request received', controller: '/application' })
-
-    await this.issuer.confirmApplication(body)
-
-    return
   }
 }

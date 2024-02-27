@@ -26,7 +26,7 @@ export default class IssuerManager {
   }
 
   confirmApplication = async (body: VerificationCode) => {
-    const res = await fetch(`${URL_PREFIX}/submit-application`, {
+    const res = await fetch(`${URL_PREFIX}/confirm-application`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,7 +35,9 @@ export default class IssuerManager {
     })
 
     if (!res.ok) {
-      throw new HttpResponse({ message: 'Error fetching issuer agent' })
+      throw new HttpResponse({
+        message: `Error confirmation application to issuer agent. ${res.status} - ${await res.text()}`,
+      })
     }
   }
 }

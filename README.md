@@ -8,13 +8,126 @@ The [Network Insight Collaboration Environment](https://digitalsupplychainhub.uk
 
 ### Usage
 
-To run the full stack, use:
+#### Prerequisites
+
+- docker 19.03.0+
+- docker-compose v2.23.0+
+- npm 10.0.0+
+- node 20.0.0+
+
+#### Single Agent
+
+To run the full Peer agent stack, use:
 
 ```
 docker-compose up --build
 ```
 
-Environment variables can be set using a `.env` file in the project root (see example file [`.env.example`](./.env.example))
+Once running, the agent frontend is available at http://localhost:3000 and the API is available at http://localhost:3000/api/docs
+
+Configuration options are set using environment variables defined in a `.env` file in the project root (see example file [`.env.example`](./.env.example))
+
+#### Multiple Agents
+
+To run more than one agent at a time, docker compose project names must be set, and configuration options for each agent defined through `.env.${PROJECT_NAME}` files at the project root.
+
+As an example, configuration options have been defined in this repository for the following 3 agents:
+
+- `nice-agent-alice`: a Peer node
+- `nice-agent-bob`: a second Peer node
+- `nice-agent-issuer`: an Issuer node
+
+These 3 agents can be run with the following 3 commands:
+
+```
+(export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+```
+
+Or:
+
+```
+for agent_name in alice bob issuer; do
+  (export COMPOSE_PROJECT_NAME=nice-agent-"${agent_name}" && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d);
+done
+```
+
+With the default configurations defined in this repo's `.env.*` files, the portals will be available at:
+
+- Peer 1 (Alice): http://localhost:3000
+- Peer 2 (Bob): http://localhost:3001
+- Issuer: http://localhost:3002
+
+**Note:** Although many Peer nodes can be run simultaneously, only a single Issuer node can be run at a time.
+
+#### Development Mode
+
+To build the agent, use the following command at the project root:
+
+```
+npm run build
+```
+
+To run the agent in development mode, first bring up dependencies with:
+
+```
+docker-compose up veritable ipfs opa postgres
+```
+
+In a different shell, run either the Peer or Issuer with the following commands.
+
+Peer agent:
+
+```
+npm run dev:peer
+```
+
+Issuer agent:
+
+```
+npm run dev:issuer
+```
+
+#### Development Mode with Multiple Agents
+
+To run an agent in development mode against other agents, the steps are:
+
+- Set up all non-development agents in production mode
+- Set up the dependencies of the agent to be run in development mode, loading the development environment variables
+- Start the development agent with the required environment variables loaded using `DOTENV_CONFIG_PATH=<env file> npm run dev:<issuer|peer>`
+
+For example, to work on the issuer node in development mode, run the following commands:
+
+```
+(export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} --env-file .env.${COMPOSE_PROJECT_NAME}.dev up veritable ipfs opa postgres -d)
+DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-issuer.dev npm run dev:issuer
+```
+
+Or, for another example, to work on peer bob in development mode, run the following commands:
+
+```
+(export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} --env-file .env.${COMPOSE_PROJECT_NAME}.dev up veritable ipfs opa postgres -d)
+DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-bob.dev npm run dev:issuer
+```
+
+#### Testing
+
+To run the full test suite, dependencies must be brought up using:
+
+```
+docker-compose up veritable ipfs opa postgres
+```
+
+Now tests can be run in a different shell using:
+
+```
+npm test
+```
 
 ### Architecture
 
@@ -50,42 +163,6 @@ The onboarding process for NICE allows users to enroll as members, verify their 
 ## Repo structure
 
 This repo contains a React frontend in the `/frontend` directory and a TSOA backend in the `/backend` directory.
-
-Bring up dependences with
-
-```
-docker compose up -d veritable-agent ipfs opa postgres
-```
-
-Build both frontend and backend:
-
-```
-npm run build
-```
-
-Build the frontend and run the backend with nodemon:
-
-```
-npm run dev
-```
-
-View OpenAPI documentation for all routes with Swagger:
-
-```
-localhost:3000/api/docs
-```
-
-View frontend:
-
-```
-localhost:3000
-```
-
-Run tests
-
-```
-npm run test
-```
 
 ## License
 

@@ -1,0 +1,20 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/controllers/**/*.ts"],
+  "multerOpts": {
+    "limits": {
+      "fileSize": 104857600
+    }
+  },
+  "spec": {
+    "outputDirectory": "src",
+    "specVersion": 3,
+    "specMerging": "recursive"
+  },
+  "routes": {
+    "esm": true,
+    "routesDir": "src",
+    "iocModule": "src/ioc"
+  }
+}

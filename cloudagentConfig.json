@@ -5,8 +5,8 @@
   "publicDidSeed": "testtesttesttesttesttesttesttest",
   "endpoint": ["http://localhost:5002", "ws://localhost:5003"],
   "autoAcceptConnections": true,
-  "autoAcceptCredentials": "never",
-  "autoAcceptProofs": "never",
+  "autoAcceptCredentials": "always",
+  "autoAcceptProofs": "always",
   "useLegacyDidSovPrefix": true,
   "logLevel": 5,
   "inboundTransport": [

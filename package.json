@@ -1,18 +1,21 @@
 {
   "name": "@digicatapult/nice-agent-portal",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "NICE agent portal",
   "homepage": "https://github.com/digicatapult/nice-agent-portal",
   "workspaces": [
     "frontend",
-    "backend"
+    "backend-peer",
+    "backend-issuer"
   ],
   "scripts": {
     "lint": "npm run lint --workspaces",
     "test": "npm run test --workspaces",
     "depcheck": "npm run depcheck --workspaces",
     "build": "npm run build --workspaces",
-    "dev": "npm run build --workspace=frontend && npm run dev --workspace=backend"
+    "dev:peer": "npm run build --workspace=frontend && npm run dev --workspace=backend-peer",
+    "dev:issuer": "npm run build --workspace=frontend && npm run dev --workspace=backend-issuer",
+    "dev": "npm run dev:peer"
   },
   "repository": {
     "type": "git",

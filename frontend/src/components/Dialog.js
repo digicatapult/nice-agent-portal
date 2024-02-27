@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from './shared'
 
-const SendMessageButton = ({
+export const SendMessageButton = ({
   title,
   setIsOpen,
   isOpen,
@@ -38,4 +38,31 @@ const SendMessageButton = ({
   )
 }
 
-export default SendMessageButton
+export const RoundButton = ({
+  imagePath,
+  optionalMargin = '0px',
+  optionalImageHeight = 'auto',
+
+  handleOnClick,
+}) => {
+  return (
+    <Button
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: optionalMargin,
+        padding: '0px',
+        border: 'none',
+        boxShadow: 'none',
+      }}
+      onClick={handleOnClick}
+    >
+      <img
+        src={imagePath}
+        style={{
+          height: optionalImageHeight,
+        }}
+      ></img>
+    </Button>
+  )
+}

@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/nice-agent-portal-frontend",
-  "version": "0.0.11",
+  "version": "0.1.0",
   "description": "NICE agent portal",
   "homepage": "https://github.com/digicatapult/nice-agent-portal",
   "main": "src/index.js",
@@ -10,7 +10,7 @@
     "lint:fix": "eslint --ext .js ./src --fix",
     "dev": "webpack-dev-server --mode=development",
     "start": "serve -s ./build",
-    "build": "./node_modules/.bin/webpack --mode=production",
+    "build": "webpack --mode=production",
     "depcheck": "depcheck",
     "test": "echo \"No tests specified\" && exit 0"
   },
@@ -73,6 +73,7 @@
     "@digicatapult/ui-component-library": "^0.17.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-qr-code": "^2.0.12",
     "react-router-dom": "^6.22.0",
     "styled-components": "^6.1.8"
   }

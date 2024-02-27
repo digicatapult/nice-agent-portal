@@ -1,81 +1,104 @@
 version: '3.8'
 
-services:
-  ##################################################################################
-  ## Alice #########################################################################
-  ##################################################################################
+x-env-files:
+  &env-files
+  env_file:
+    - .env
+    - .env.${COMPOSE_PROJECT_NAME}
 
-  nice-agent:
+services:
+  portal:
+    <<: *env-files
+    container_name: ${COMPOSE_PROJECT_NAME}-portal
     build:
       context: .
-    image: digicatapult/nice-agent-portal:${NICE_AGENT_VER-latest}
-    restart: always
+      args:
+        NICE_AGENT_ROLE: ${NICE_AGENT_ROLE}
+    image: digicatapult/nice-agent-portal-${NICE_AGENT_ROLE}:${NICE_AGENT_VER-latest}
+    restart: on-failure
     depends_on:
-      veritable-agent:
+      veritable:
         condition: service_healthy
     ports:
-      - '3000:3000'
-    environment:
-      - CLOUDAGENT_HOST=${CLOUDAGENT_HOST-veritable-agent}
+      - '${NICE_PORT_HOST-3000}:3000'
+    networks: ['nice-net', 'agent-net']
 
-  ##################################################################################
-  ## Alice #########################################################################
-  ##################################################################################
-
-  veritable-agent:
+  veritable:
+    <<: *env-files
+    container_name: ${COMPOSE_PROJECT_NAME}-veritable
     image: digicatapult/veritable-cloudagent:${VERITABLE_AGENT_VER-latest}
-    restart: always
+    restart: on-failure
     depends_on:
       ipfs:
+        condition: service_healthy
+      opa:
+        condition: service_started
+      postgres:
         condition: service_healthy
     volumes:
       - ./cloudagentConfig.json:/config.json
     ports:
-      #  - '5002:5002'
-      #  - '5003:5003'
-      - '3001:3000'
+    #  - '5022:5002'
+    #  - '5023:5003'
+      - '${VERITABLE_PORT_HOST-3010}:3000'
     # or via command line arguments
-    command: --endpoint "http://veritable-agent:5002", "ws://veritable-agent:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --config /config.json
-
-  ##################################################################################
-  ## IPFS ##########################################################################
-  ##################################################################################
+    command: --endpoint "http://${COMPOSE_PROJECT_NAME}-veritable:5002" "ws://${COMPOSE_PROJECT_NAME}-veritable:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --webhook-url "${PORTAL_BASE_URL}/api/webhooks" --auto-accept-connections true auto-accept-credentials always --config /config.json
+    networks: ['nice-net', 'agent-net']
 
   ipfs:
+    <<: *env-files
+    container_name: ${COMPOSE_PROJECT_NAME}-ipfs
     image: ipfs/kubo:${KUBO_AGENT_VER-release}
-    ports:
-      #     - "4001:4001" # ipfs swarm - expose if needed/wanted
-      #     - "5001:5001" # ipfs api - expose if needed/wanted
-      - '8080:8080' # ipfs gateway - expose if needed/wanted
+    restart: on-failure
+    # ports:
+    #   - "4001:4001" # ipfs swarm - expose if needed/wanted
+    #   - "5001:5001" # ipfs api - expose if needed/wanted
+    #   - '8080:8080' # ipfs gateway - expose if needed/wanted
     volumes:
       - ipfs-data:/data/ipfs
-
-  ##################################################################################
-  ## OPA ###########################################################################
-  ##################################################################################
+    healthcheck:
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 0s
+    networks: ['nice-net', 'agent-net']
 
   opa:
+    <<: *env-files
+    container_name: ${COMPOSE_PROJECT_NAME}-opa
     image: openpolicyagent/opa:0.61.0-static
-    ports:
-      - '8181:8181'
+    restart: on-failure
+    #ports:
+    #  - '8181:8181'
     command: run --server --log-level debug
-
-  ##################################################################################
-  ## Postgres ######################################################################
-  ##################################################################################
+    networks: ['agent-net']
 
   postgres:
-    container_name: postgres
+    <<: *env-files
+    container_name: ${COMPOSE_PROJECT_NAME}-postgres
     image: postgres:16.2-alpine
+    restart: on-failure
     ports:
-      - 5432:5432
+      - ${DB_PORT_HOST}:5432
     volumes:
       - nice-storage:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=nice-agent-portal
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    healthcheck:
+      test: ["CMD-SHELL", "PGUSER=${DB_USERNAME}", pg_isready", "-d", "${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 0s
+    networks: ['agent-net']
 
 volumes:
   nice-storage:
   ipfs-data:
+
+networks:
+  nice-net:
+    name: nice-net
+  agent-net:

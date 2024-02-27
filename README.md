@@ -25,7 +25,7 @@ docker-compose up --build
 
 Once running, the agent frontend is available at http://localhost:3000 and the API is available at http://localhost:3000/api/docs
 
-Configuration options are set using environment variables defined in a `.env` file in the project root (see example file [`.env.example`](./.env.example))
+Configuration options are set using environment variables defined in a `.env` file in the project root.
 
 #### Multiple Agents
 
@@ -112,7 +112,7 @@ Or, for another example, to work on peer bob in development mode, run the follow
 (export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
 (export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
 (export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} --env-file .env.${COMPOSE_PROJECT_NAME}.dev up veritable ipfs opa postgres -d)
-DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-bob.dev npm run dev:issuer
+DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-bob.dev npm run dev:peer
 ```
 
 #### Testing
@@ -139,7 +139,7 @@ Below is the specific architecture for an Issuer node. Note that an Issuer node 
 
 ![NICE Issuer node architecture](./docs/images/nice-arch-node-issuer.png)
 
-Below is the specific architecture for a Peer node (NICE participant, Supplier or Consumer). Note that nice-agent-portal (the react frontend and backend) acts as the gateway to the Veritable system. Also note that ipfs-cluster should not be required here, as each node is independantly responsible for its own stored IPFS data being available.
+Below is the specific architecture for a Peer node (NICE participant, Supplier or Consumer). Note that nice-agent-portal (the react frontend and backend) acts as the gateway to the Veritable system. Also note that ipfs-cluster should not be required here, as each node is independently responsible for its own stored IPFS data being available.
 
 ![NICE Peer node architecture](./docs/images/nice-arch-node-peer.png)
 

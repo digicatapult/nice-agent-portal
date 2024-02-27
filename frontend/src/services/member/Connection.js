@@ -12,7 +12,6 @@ export const postCreateConnection = async (did) => {
     status: 204,
     headers: {
       'Content-Type': 'application/json',
-      'X-Custom-Header': 'Custom Value',
     },
     data: {},
   }

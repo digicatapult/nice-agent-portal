@@ -13,7 +13,6 @@ export const postSendMessage = async (message) => {
     status: 204,
     headers: {
       'Content-Type': 'application/json',
-      'X-Custom-Header': 'Custom Value',
     },
     data: {},
   }
@@ -29,7 +28,6 @@ export const getMessages = async () => {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
-      'X-Custom-Header': 'Custom Value',
     },
     data: { messages: ['Message 1', 'Message 2'] },
   }

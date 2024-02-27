@@ -15,7 +15,6 @@ const ScanTheirNiceId = () => {
   const handleValueChange = useCallback(async () => {
     try {
       const response = await postCreateConnection(QrCodeContent) //we assume the qr code contains a did
-      console.log(response)
 
       if (response.status != 204) {
         throw new Error(`Status code: ${response.status}`)

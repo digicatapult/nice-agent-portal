@@ -2,11 +2,16 @@ import React from 'react'
 import { SmallThinText, QRReaderWrapper } from './shared'
 import { QRReader } from '@digicatapult/ui-component-library'
 
-const QRReaderSection = ({ instructionText, setHasScanned }) => {
+const QRReaderSection = ({
+  instructionText,
+  setHasScanned,
+  setQRCodeContent,
+}) => {
   const handleQrCode = (qr) => {
     // eslint-disable-next-line
     console.log(`Scanned: ${qr}`)
     setHasScanned(true)
+    setQRCodeContent(qr)
   }
   return (
     <>

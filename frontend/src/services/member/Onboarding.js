@@ -8,7 +8,6 @@ export const postSubmitApplication = async (data) => {
     status: 204,
     headers: {
       'Content-Type': 'application/json',
-      'X-Custom-Header': 'Custom Value',
     },
     data: {},
   }
@@ -24,7 +23,6 @@ export const postConfirmApplication = async (verificationCode) => {
     status: 204,
     headers: {
       'Content-Type': 'application/json',
-      'X-Custom-Header': 'Custom Value',
     },
     data: {},
   }

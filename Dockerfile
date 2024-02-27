@@ -7,7 +7,7 @@ ENV NODE_ENV=${NODE_ENV}
 WORKDIR /build
 
 COPY frontend/package.json package-lock.json ./
-RUN npm ci && npm cache clean --force
+RUN npm i --package-lock-only && npm ci && npm cache clean --force
 
 COPY frontend ./
 RUN npm run build

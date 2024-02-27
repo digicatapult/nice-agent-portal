@@ -24,8 +24,10 @@ const CompleteOnboardingPage = () => {
     }
   }, [QrCodeContent])
   useEffect(() => {
-    handleValueChange()
-  }, [handleValueChange])
+    if (QrCodeContent) {
+      handleValueChange()
+    }
+  }, [QrCodeContent, handleValueChange])
 
   const ScanQR = () => {
     return (

@@ -26,6 +26,9 @@ export default envalid.cleanEnv(process.env, {
   }),
   WEB_DID: envalid.str(),
   WEB_DID_PRIVATE_KEY: envalid.str(),
-  ISSUER_HOST: envalid.host({ default: 'nice-agent-issuer' }),
+  ISSUER_HOST: envalid.host({
+    default: 'nice-agent-issuer',
+    devDefault: 'localhost',
+  }),
   ISSUER_PORT: envalid.port({ default: 3002 }),
 })

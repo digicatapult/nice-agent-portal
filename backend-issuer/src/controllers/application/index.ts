@@ -6,7 +6,6 @@ import { BadRequest } from '../../lib/error-handler/index.js'
 import CloudagentManager from '../../lib/services/cloudagent.js'
 import Database from '../../lib/db.js'
 import type { MemberCreate, ConfirmApplication } from '../types.js'
-//import { Prisma } from '@prisma/client'
 
 @Route('api')
 @Tags('application')

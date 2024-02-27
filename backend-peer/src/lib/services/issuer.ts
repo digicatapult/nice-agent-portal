@@ -2,20 +2,15 @@ import { singleton } from 'tsyringe'
 
 import env from '../../env.js'
 import { HttpResponse } from '../error-handler/index.js'
-import type {
-  SubmitApplication,
-  VerificationCode,
-} from '../models/application.js'
+import type { MemberCreate, VerificationCode } from '../../controllers/types.js'
 
-const URL_PREFIX = `http://${env.ISSUER_HOST}:${env.ISSUER_PORT}`
+const URL_PREFIX = `http://${env.ISSUER_HOST}:${env.ISSUER_PORT}/api`
 
 @singleton()
 export default class IssuerManager {
   constructor() {}
 
-  submitApplication = async (
-    body: SubmitApplication
-  ): Promise<VerificationCode> => {
+  submitApplication = async (body: MemberCreate) => {
     const res = await fetch(`${URL_PREFIX}/submit-application`, {
       method: 'POST',
       headers: {
@@ -23,13 +18,11 @@ export default class IssuerManager {
       },
       body: JSON.stringify(body),
     })
-
-    if (res.ok) {
-      const verificationCode = await res.json()
-      return verificationCode as VerificationCode
+    if (!res.ok) {
+      throw new HttpResponse({
+        message: `Error submitting application to issuer agent. ${res.status} - ${await res.text()}`,
+      })
     }
-
-    throw new HttpResponse({ message: 'Error fetching issuer agent' })
   }
 
   confirmApplication = async (body: VerificationCode) => {

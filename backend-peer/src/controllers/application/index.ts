@@ -4,10 +4,8 @@ import { KeyType } from '@aries-framework/core'
 
 import { logger } from '../../lib/logger.js'
 import CloudagentManager from '../../lib/services/cloudagent.js'
-import type {
-  Application,
-  VerificationCode,
-} from '../../lib/models/application.js'
+import type { Application, VerificationCode } from '../types.js'
+
 import IssuerManager from '../../lib/services/issuer.js'
 import { HttpResponse } from '../../lib/error-handler/index.js'
 import env from '../../env.js'
@@ -29,7 +27,11 @@ export class ApplicationController extends Controller {
   @SuccessResponse(204)
   @Post('/')
   public async post(@Body() body: Application) {
-    logger.debug({ msg: 'new request received', controller: '/application' })
+    logger.debug({
+      msg: 'new request received',
+      controller: '/application',
+      payload: body,
+    })
 
     const didImport = {
       did: env.WEB_DID,
@@ -43,13 +45,15 @@ export class ApplicationController extends Controller {
     }
 
     const { didDocument } = await this.cloudagent.importDid(didImport)
-    console.log(didDocument)
+
     if (!didDocument) {
       throw new HttpResponse({ message: 'Failed to create DID document' })
     }
-    await this.issuer.submitApplication({ ...body, did: didDocument.id })
 
-    return
+    await this.issuer.submitApplication({
+      ...body,
+      did: didDocument.id,
+    })
   }
 
   /**

@@ -42,7 +42,7 @@ services:
     #  - '5023:5003'
       - '${VERITABLE_PORT_HOST-3010}:3000'
     # or via command line arguments
-    command: --endpoint "http://${COMPOSE_PROJECT_NAME}-veritable:5002" "ws://${COMPOSE_PROJECT_NAME}-veritable:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --webhook-url "http://host.docker.internal:3002/api/webhooks" --auto-accept-connections true auto-accept-credentials always --config /config.json
+    command: --endpoint "http://${COMPOSE_PROJECT_NAME}-veritable:5002" "ws://${COMPOSE_PROJECT_NAME}-veritable:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --webhook-url "${PORTAL_BASE_URL}/api/webhooks" --auto-accept-connections true auto-accept-credentials always --config /config.json
     networks: ['nice-net', 'agent-net']
 
   ipfs:
@@ -79,7 +79,7 @@ services:
     image: postgres:16.2-alpine
     restart: on-failure
     ports:
-      - ${DB_PORT}:5432
+      - ${DB_PORT_HOST}:5432
     volumes:
       - nice-storage:/var/lib/postgresql/data
     environment:

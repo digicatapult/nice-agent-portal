@@ -22,7 +22,7 @@ export class WebhooksController extends Controller {
   }
 
   /**
-   * @summary Confirm membership with received verification code
+   * @summary Receive Basic Message events from Veritable
    */
   @SuccessResponse(204)
   @Post('/basic-messages')
@@ -37,7 +37,7 @@ export class WebhooksController extends Controller {
   }
 
   /**
-   * @summary Submit membership application
+   * @summary Receive Connection events from Veritable
    */
   @SuccessResponse(204)
   @Post('/connections')
@@ -66,7 +66,7 @@ export class WebhooksController extends Controller {
   }
 
   /**
-   * @summary Confirm membership with received verification code
+   * @summary Receive Credential events from Veritable
    */
   @SuccessResponse(204)
   @Post('/credentials')
@@ -81,7 +81,7 @@ export class WebhooksController extends Controller {
   }
 
   /**
-   * @summary Confirm membership with received verification code
+   * @summary Receive Proof events from Veritable
    */
   @SuccessResponse(204)
   @Post('/proofs')

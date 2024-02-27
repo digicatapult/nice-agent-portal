@@ -37,9 +37,9 @@ As an example, configuration options have been defined in this repository for th
 
 These 3 agents can be run with the following 3 commands:
 ```
-export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d
-export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d
-export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d
+(export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
 ```
 
 Or:
@@ -78,6 +78,29 @@ npm run dev:peer
 Issuer agent:
 ```
 npm run dev:issuer
+```
+
+#### Development Mode with Multiple Agents
+
+To run an agent in development mode against other agents, the steps are:
+- Set up all non-development agents in production mode
+- Set up the dependencies of the agent to be run in development mode, loading the development environment variables
+- Start the development agent with the required environment variables loaded using `DOTENV_CONFIG_PATH=<env file> npm run dev:<issuer|peer>`
+
+For example, to work on the issuer node in development mode, run the following commands:
+```
+(export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} --env-file .env.${COMPOSE_PROJECT_NAME}.dev up veritable ipfs opa postgres -d)
+DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-issuer.dev npm run dev:issuer
+```
+
+Or, for another example, to work on peer bob in development mode, run the following commands:
+```
+(export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} --env-file .env.${COMPOSE_PROJECT_NAME}.dev up veritable ipfs opa postgres -d)
+DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-bob.dev npm run dev:issuer
 ```
 
 #### Testing

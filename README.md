@@ -106,6 +106,15 @@ For example, to work on the issuer node in development mode, run the following c
 DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-issuer.dev npm run dev:issuer
 ```
 
+Or, for another example, to work on peer alice in development mode, run the following commands:
+
+```
+(export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
+(export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} --env-file .env.${COMPOSE_PROJECT_NAME}.dev up veritable ipfs opa postgres -d)
+DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-alice.dev npm run dev:peer
+```
+
 Or, for another example, to work on peer bob in development mode, run the following commands:
 
 ```

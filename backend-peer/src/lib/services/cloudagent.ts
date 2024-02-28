@@ -5,6 +5,7 @@ import type {
   DidDocument,
   CredentialExchangeRecord,
   ImportDidOptions,
+  ConnectionRecord,
 } from '@aries-framework/core'
 import type { DIDDocument } from 'did-resolver'
 
@@ -92,6 +93,30 @@ export default class CloudagentManager {
 
     if (res.ok) {
       return responseBody as DidResolutionResultProps
+    }
+
+    throw new HttpResponse({
+      message: `Error fetching cloud agent - ${responseBody}`,
+    })
+  }
+
+  acceptConnectionRequest = async (
+    connectionId: string
+  ): Promise<ConnectionRecord> => {
+    const res = await fetch(
+      `${URL_PREFIX}/connections/${connectionId}/accept-request`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+
+    const responseBody = await res.json()
+
+    if (res.ok) {
+      return responseBody as ConnectionRecord
     }
 
     throw new HttpResponse({

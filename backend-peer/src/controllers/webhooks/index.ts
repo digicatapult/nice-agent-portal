@@ -10,13 +10,13 @@ import {
 import { injectable } from 'tsyringe'
 
 import { logger } from '../../lib/logger.js'
-import Database from '../../lib/db.js'
+import CloudagentManager from 'src/lib/services/cloudagent.js'
 
 @Route('api/webhooks')
 @Tags('webhooks')
 @injectable()
 export class WebhooksController extends Controller {
-  constructor(private db: Database) {
+  constructor(private cloudagent: CloudagentManager) {
     super()
   }
 
@@ -51,19 +51,9 @@ export class WebhooksController extends Controller {
 
     console.log(payload)
 
-    // if (payload.state === 'completed' && payload.invitationDid) {
-    //   try {
-    //     await this.db.updateMember(
-    //       {
-    //         did: payload.invitationDid,
-    //         status: 'approved',
-    //       },
-    //       { status: 'verified' }
-    //     )
-    //   } catch (e) {
-    //     throw new InternalError('Could not update status')
-    //   }
-    // }
+    if (payload.state === 'request-received' && payload.id) {
+      await this.cloudagent.acceptConnectionRequest(payload.id)
+    }
   }
 
   /**

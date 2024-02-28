@@ -100,7 +100,7 @@ Or, for another example, to work on peer bob in development mode, run the follow
 (export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
 (export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
 (export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} --env-file .env.${COMPOSE_PROJECT_NAME}.dev up veritable ipfs opa postgres -d)
-DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-bob.dev npm run dev:issuer
+DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-bob.dev npm run dev:peer
 ```
 
 #### Testing

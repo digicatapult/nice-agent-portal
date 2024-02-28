@@ -19,13 +19,11 @@ export default function Summary({ inputs, setStage }) {
 
   const handleSubmitApplication = async () => {
     try {
-      const requestBody = {
+      const response = await postSubmitApplication({
         companyName: inputs.name,
         companiesHouseNumber: inputs.companiesHouseNumber,
         email: inputs.email,
-      }
-      const response = await postSubmitApplication(requestBody)
-
+      })
       if (response.status !== 204) {
         throw new Error(`Response status: ${response.status}`)
       }

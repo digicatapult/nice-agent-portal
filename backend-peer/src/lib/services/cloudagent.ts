@@ -68,12 +68,15 @@ export default class CloudagentManager {
       body: JSON.stringify(body),
     })
 
+    const responseBody = await res.json()
+
     if (res.ok) {
-      const agentInfo = await res.json()
-      return agentInfo as DidResolutionResultProps
+      return responseBody as DidResolutionResultProps
     }
 
-    throw new HttpResponse({ message: 'Error fetching cloud agent' })
+    throw new HttpResponse({
+      message: `Error fetching cloud agent - ${responseBody}`,
+    })
   }
 
   importDid = async (body: ImportDid): Promise<DidResolutionResultProps> => {
@@ -85,23 +88,29 @@ export default class CloudagentManager {
       body: JSON.stringify(body),
     })
 
+    const responseBody = await res.json()
+
     if (res.ok) {
-      const agentInfo = await res.json()
-      return agentInfo as DidResolutionResultProps
+      return responseBody as DidResolutionResultProps
     }
 
-    throw new HttpResponse({ message: 'Error fetching cloud agent' })
+    throw new HttpResponse({
+      message: `Error fetching cloud agent - ${responseBody}`,
+    })
   }
 
   getCredentials = async (): Promise<CredentialExchangeRecord[]> => {
     const res = await fetch(`${URL_PREFIX}/credentials`)
 
+    const responseBody = await res.json()
+
     if (res.ok) {
-      const agentInfo = await res.json()
-      return agentInfo as CredentialExchangeRecord[]
+      return responseBody as CredentialExchangeRecord[]
     }
 
-    throw new HttpResponse({ message: 'Error fetching cloud agent' })
+    throw new HttpResponse({
+      message: `Error fetching cloud agent - ${responseBody}`,
+    })
   }
 
   acceptCredentialOffer = async (
@@ -118,11 +127,14 @@ export default class CloudagentManager {
       }
     )
 
+    const responseBody = await res.json()
+
     if (res.ok) {
-      const agentInfo = await res.json()
-      return agentInfo as DidResolutionResultProps
+      return responseBody as DidResolutionResultProps
     }
 
-    throw new HttpResponse({ message: 'Error fetching cloud agent' })
+    throw new HttpResponse({
+      message: `Error fetching cloud agent - ${responseBody}`,
+    })
   }
 }

@@ -1,7 +1,7 @@
 import { singleton } from 'tsyringe'
 
 import env from '../../env.js'
-import { HttpResponse } from '../error-handler/index.js'
+import { BadRequest, HttpResponse } from '../error-handler/index.js'
 import type { MemberCreate, VerificationCode } from '../../controllers/types.js'
 
 const URL_PREFIX = `http://${env.ISSUER_HOST}:${env.ISSUER_PORT}/api`
@@ -33,6 +33,10 @@ export default class IssuerManager {
       },
       body: JSON.stringify(body),
     })
+
+    if (res.status === 400) {
+      throw new BadRequest(await res.json())
+    }
 
     if (!res.ok) {
       throw new HttpResponse({

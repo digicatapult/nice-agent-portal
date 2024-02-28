@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/nice-agent-portal-backend-peer",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "OpenAPI service to manage profiles for the NICE agent and communication with veritable-cloudagent",
   "main": "src/index.ts",
   "type": "module",
@@ -16,9 +16,9 @@
     "test:integration": "NODE_ENV=test mocha --config ./test/mocharc.json ./test/integration/**/*.test.ts",
     "test:unit": "NODE_ENV=test mocha --config ./test/mocharc.json ./src/**/*.test.ts",
     "coverage": "c8 npm run test",
-    "db:deploy": "dotenv -e .env.nice-agent-alice.dev -- npx prisma migrate deploy",
-    "db:dev": "dotenv -e .env.nice-agent-alice.dev -- npx prisma migrate dev",
-    "db:reset": "dotenv -e .env.nice-agent-alice.dev -- npx prisma migrate reset"
+    "db:deploy": "dotenv -e ../.env.nice-agent-alice.dev -- npx prisma migrate deploy",
+    "db:dev": "dotenv -e ../.env.nice-agent-alice.dev -- npx prisma migrate dev",
+    "db:reset": "dotenv -e ../.env.nice-agent-alice.dev -- npx prisma migrate reset"
   },
   "repository": {
     "type": "git",

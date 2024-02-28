@@ -10,7 +10,7 @@ import {
 import { injectable } from 'tsyringe'
 
 import { logger } from '../../lib/logger.js'
-import CloudagentManager from 'src/lib/services/cloudagent.js'
+import CloudagentManager from '../../lib/services/cloudagent.js'
 
 @Route('api/webhooks')
 @Tags('webhooks')
@@ -48,8 +48,6 @@ export class WebhooksController extends Controller {
       controller: '/webhooks/connections',
       payload,
     })
-
-    console.log(payload)
 
     if (payload.state === 'request-received' && payload.id) {
       await this.cloudagent.acceptConnectionRequest(payload.id)

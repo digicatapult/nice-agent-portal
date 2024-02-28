@@ -28,7 +28,7 @@ export class MembersController extends Controller {
    * @summary Approve NICE applicant
    * @param memberId Member ID
    */
-  @SuccessResponse(204)
+  @SuccessResponse(200)
   @Post('/:memberId/approve')
   public async approveMember(@Path('memberId') id: number) {
     logger.info({
@@ -36,13 +36,19 @@ export class MembersController extends Controller {
       controller: '/members/:memberId/approve',
     })
 
+    let member
+
     try {
-      await this.db.updateMember(
+      member = await this.db.updateMember(
         { id, status: 'pending' },
         { status: 'approved' }
       )
     } catch (e) {
       throw new InternalError('Could not approve member')
     }
+    const verificationCode = Buffer.from(
+      `${member.id}.${member.verificationCode}`
+    ).toString('base64')
+    return { verificationCode }
   }
 }

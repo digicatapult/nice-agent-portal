@@ -24,8 +24,6 @@ export default envalid.cleanEnv(process.env, {
     default: '/www',
     devDefault: '../frontend/build',
   }),
-  WEB_DID: envalid.str(),
-  WEB_DID_PRIVATE_KEY: envalid.str(),
   ISSUER_HOST: envalid.host({
     default: 'nice-agent-issuer',
     devDefault: 'localhost',

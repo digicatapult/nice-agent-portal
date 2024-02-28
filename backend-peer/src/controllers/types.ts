@@ -27,12 +27,6 @@ export interface Member {
 }
 
 /**
- * A member's initial application
- */
-export interface Application
-  extends Pick<Member, 'companyName' | 'companiesHouseNumber' | 'email'> {}
-
-/**
  * The applying member's details
  */
 export interface MemberCreate
@@ -41,6 +35,12 @@ export interface MemberCreate
     'companyName' | 'companiesHouseNumber' | 'email' | 'did'
   > {}
 
+/**
+ * The applying member's details
+ */
+export interface MemberCreateWithSecret extends MemberCreate {
+  privateKey: string
+}
 /**
  * The verification code received from NICE
  */

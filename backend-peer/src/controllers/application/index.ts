@@ -4,11 +4,10 @@ import { KeyType } from '@aries-framework/core'
 
 import { logger } from '../../lib/logger.js'
 import CloudagentManager from '../../lib/services/cloudagent.js'
-import type { Application } from '../types.js'
+import type { MemberCreateWithSecret } from '../types.js'
 
 import IssuerManager from '../../lib/services/issuer.js'
 import { HttpResponse } from '../../lib/error-handler/index.js'
-import env from '../../env.js'
 
 @Route('api/application')
 @Tags('application')
@@ -26,19 +25,21 @@ export class ApplicationController extends Controller {
    */
   @SuccessResponse(204)
   @Post('/')
-  public async post(@Body() body: Application) {
+  public async post(@Body() body: MemberCreateWithSecret) {
     logger.debug({
       msg: 'new request received',
       controller: '/application',
       payload: body,
     })
 
+    const { privateKey, ...member } = body
+
     const didImport = {
-      did: env.WEB_DID,
+      did: member.did,
       privateKeys: [
         {
           keyType: KeyType.Ed25519,
-          privateKey: env.WEB_DID_PRIVATE_KEY,
+          privateKey,
         },
       ],
       overwrite: true,
@@ -51,8 +52,7 @@ export class ApplicationController extends Controller {
     }
 
     await this.issuer.submitApplication({
-      ...body,
-      did: didDocument.id,
+      ...member,
     })
   }
 }

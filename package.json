@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/nice-agent-portal",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "NICE agent portal",
   "homepage": "https://github.com/digicatapult/nice-agent-portal",
   "workspaces": [

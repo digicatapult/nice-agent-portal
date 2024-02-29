@@ -107,7 +107,7 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
       - name: Setup dependencies
-        run: docker  compose up -d veritable ipfs opa postgres
+        run: docker compose up -d veritable ipfs opa postgres
       - name: Install Node Packages
         run: npm ci
       - name: Run tests

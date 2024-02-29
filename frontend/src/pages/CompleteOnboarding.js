@@ -1,33 +1,45 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import styled from 'styled-components'
 
 import { SmallThinText, Button, ContentWrapper } from '../components/shared'
 import WrapperWithHeader from '../components/Header'
 import QRReaderSection from '../components/QRCode'
 import { postConfirmApplication } from '../services/member/Onboarding'
 
+const ErrorText = styled.h2`
+  color: red;
+`
+
 const CompleteOnboardingPage = () => {
-  const [hasScanned, setHasScanned] = useState(false)
-  const [QrCodeContent, setQRCodeContent] = useState('')
+  const [qrCodeContent, setQrCodeContent] = useState('')
+  const [confirmAppError, setConfirmAppError] = useState('')
+  const [success, setSuccess] = useState(false)
 
   const handleBackToHomepage = () => {
     window.location.href = `/home`
   }
   const handleValueChange = useCallback(async () => {
-    try {
-      const response = await postConfirmApplication(QrCodeContent)
-
-      if (response.status != 204) {
-        throw new Error(`Status code: ${response.status}`)
-      }
-    } catch (error) {
-      throw new Error(`${error}`)
+    const response = await postConfirmApplication(qrCodeContent)
+    const error = await response.json()
+    switch (response.status) {
+      case 204:
+        setConfirmAppError('')
+        setSuccess(true)
+      case 422:
+        setConfirmAppError('Incorrect format')
+        break
+      case 400:
+        setConfirmAppError(error)
+        break
+      default:
+        setConfirmAppError(`Unknown error confirming code - ${error}`)
     }
-  }, [QrCodeContent])
+  }, [qrCodeContent])
   useEffect(() => {
-    if (QrCodeContent) {
+    if (qrCodeContent) {
       handleValueChange()
     }
-  }, [QrCodeContent, handleValueChange])
+  }, [qrCodeContent, handleValueChange])
 
   const ScanQR = () => {
     return (
@@ -36,10 +48,9 @@ const CompleteOnboardingPage = () => {
         <h2>Scan first QR code</h2>
         <QRReaderSection
           instructionText={`   You will find this in your email sent to you from the NICE Network.`}
-          setHasScanned={setHasScanned}
-          setQRCodeContent={setQRCodeContent}
+          setQrCodeContent={setQrCodeContent}
         ></QRReaderSection>
-
+        <ErrorText>{confirmAppError}</ErrorText>
         <Button onClick={handleBackToHomepage}>{'<'}</Button>
       </>
     )
@@ -61,7 +72,7 @@ const CompleteOnboardingPage = () => {
 
   return (
     <WrapperWithHeader>
-      <ContentWrapper>{hasScanned ? <Success /> : <ScanQR />}</ContentWrapper>
+      <ContentWrapper>{success ? <Success /> : <ScanQR />}</ContentWrapper>
     </WrapperWithHeader>
   )
 }

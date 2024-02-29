@@ -24,4 +24,9 @@ export default envalid.cleanEnv(process.env, {
     default: '/www',
     devDefault: '../frontend/build',
   }),
+  ISSUER_HOST: envalid.host({
+    default: 'nice-agent-issuer-portal',
+    devDefault: 'localhost',
+  }),
+  ISSUER_PORT: envalid.port({ default: 3000, devDefault: 3002 }),
 })

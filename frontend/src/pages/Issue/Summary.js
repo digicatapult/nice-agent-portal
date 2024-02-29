@@ -19,13 +19,11 @@ export default function Summary({ inputs, setStage }) {
 
   const handleSubmitApplication = async () => {
     try {
-      const requestBody = {
+      const response = await postSubmitApplication({
         companyName: inputs.name,
         companiesHouseNumber: inputs.companiesHouseNumber,
         email: inputs.email,
-      }
-      const response = await postSubmitApplication(requestBody)
-
+      })
       if (response.status !== 204) {
         throw new Error(`Response status: ${response.status}`)
       }
@@ -93,8 +91,6 @@ export default function Summary({ inputs, setStage }) {
             onClick={(e) => {
               e.preventDefault()
               setStage((prev) => prev + 1)
-              // eslint-disable-next-line
-              console.log(Math.floor(1000 + Math.random() * 9000).toString())
 
               handleSubmitApplication()
             }}

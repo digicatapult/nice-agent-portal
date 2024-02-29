@@ -12,6 +12,8 @@ Use a `.env` at root of this directory to set values for the following environme
 | LOG_LEVEL       |    N     |       `debug`       | Logging level. Valid values are [`trace`, `debug`, `info`, `warn`, `error`, `fatal`] |
 | CLOUDAGENT_HOST |    Y     |          -          | The hostname / host of `veritable-cloudagent`                                        |
 | CLOUDAGENT_PORT |    N     |       `3001`        | The port of `veritable-cloudagent`                                                   |
+| ISSUER_HOST     |    Y     |          -          | The hostname / host of an issuer's `nice-agent-portal` API                           |
+| ISSUER_PORT     |    N     |       `3002`        | The port of of an issuer's `nice-agent-portal` API                                   |
 | DB_PORT         |    N     |       `5432`        | The port for the database                                                            |
 | DB_HOST         |    Y     |          -          | The database hostname / host                                                         |
 | DB_NAME         |    N     | `nice-agent-portal` | The database name                                                                    |

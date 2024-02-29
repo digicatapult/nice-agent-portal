@@ -47,8 +47,10 @@ COPY --from=build-backend \
     /build/package.json \
     /build/package-lock.json \
     /build/build \
-    .
+    ./
+
 COPY --from=build-backend /build/node_modules ./node_modules
+COPY --from=build-backend /build/prisma ./prisma
 
 COPY --from=build-frontend /build/build /www
 

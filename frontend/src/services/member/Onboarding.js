@@ -1,30 +1,33 @@
-// const BASE_URL = 'https://some-backend-api-url.com'
+const BASE_URL = '/api'
 
-// eslint-disable-next-line no-unused-vars
-export const postSubmitApplication = async (data) => {
-  // const response = await fetch(`${BASE_URL}/api/application`,data)
-  // const data = await response.json()
-  const exampleResponse = {
-    status: 204,
+export const postSubmitApplication = async ({
+  companyName,
+  companiesHouseNumber,
+  email,
+  did,
+  privateKey,
+}) => {
+  return fetch(`${BASE_URL}/application`, {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: {},
-  }
-
-  return exampleResponse
+    body: JSON.stringify({
+      companyName,
+      companiesHouseNumber,
+      email,
+      did,
+      privateKey,
+    }),
+  })
 }
 
-// eslint-disable-next-line
 export const postConfirmApplication = async (verificationCode) => {
-  // const response = await fetch(`${BASE_URL}/api/confirmation`, options)
-  // const data = await response.json()
-  const exampleResponse = {
-    status: 204,
+  return fetch(`${BASE_URL}/confirmation`, {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: {},
-  }
-  return exampleResponse
+    body: JSON.stringify({ verificationCode }),
+  })
 }

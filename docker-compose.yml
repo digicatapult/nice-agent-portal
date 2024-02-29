@@ -1,7 +1,6 @@
 version: '3.8'
 
-x-env-files:
-  &env-files
+x-env-files: &env-files
   env_file:
     - .env
     - .env.${COMPOSE_PROJECT_NAME}
@@ -21,6 +20,7 @@ services:
         condition: service_healthy
     ports:
       - '${NICE_PORT_HOST-3000}:3000'
+    command: [sh, -c, 'npx prisma migrate deploy && node index.js']
     networks: ['nice-net', 'agent-net']
 
   veritable:
@@ -38,8 +38,8 @@ services:
     volumes:
       - ./cloudagentConfig.json:/config.json
     ports:
-    #  - '5022:5002'
-    #  - '5023:5003'
+      #  - '5022:5002'
+      #  - '5023:5003'
       - '${VERITABLE_PORT_HOST-3010}:3000'
     # or via command line arguments
     command: --endpoint "http://${COMPOSE_PROJECT_NAME}-veritable:5002" "ws://${COMPOSE_PROJECT_NAME}-veritable:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --webhook-url "${PORTAL_BASE_URL}/api/webhooks" --auto-accept-connections true auto-accept-credentials always --config /config.json
@@ -87,7 +87,8 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
     healthcheck:
-      test: ["CMD-SHELL", "PGUSER=${DB_USERNAME}", pg_isready", "-d", "${DB_NAME}"]
+      test:
+        ['CMD-SHELL', 'PGUSER=${DB_USERNAME}', pg_isready", '-d', '${DB_NAME}']
       interval: 5s
       timeout: 5s
       retries: 20

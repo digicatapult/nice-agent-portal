@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "rootDir": "./test",
+    "baseUrl": "./",
+    "moduleResolution": "node",
+    "types": ["mocha", "chai", "node"],
+    "typeRoots": ["types/*", "node_modules/@types", "../node_modules/@types"],
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "sourceMap": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "outDir": "./build",
+    "esModuleInterop": true,
+    "paths":{
+      "types": ["mocha", "chai", "node"]
+    }
+  },
+  "exclude": [
+    "**/*.test.ts",
+    "test",
+    "**/__test__"
+  ]
+}

@@ -10,7 +10,7 @@
     "backend-issuer"
   ],
   "scripts": {
-    "lint":                 "eslint ./test && npm run lint --workspaces",
+    "lint":                 "npm run lint --workspaces",
     "depcheck":             "depcheck && npm run depcheck --workspaces",
     "build":                "npm run build --workspaces",
     "test:unit":            "npm run test:unit --workspaces --if-present",
@@ -43,7 +43,7 @@
     "compose:up:deps:dev:bob":     "export SERVICES=\"veritable postgres\" COMPOSE_EXTRA_OPTS=\"${COMPOSE_EXTRA_OPTS} --env-file .env.nice-agent-bob.dev\" && npm run compose:up:agent:bob",
     "compose:up:deps:dev:issuer":  "export SERVICES=\"veritable postgres\" COMPOSE_EXTRA_OPTS=\"${COMPOSE_EXTRA_OPTS} --env-file .env.nice-agent-issuer.dev\" && npm run compose:up:agent:issuer",
 
-    "compose:up:deps:test":         "npm run compose:up:deps:test:alice && compose:up:deps:test:bob && compose:up:deps:test:issuer",
+    "compose:up:deps:test":         "npm run compose:up:deps:test:alice && npm run compose:up:deps:test:bob && npm run compose:up:deps:test:issuer",
     "compose:up:deps:test:alice":   "export SERVICES=\"veritable postgres\" && npm run compose:up:agent:test:alice",
     "compose:up:deps:test:bob":     "export SERVICES=\"veritable postgres\" && npm run compose:up:agent:test:bob",
     "compose:up:deps:test:issuer":  "export SERVICES=\"veritable postgres\" && npm run compose:up:agent:test:issuer",
@@ -59,10 +59,8 @@
     "@types/chai": "^4.3.12",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.11.20",
-    "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
-    "chai": "^5.1.0",
     "depcheck": "^1.4.7",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
@@ -70,7 +68,6 @@
     "eslint-plugin-prettier": "^5.1.3",
     "mocha": "^10.3.0",
     "prettier": "^3.2.5",
-    "supertest": "^6.3.4",
     "tsimp": "^2.0.11"
   },
   "repository": {

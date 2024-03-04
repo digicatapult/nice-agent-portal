@@ -106,12 +106,14 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
-      - name: Setup dependencies
-        run: docker compose up -d veritable ipfs opa postgres
       - name: Install Node Packages
         run: npm ci
-      - name: Run tests
-        run: npm run test
+      - name: Run unit tests
+        run: npm run test:unit
+      - name: Setup dependencies
+        run: npm run compose:up:deps:test
+      - name: Run integration tests
+        run: npm run test:integration
 
   publish:
     name: 'Publish docker image'
@@ -180,7 +182,7 @@ jobs:
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
-          build-args: NICE_AGENT_ROLE=${{ matrix.nice-agent-role }}
+          file: ${{ matrix.nice-agent-role }}.Dockerfile
           platforms: linux/amd64, linux/arm64
           push: true
           tags: |

@@ -17,16 +17,15 @@ RUN npm prune --production
 #Build backend
 FROM node:lts as build-backend
 
-ARG NICE_AGENT_ROLE=peer
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /build
 
-COPY backend-${NICE_AGENT_ROLE-peer}/package.json package-lock.json ./
+COPY backend-peer/package.json package-lock.json ./
 RUN npm ci && npm cache clean --force
 
-COPY backend-${NICE_AGENT_ROLE-peer} ./
+COPY backend-peer ./
 RUN npm run build
 RUN npm prune --production
 

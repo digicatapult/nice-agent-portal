@@ -14,8 +14,8 @@ build
 .env
 .idea/
 .vscode/
-!docker/.env
 !/.env
+.env*.local
 .DS_Store
 
 npm-debug.log*

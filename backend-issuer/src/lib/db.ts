@@ -1,7 +1,7 @@
-import { singleton } from 'tsyringe'
+import { singleton, container } from 'tsyringe'
 import { PrismaClient, Prisma } from '@prisma/client'
 
-import env from '../env.js'
+import type { Env } from '../env.js'
 
 export type MemberCreate = Pick<
   Prisma.MemberCreateInput,
@@ -16,6 +16,7 @@ export default class Database {
   private db: PrismaClient
 
   constructor() {
+    const env = container.resolve<Env>('env')
     this.db = new PrismaClient({
       datasourceUrl: `postgresql://${env.DB_USERNAME}:${env.DB_PASSWORD}@${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`,
     })

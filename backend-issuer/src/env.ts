@@ -1,3 +1,4 @@
+import { container } from 'tsyringe'
 import * as envalid from 'envalid'
 import dotenv from 'dotenv'
 
@@ -7,7 +8,7 @@ if (process.env.NODE_ENV === 'test') {
   dotenv.config({ path: process.env.DOTENV_FILE_PATHS.split(' ') })
 }
 
-export default envalid.cleanEnv(process.env, {
+const env = envalid.cleanEnv(process.env, {
   PORT: envalid.port({ default: 3000 }),
   LOG_LEVEL: envalid.str({ default: 'info', devDefault: 'debug' }),
   CLOUDAGENT_HOST: envalid.host({
@@ -27,3 +28,7 @@ export default envalid.cleanEnv(process.env, {
   DID: envalid.str({ default: '' }), // allow empty if already stored in wallet
   PRIVATE_KEY: envalid.str({ default: '' }), // allow empty if already stored in wallet
 })
+
+export type Env = typeof env
+
+container.register<Env>('env', { useValue: env })

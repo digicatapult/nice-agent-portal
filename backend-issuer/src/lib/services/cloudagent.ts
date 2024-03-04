@@ -1,11 +1,9 @@
-import { singleton } from 'tsyringe'
+import { singleton, container } from 'tsyringe'
 
-import env from '../../env.js'
+import type { Env } from '../../env.js'
 import { ServiceUnavailable } from '../error-handler/index.js'
 import { logger } from '../../lib/logger.js'
 const log = logger.child({ context: 'CloudagentManager' })
-
-const URL_PREFIX = `http://${env.CLOUDAGENT_HOST}:${env.CLOUDAGENT_PORT}`
 
 interface AgentInfo {
   label: string
@@ -39,10 +37,15 @@ export class Claims implements IClaims {
 
 @singleton()
 export class CloudagentManager {
-  constructor() {}
+  private url_prefix: string
+
+  constructor() {
+    const env = container.resolve<Env>('env')
+    this.url_prefix = `http://${env.CLOUDAGENT_HOST}:${env.CLOUDAGENT_PORT}`
+  }
 
   getAgent = async (): Promise<AgentInfo> => {
-    const res = await fetch(`${URL_PREFIX}/agent`)
+    const res = await fetch(`${this.url_prefix}/agent`)
 
     if (!res.ok) {
       throw new ServiceUnavailable('Error fetching cloud agent')
@@ -59,11 +62,14 @@ export class CloudagentManager {
       autoAcceptConnection: true,
     }
 
-    const res = await fetch(`${URL_PREFIX}/oob/receive-implicit-invitation`, {
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody),
-      method: 'POST',
-    })
+    const res = await fetch(
+      `${this.url_prefix}/oob/receive-implicit-invitation`,
+      {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+        method: 'POST',
+      }
+    )
 
     if (!res.ok) {
       throw new ServiceUnavailable('Error accepting implicit invitation')
@@ -71,7 +77,7 @@ export class CloudagentManager {
   }
 
   importDid = async (body: ImportDid) => {
-    const res = await fetch(`${URL_PREFIX}/dids/import`, {
+    const res = await fetch(`${this.url_prefix}/dids/import`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,8 +89,9 @@ export class CloudagentManager {
       throw new ServiceUnavailable(`Error fetching cloud agent`)
     }
 
-    const { didDocument: { id } = {} } =
-      (await res.json()) as ObjectWithDidDocument
+    const {
+      didDocument: { id },
+    } = (await res.json()) as ObjectWithDidDocument
 
     log.info(`DID imported ${id}`)
 
@@ -92,9 +99,12 @@ export class CloudagentManager {
   }
 
   isSchemaDefined = async (id: string) => {
-    const res = await fetch(`${URL_PREFIX}/schemas/${encodeURIComponent(id)}`, {
-      signal: AbortSignal.timeout(3000),
-    })
+    const res = await fetch(
+      `${this.url_prefix}/schemas/${encodeURIComponent(id)}`,
+      {
+        signal: AbortSignal.timeout(3000),
+      }
+    )
     try {
       if (!res.ok) {
         throw new ServiceUnavailable('Error fetching cloud agent')
@@ -116,7 +126,7 @@ export class CloudagentManager {
     version: string
     attrNames: string[]
   }) => {
-    const res = await fetch(`${URL_PREFIX}/schemas`, {
+    const res = await fetch(`${this.url_prefix}/schemas`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -141,7 +151,7 @@ export class CloudagentManager {
 
   isCredDefDefined = async (id: string) => {
     const res = await fetch(
-      `${URL_PREFIX}/credential-definitions/${encodeURIComponent(id)}`,
+      `${this.url_prefix}/credential-definitions/${encodeURIComponent(id)}`,
       { signal: AbortSignal.timeout(3000) }
     )
     try {
@@ -164,7 +174,7 @@ export class CloudagentManager {
     schemaId: string
     issuerId: string
   }) => {
-    const res = await fetch(`${URL_PREFIX}/credential-definitions`, {
+    const res = await fetch(`${this.url_prefix}/credential-definitions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -55,24 +55,11 @@ To build the agent, use the following command at the project root:
 npm run build
 ```
 
-To run the agent in development mode, first bring up dependencies with:
+To run the agent in development mode, first bring up dependencies with (choose one of `alice` `bob` or `issuer`, depending on which persona of noe you would like to run):
 
 ```
-npm run compose:up:deps
-```
-
-In a different shell, run either the Peer or Issuer with the following commands.
-
-Peer agent:
-
-```
-npm run dev:peer
-```
-
-Issuer agent:
-
-```
-npm run dev:issuer
+npm run compose:up:deps:dev:<alice|bob|issuer>
+npm run dev:<alice|bob|issuer>
 ```
 
 #### Development Mode with Multiple Agents

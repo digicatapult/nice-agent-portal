@@ -1,6 +1,6 @@
-import { injectable, singleton } from 'tsyringe'
+import { injectable, singleton, container } from 'tsyringe'
 
-import env from '../env.js'
+import type { Env } from '../env.js'
 import Database from './db.js'
 import { CloudagentManager, Claims } from './services/cloudagent.js'
 import { logger } from './logger.js'
@@ -15,6 +15,7 @@ export class Provisioner {
   ) {}
 
   async provision() {
+    const env = container.resolve<Env>('env')
     let { did, schemaId, credDefId } = await this.db.getConfig()
 
     if (!did) {
@@ -23,43 +24,55 @@ export class Provisioner {
           'DID and private key not found in wallet, DID and PRIVATE_KEY environment variables must be specified at startup'
         )
       }
-      log.info(`DID ${env.DID} not found in store, creating...`)
-      const didImportPayload = {
-        did: env.DID,
-        privateKeys: [
-          {
-            keyType: 'ed25519',
-            privateKey: env.PRIVATE_KEY,
-          },
-        ],
-        overwrite: true,
-      }
-      await this.cloudagent.importDid(didImportPayload)
-      did = env.DID
+      log.info(`DID not found in store, importing...`)
+      did = await this.importDid(env.DID, env.PRIVATE_KEY)
     }
 
     if (!schemaId || !(await this.cloudagent.isSchemaDefined(schemaId))) {
       log.info('Schema not found in store, creating...')
-      const schemaPayload = {
-        issuerId: did,
-        version: '1.0',
-        name: 'niceMemberSchema',
-        attrNames: Object.getOwnPropertyNames(new Claims()),
-      }
-      schemaId = await this.cloudagent.createSchema(schemaPayload)
+      schemaId = await this.createSchema(did)
+      credDefId = await this.createCredDef(did, schemaId)
     }
 
     if (!credDefId || !(await this.cloudagent.isCredDefDefined(credDefId))) {
       log.info('Credential Definition not found in store, creating...')
-      const credDefPayload = {
-        tag: 'niceMemberCredDef',
-        schemaId: schemaId,
-        issuerId: did,
-      }
-      credDefId = await this.cloudagent.createCredDef(credDefPayload)
+      credDefId = await this.createCredDef(did, schemaId)
     }
 
     await this.db.updateConfig({ did, schemaId, credDefId })
-    log.info({ msg: 'Provision completed, using:', did, schemaId, credDefId })
+    log.info({ msg: 'Provision completed:', did, schemaId, credDefId })
+  }
+
+  private async importDid(did: string, privateKey: string): Promise<string> {
+    return this.cloudagent.importDid({
+      did,
+      privateKeys: [
+        {
+          keyType: 'ed25519',
+          privateKey,
+        },
+      ],
+      overwrite: true,
+    })
+  }
+
+  private async createSchema(issuerId: string): Promise<string> {
+    return this.cloudagent.createSchema({
+      issuerId,
+      version: '1.0',
+      name: 'niceMemberSchema',
+      attrNames: Object.getOwnPropertyNames(new Claims()),
+    })
+  }
+
+  private async createCredDef(
+    issuerId: string,
+    schemaId: string
+  ): Promise<string> {
+    return await this.cloudagent.createCredDef({
+      issuerId,
+      schemaId,
+      tag: 'niceMemberCredDef',
+    })
   }
 }

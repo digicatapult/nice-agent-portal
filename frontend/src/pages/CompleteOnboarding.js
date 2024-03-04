@@ -25,6 +25,7 @@ const CompleteOnboardingPage = () => {
       case 204:
         setConfirmAppError('')
         setSuccess(true)
+        break
       case 422:
         setConfirmAppError('Incorrect format')
         break

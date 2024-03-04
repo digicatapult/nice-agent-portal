@@ -16,7 +16,7 @@ export default envalid.cleanEnv(process.env, {
   }),
   CLOUDAGENT_PORT: envalid.port({ default: 3000, devDefault: 3010 }),
   DB_HOST: envalid.str({ default: 'postgres', devDefault: 'localhost' }),
-  DB_PORT: envalid.port({ default: 5432 }),
+  DB_PORT: envalid.port({ default: 5432, devDefault: 3021 }),
   DB_USERNAME: envalid.str({ devDefault: 'postgres' }),
   DB_PASSWORD: envalid.str({ devDefault: 'postgres' }),
   DB_NAME: envalid.str({ default: 'nice-agent-portal' }),

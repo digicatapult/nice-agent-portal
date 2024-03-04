@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import express, { Express } from 'express'
 import { setup, serve } from 'swagger-ui-express'
 import cors from 'cors'
@@ -6,7 +7,9 @@ import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import env from './env.js'
+import { container } from 'tsyringe'
 
+import { Provisioner } from './lib/provisioner.js'
 import { errorHandler } from './lib/error-handler/index.js'
 import { RegisterRoutes } from './routes.js'
 
@@ -15,6 +18,8 @@ const __dirname = path.dirname(__filename)
 const static_root_abs = path.resolve(env.STATIC_ROOT)
 
 export default async (): Promise<Express> => {
+  const provisioner = container.resolve(Provisioner)
+  await provisioner.provision()
   const swaggerBuffer = await fs.readFile(
     path.join(__dirname, './swagger.json')
   )

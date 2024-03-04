@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { container } from 'tsyringe'
 import * as sinon from 'sinon'
 import supertest from 'supertest'
@@ -6,13 +5,15 @@ import { Express } from 'express'
 
 import type { Member } from '../../../controllers/types.js'
 import createHttpServer from '../../../server.js'
+import { Provisioner } from '../../../lib/provisioner.js'
 import Database from '../../../lib/db.js'
-import CloudagentManager from '../../../lib/services/cloudagent.js'
+import { CloudagentManager } from '../../../lib/services/cloudagent.js'
 
 describe('application controller', () => {
   describe('POST /api/confirm-application', async () => {
     const db = container.resolve(Database)
     const cloudagent = container.resolve(CloudagentManager)
+    const provisioner = container.resolve(Provisioner)
     let app: Express
     let testAgent: supertest.Agent
     let testMember: Member
@@ -21,6 +22,7 @@ describe('application controller', () => {
     let receiveImplicitInvitationStub: sinon.SinonStub
 
     before(async () => {
+      sinon.stub(provisioner, 'provision').resolves()
       app = await createHttpServer()
       testAgent = supertest(app)
     })
@@ -58,6 +60,10 @@ describe('application controller', () => {
     })
 
     afterEach(() => {
+      sinon.restore()
+    })
+
+    after(() => {
       sinon.restore()
     })
 

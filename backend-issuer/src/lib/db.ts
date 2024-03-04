@@ -38,4 +38,29 @@ export default class Database {
   ) => {
     return this.db.member.update({ where, data })
   }
+
+  deleteMember = async (where: Prisma.MemberWhereUniqueInput) => {
+    return this.db.member.delete({ where })
+  }
+
+  getConfig = async () => {
+    return (await this.db.config.findMany()).reduce(
+      (acc, configPair) => {
+        acc[configPair.key] = configPair.value
+        return acc
+      },
+      {} as { [key: string]: string }
+    )
+  }
+
+  updateConfig = async (config: { [key: string]: string }) => {
+    await this.db.$transaction([
+      this.db.config.deleteMany({
+        where: { key: { in: Object.keys(config) } },
+      }),
+      this.db.config.createMany({
+        data: Object.entries(config).map(([key, value]) => ({ key, value })),
+      }),
+    ])
+  }
 }

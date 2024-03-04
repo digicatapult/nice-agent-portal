@@ -3,8 +3,8 @@ import dotenv from 'dotenv'
 
 if (process.env.NODE_ENV === 'test') {
   dotenv.config({ path: 'test/test.env' })
-} else {
-  dotenv.config({ path: process.env.DOTENV_CONFIG_PATH })
+} else if (process.env.DOTENV_FILE_PATHS) {
+  dotenv.config({ path: process.env.DOTENV_FILE_PATHS.split(' ') })
 }
 
 export default envalid.cleanEnv(process.env, {
@@ -16,7 +16,7 @@ export default envalid.cleanEnv(process.env, {
   }),
   CLOUDAGENT_PORT: envalid.port({ default: 3000, devDefault: 3010 }),
   DB_HOST: envalid.str({ default: 'postgres', devDefault: 'localhost' }),
-  DB_PORT: envalid.port({ default: 5432 }),
+  DB_PORT: envalid.port({ default: 5432, devDefault: 3022 }),
   DB_USERNAME: envalid.str({ devDefault: 'postgres' }),
   DB_PASSWORD: envalid.str({ devDefault: 'postgres' }),
   DB_NAME: envalid.str({ default: 'nice-agent-portal' }),
@@ -24,4 +24,6 @@ export default envalid.cleanEnv(process.env, {
     default: '/www',
     devDefault: '../frontend/build',
   }),
+  DID: envalid.str({ default: '' }), // allow empty if already stored in wallet
+  PRIVATE_KEY: envalid.str({ default: '' }), // allow empty if already stored in wallet
 })

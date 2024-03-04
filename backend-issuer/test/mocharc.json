@@ -2,6 +2,7 @@
   "timeout": 5000,
   "exit": true,
   "node-option": ["import=tsimp/import"],
+  "require": "reflect-metadata",
   "extension": ["test.ts"],
   "bail": false,
   "package": "./package.json",

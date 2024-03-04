@@ -9,9 +9,10 @@ import {
 } from 'tsoa'
 import { injectable } from 'tsyringe'
 
-import { logger } from '../../lib/logger.js'
 import { InternalError } from '../../lib/error-handler/index.js'
 import Database from '../../lib/db.js'
+import { logger } from '../../lib/logger.js'
+const log = logger.child({ context: 'WebhooksController' })
 
 @Route('api/webhooks')
 @Tags('webhooks')
@@ -29,7 +30,7 @@ export class WebhooksController extends Controller {
   @Hidden()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async onBasicMessageEvent(@Body() payload: { [key: string]: any }) {
-    logger.info({
+    log.info({
       msg: 'new request received',
       controller: '/webhooks/basic-messages',
       payload,
@@ -44,7 +45,7 @@ export class WebhooksController extends Controller {
   @Hidden()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async onConnectionEvent(@Body() payload: { [key: string]: any }) {
-    logger.info({
+    log.info({
       msg: 'new request received',
       controller: '/webhooks/connections',
       payload,
@@ -73,7 +74,7 @@ export class WebhooksController extends Controller {
   @Hidden()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async onCredentialEvent(@Body() payload: { [key: string]: any }) {
-    logger.info({
+    log.info({
       msg: 'new request received',
       controller: '/webhooks/credentials',
       payload,
@@ -88,7 +89,7 @@ export class WebhooksController extends Controller {
   @Hidden()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async onProofEvent(@Body() payload: { [key: string]: any }) {
-    logger.info({
+    log.info({
       msg: 'new request received',
       controller: '/webhooks/proofs',
       payload,

@@ -35,7 +35,7 @@ export default class IssuerManager {
     })
 
     if (res.status === 400) {
-      throw new BadRequest(await res.json())
+      throw new BadRequest((await res.json()) as string)
     }
 
     if (!res.ok) {

@@ -64,7 +64,7 @@ export class Database {
     )
   }
 
-  // Upsert handled by delete and createMany atomic transaction
+  // Upsert handled by deleteMany and createMany atomic transaction
   updateConfig = async (config: { [key: string]: string }) => {
     await this.db.$transaction([
       this.db.config.deleteMany({

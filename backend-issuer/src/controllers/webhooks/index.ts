@@ -10,6 +10,7 @@ import {
 import { injectable } from 'tsyringe'
 
 import { InternalError } from '../../lib/error-handler/index.js'
+import { CloudagentManager } from '../../lib/services/cloudagent.js'
 import { Database } from '../../lib/db.js'
 import { logger } from '../../lib/logger.js'
 const log = logger.child({ context: 'WebhooksController' })
@@ -18,7 +19,10 @@ const log = logger.child({ context: 'WebhooksController' })
 @Tags('webhooks')
 @injectable()
 export class WebhooksController extends Controller {
-  constructor(private db: Database) {
+  constructor(
+    private cloudagent: CloudagentManager,
+    private db: Database
+  ) {
     super()
   }
 
@@ -52,17 +56,25 @@ export class WebhooksController extends Controller {
     })
 
     if (payload.state === 'completed' && payload.invitationDid) {
+      let member
       try {
-        await this.db.updateMember(
+        member = await this.db.updateMember(
           {
             did: payload.invitationDid,
-            status: 'approved',
           },
-          { status: 'verified' }
+          { connectionId: payload.id }
         )
       } catch (e) {
-        throw new InternalError('Could not update status')
+        throw new InternalError('Could not update connectionId')
       }
+      log.info({
+        msg: `Connection ${payload.id} established with ${payload.invitationDid}`,
+      })
+      const { credDefId } = await this.db.getConfig()
+      await this.cloudagent.sendCredentialOffer(payload.id, credDefId, {
+        companyName: member.companyName,
+        companiesHouseNumber: member.companiesHouseNumber,
+      })
     }
   }
 
@@ -79,6 +91,20 @@ export class WebhooksController extends Controller {
       controller: '/webhooks/credentials',
       payload,
     })
+
+    if (payload.state === 'done' && payload.connectionId) {
+      try {
+        await this.db.updateMember(
+          {
+            connectionId: payload.connectionId,
+            status: 'approved',
+          },
+          { status: 'verified' }
+        )
+      } catch (e) {
+        throw new InternalError('Could not set member status to verified')
+      }
+    }
   }
 
   /**
@@ -92,6 +118,21 @@ export class WebhooksController extends Controller {
     log.info({
       msg: 'new request received',
       controller: '/webhooks/proofs',
+      payload,
+    })
+  }
+
+  /**
+   * @summary Receive Trust Ping events from Veritable
+   */
+  @SuccessResponse(204)
+  @Post('/trust-ping')
+  @Hidden()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async onTrustPingEvent(@Body() payload: { [key: string]: any }) {
+    log.info({
+      msg: 'new request received',
+      controller: '/webhooks/trust-ping',
       payload,
     })
   }

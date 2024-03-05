@@ -6,7 +6,7 @@ import { Express } from 'express'
 import type { Member } from '../../../controllers/types.js'
 import createHttpServer from '../../../server.js'
 import { Provisioner } from '../../../lib/provisioner.js'
-import Database from '../../../lib/db.js'
+import { Database } from '../../../lib/db.js'
 import { CloudagentManager } from '../../../lib/services/cloudagent.js'
 
 describe('application controller', () => {
@@ -60,10 +60,6 @@ describe('application controller', () => {
     })
 
     afterEach(() => {
-      sinon.restore()
-    })
-
-    after(() => {
       sinon.restore()
     })
 

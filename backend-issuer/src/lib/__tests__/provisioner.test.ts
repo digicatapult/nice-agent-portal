@@ -1,9 +1,8 @@
 import { container } from 'tsyringe'
 import * as sinon from 'sinon'
-import { expect } from 'chai'
 
 import type { Env } from '../../env.js'
-import Database from '../../lib/db.js'
+import { Database } from '../../lib/db.js'
 import { CloudagentManager } from '../../lib/services/cloudagent.js'
 
 import { Provisioner } from '../../lib/provisioner.js'
@@ -21,7 +20,7 @@ const restoreEnv = () => {
   container.registerInstance<Env>('env', originalEnv)
 }
 
-describe.only('Provisioner', async () => {
+describe('Provisioner', async () => {
   describe('provision', async () => {
     let db: Database
     let cloudagent: CloudagentManager
@@ -86,7 +85,7 @@ describe.only('Provisioner', async () => {
     it('should get existing config from the database', async () => {
       await provisioner.provision()
 
-      expect(getConfigStub.calledOnce)
+      sinon.assert.calledOnce(getConfigStub)
     })
 
     it('should import a DID if none exists in the database', async () => {

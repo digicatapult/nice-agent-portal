@@ -3,7 +3,7 @@ import { injectable } from 'tsyringe'
 
 import { BadRequest } from '../../lib/error-handler/index.js'
 import { CloudagentManager } from '../../lib/services/cloudagent.js'
-import Database from '../../lib/db.js'
+import { Database } from '../../lib/db.js'
 import type { MemberCreate, ConfirmApplication } from '../types.js'
 import { logger } from '../../lib/logger.js'
 const log = logger.child({ context: 'ApplicationController' })

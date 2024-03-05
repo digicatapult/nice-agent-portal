@@ -1,4 +1,4 @@
-import { singleton, container } from 'tsyringe'
+import { singleton, container, injectable, inject } from 'tsyringe'
 import { PrismaClient, Prisma } from '@prisma/client'
 
 import type { Env } from '../env.js'
@@ -11,15 +11,24 @@ export type MemberConfirm = Required<
   Pick<Prisma.MemberWhereUniqueInput, 'id' | 'verificationCode' | 'status'>
 >
 
+@injectable()
 @singleton()
-export default class Database {
+export class PrismaWrapper {
+  public prismaClient: PrismaClient
+
+  constructor(@inject('env') private env: Env) {
+    this.prismaClient = new PrismaClient({
+      datasourceUrl: `postgresql://${this.env.DB_USERNAME}:${this.env.DB_PASSWORD}@${env.DB_HOST}:${this.env.DB_PORT}/${this.env.DB_NAME}`,
+    })
+  }
+}
+
+@singleton()
+export class Database {
   private db: PrismaClient
 
   constructor() {
-    const env = container.resolve<Env>('env')
-    this.db = new PrismaClient({
-      datasourceUrl: `postgresql://${env.DB_USERNAME}:${env.DB_PASSWORD}@${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`,
-    })
+    this.db = container.resolve(PrismaWrapper).prismaClient
   }
 
   getMember = async (where: Prisma.MemberWhereUniqueInput) => {
@@ -45,6 +54,7 @@ export default class Database {
   }
 
   getConfig = async () => {
+    // Converts key/value pairs into javascript object
     return (await this.db.config.findMany()).reduce(
       (acc, configPair) => {
         acc[configPair.key] = configPair.value
@@ -54,12 +64,14 @@ export default class Database {
     )
   }
 
+  // Upsert handled by delete and createMany atomic transaction
   updateConfig = async (config: { [key: string]: string }) => {
     await this.db.$transaction([
       this.db.config.deleteMany({
         where: { key: { in: Object.keys(config) } },
       }),
       this.db.config.createMany({
+        // Converts javascript object in key/value pairs
         data: Object.entries(config).map(([key, value]) => ({ key, value })),
       }),
     ])

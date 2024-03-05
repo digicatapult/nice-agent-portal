@@ -1,7 +1,7 @@
 import { injectable, singleton, container } from 'tsyringe'
 
 import type { Env } from '../env.js'
-import Database from './db.js'
+import { Database } from './db.js'
 import { CloudagentManager, Claims } from './services/cloudagent.js'
 import { logger } from './logger.js'
 const log = logger.child({ context: 'Provision' })

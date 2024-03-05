@@ -10,7 +10,7 @@ import {
 import { injectable } from 'tsyringe'
 
 import { InternalError } from '../../lib/error-handler/index.js'
-import Database from '../../lib/db.js'
+import { Database } from '../../lib/db.js'
 import { logger } from '../../lib/logger.js'
 const log = logger.child({ context: 'WebhooksController' })
 

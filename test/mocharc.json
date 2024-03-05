@@ -1,0 +1,16 @@
+{
+  "timeout": 5000,
+  "retries": 10,
+  "parallel": false,
+  "exit": true,
+  "node-option": ["import=tsimp/import"],
+  "extension": ["test.ts"],
+  "bail": true,
+  "package": "./package.json",
+  "watch": false,
+  "fullTrace": false,
+  "ui": "bdd",
+  "color": true,
+  "recursive": true,
+  "reporter": "spec"
+}

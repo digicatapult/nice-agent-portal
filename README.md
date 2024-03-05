@@ -17,10 +17,10 @@ The [Network Insight Collaboration Environment](https://digitalsupplychainhub.uk
 
 #### Single Agent
 
-To run the full Peer agent stack, use:
+To run a full Peer agent stack, use:
 
 ```
-docker-compose up --build
+npm run compose:up:agent
 ```
 
 Once running, the agent frontend is available at http://localhost:3000 and the API is available at http://localhost:3000/api/docs
@@ -37,21 +37,7 @@ As an example, configuration options have been defined in this repository for th
 - `nice-agent-bob`: a second Peer node
 - `nice-agent-issuer`: an Issuer node
 
-These 3 agents can be run with the following 3 commands:
-
-```
-(export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
-(export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
-(export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
-```
-
-Or:
-
-```
-for agent_name in alice bob issuer; do
-  (export COMPOSE_PROJECT_NAME=nice-agent-"${agent_name}" && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d);
-done
-```
+These 3 agents can be run with the following command: `npm run compose:up`
 
 With the default configurations defined in this repo's `.env.*` files, the portals will be available at:
 
@@ -72,7 +58,7 @@ npm run build
 To run the agent in development mode, first bring up dependencies with:
 
 ```
-docker-compose up veritable ipfs opa postgres
+npm run compose:up:deps
 ```
 
 In a different shell, run either the Peer or Issuer with the following commands.
@@ -93,50 +79,83 @@ npm run dev:issuer
 
 To run an agent in development mode against other agents, the steps are:
 
-- Set up all non-development agents in production mode
-- Set up the dependencies of the agent to be run in development mode, loading the development environment variables
-- Start the development agent with the required environment variables loaded using `DOTENV_CONFIG_PATH=<env file> npm run dev:<issuer|peer>`
+- If running the issuer in development mode, define its hostname and port as env vars
+- Set up all non-development agents in production mode using `npm run compose:up:<agent-name>`
+- Set up the dependencies of the agent to be run in development mode, loading the development environment variables using `npm run compose:up:deps:<agent-name>`
+- Start the target agent in develpoment mode with the required environment variables loaded using `npm run dev:<agent-name>`
 
 For example, to work on the issuer node in development mode, run the following commands:
 
 ```
-(export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
-(export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
-(export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} --env-file .env.${COMPOSE_PROJECT_NAME}.dev up veritable ipfs opa postgres -d)
-DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-issuer.dev npm run dev:issuer
+(export ISSUER_HOST=host.docker.internal ISSUER_PORT=3002 &&
+ npm run compose:up:agent:alice &&
+ npm run compose:up:agent:bob &&
+ npm run compose:up:deps:dev:issuer &&
+ npm run dev:issuer)
 ```
 
 Or, for another example, to work on peer alice in development mode, run the following commands:
 
 ```
-(export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
-(export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
-(export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} --env-file .env.${COMPOSE_PROJECT_NAME}.dev up veritable ipfs opa postgres -d)
-DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-alice.dev npm run dev:peer
+npm run compose:up:agent:bob
+npm run compose:up:agent:issuer
+npm run compose:up:deps:dev:alice
+npm run dev:alice
 ```
 
 Or, for another example, to work on peer bob in development mode, run the following commands:
 
 ```
-(export COMPOSE_PROJECT_NAME=nice-agent-alice && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
-(export COMPOSE_PROJECT_NAME=nice-agent-issuer && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} up --build -d)
-(export COMPOSE_PROJECT_NAME=nice-agent-bob && docker-compose --env-file .env --env-file .env.${COMPOSE_PROJECT_NAME} --env-file .env.${COMPOSE_PROJECT_NAME}.dev up veritable ipfs opa postgres -d)
-DOTENV_CONFIG_PATH=$(pwd)/.env.nice-agent-bob.dev npm run dev:peer
+npm run compose:up:agent:alice
+npm run compose:up:agent:issuer
+npm run compose:up:deps:dev:bob
+npm run dev:bob
+```
+
+#### Terminating a cluster
+
+To bring down the entire cluster, use the command
+```
+npm run compose:down
+```
+
+And to reset the state of the cluster (**warning**: this will delete **all** data) use the command
+```
+npm run compose:down:clean
 ```
 
 #### Testing
 
-To run the full test suite, dependencies must be brought up using:
+### Unit tests
+
+To run unit test suites use the command `npm run test:unit`
+
+### Integration testing
+
+To run integration test suites, dependencies must be brought up in test mode using
+```
+npm run compose:up:deps:test
+```
+
+This will start the dependencies up in a clean ephemeral state. Now tests can be run for using
+```
+npm run test:integration
+```
+
+### End-to-end testing
+
+To run E2E tests a full cluster of 2 peers and an issuer must be set up in test mode using
+```
+npm run compose:up:test
+```
+This will start the cluster in a clean ephemeral state. Tests can now be run using
 
 ```
-docker-compose up veritable ipfs opa postgres
+npm run test:e2e:wait4peers
 ```
+(this script waits until the IPFS nodes have successfully formed a swarm before beginning tests).
 
-Now tests can be run in a different shell using:
-
-```
-npm test
-```
+**Note:** If successful, the E2E tests will clean up any resources they create. If the tests fail, howevere, the cluster could be left in a dirty state, and so `npm run compose:up:test` should be run again before tests are re-run.
 
 ### Architecture
 

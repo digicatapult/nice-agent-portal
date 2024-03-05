@@ -4,9 +4,10 @@
     "emitDecoratorMetadata": true,
     "target": "ESNext",
     "module": "ESNext",
-    "rootDir": "./src",
+    "rootDir": "./test",
     "baseUrl": "./",
     "moduleResolution": "node",
+    "types": ["mocha", "chai", "node"],
     "typeRoots": ["types/*", "node_modules/@types", "../node_modules/@types"],
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
@@ -18,11 +19,9 @@
     "outDir": "./build",
     "esModuleInterop": true,
     "paths":{
-      "pino": ["node_modules/pino"],
-      "types": ["types"],
+      "types": ["mocha", "chai", "node"]
     }
   },
-  "include": ["src/**/*.ts", "src/swagger.json"],
   "exclude": [
     "**/*.test.ts",
     "test",

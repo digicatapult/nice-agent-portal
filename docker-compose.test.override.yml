@@ -1,0 +1,22 @@
+services:
+  veritable:
+    volumes:
+      - veritable-storage-test:/root/.afj
+
+  ipfs:
+    volumes:
+      - ipfs-data-test:/data/ipfs
+
+  postgres:
+    volumes:
+      - pg-data-test:/var/lib/postgresql/data
+
+volumes:
+  pg-data: null
+  ipfs-data: null
+  ipfs-cluster-data: null
+  veritable-storage: null
+  pg-data-test:
+  ipfs-data-test:
+  ipfs-cluster-data-test:
+  veritable-storage-test:

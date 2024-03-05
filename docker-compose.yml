@@ -1,18 +1,11 @@
 version: '3.8'
 
-x-env-files: &env-files
-  env_file:
-    - .env
-    - .env.${COMPOSE_PROJECT_NAME}
-
 services:
   portal:
-    <<: *env-files
     container_name: ${COMPOSE_PROJECT_NAME}-portal
     build:
       context: .
-      args:
-        NICE_AGENT_ROLE: ${NICE_AGENT_ROLE}
+      dockerfile: ${NICE_AGENT_ROLE}.Dockerfile
     image: digicatapult/nice-agent-portal-${NICE_AGENT_ROLE}:${NICE_AGENT_VER-latest}
     restart: on-failure
     depends_on:
@@ -20,11 +13,25 @@ services:
         condition: service_healthy
     ports:
       - '${NICE_PORT_HOST-3000}:3000'
+    volumes:
+      - ./.env.${COMPOSE_PROJECT_NAME}.local:/app/.env
+    environment:
+      - CLOUDAGENT_HOST
+      - DB_HOST
+      - DB_PORT
+      - DB_USERNAME
+      - DB_PASSWORD
+      - DB_NAME
+      - STATIC_ROOT
+      - DATABASE_URL
+      - ISSUER_HOST
+      - ISSUER_PORT
+    env_file:
+      - .env.${COMPOSE_PROJECT_NAME}.local
     command: [sh, -c, 'npx prisma migrate deploy && node index.js']
     networks: ['nice-net', 'agent-net']
 
   veritable:
-    <<: *env-files
     container_name: ${COMPOSE_PROJECT_NAME}-veritable
     image: digicatapult/veritable-cloudagent:${VERITABLE_AGENT_VER-latest}
     restart: on-failure
@@ -37,16 +44,18 @@ services:
         condition: service_healthy
     volumes:
       - ./cloudagentConfig.json:/config.json
+      - veritable-storage:/root/.afj
     ports:
       #  - '5022:5002'
       #  - '5023:5003'
       - '${VERITABLE_PORT_HOST-3010}:3000'
+    environment:
+      - AFJ_LOG_LEVEL=1
     # or via command line arguments
-    command: --endpoint "http://${COMPOSE_PROJECT_NAME}-veritable:5002" "ws://${COMPOSE_PROJECT_NAME}-veritable:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --webhook-url "${PORTAL_BASE_URL}/api/webhooks" --auto-accept-connections true auto-accept-credentials always --config /config.json
+    command: --endpoint "http://${COMPOSE_PROJECT_NAME}-veritable:5002" "ws://${COMPOSE_PROJECT_NAME}-veritable:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --webhook-url "${PORTAL_BASE_URL}/api/webhooks" --auto-accept-connections true --auto-accept-credentials always --config /config.json
     networks: ['nice-net', 'agent-net']
 
   ipfs:
-    <<: *env-files
     container_name: ${COMPOSE_PROJECT_NAME}-ipfs
     image: ipfs/kubo:${KUBO_AGENT_VER-release}
     restart: on-failure
@@ -56,15 +65,17 @@ services:
     #   - '8080:8080' # ipfs gateway - expose if needed/wanted
     volumes:
       - ipfs-data:/data/ipfs
+      - ./ipfs-init.sh:/container-init.d/0-ipfs-init.sh
     healthcheck:
       interval: 5s
       timeout: 5s
       retries: 20
       start_period: 0s
     networks: ['nice-net', 'agent-net']
+    #environment:
+    #  - IPFS_LOGGING=info
 
   opa:
-    <<: *env-files
     container_name: ${COMPOSE_PROJECT_NAME}-opa
     image: openpolicyagent/opa:0.61.0-static
     restart: on-failure
@@ -74,14 +85,13 @@ services:
     networks: ['agent-net']
 
   postgres:
-    <<: *env-files
     container_name: ${COMPOSE_PROJECT_NAME}-postgres
     image: postgres:16.2-alpine
     restart: on-failure
     ports:
       - ${DB_PORT_HOST}:5432
     volumes:
-      - nice-storage:/var/lib/postgresql/data
+      - pg-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -96,8 +106,10 @@ services:
     networks: ['agent-net']
 
 volumes:
-  nice-storage:
+  pg-data:
   ipfs-data:
+  ipfs-cluster-data:
+  veritable-storage:
 
 networks:
   nice-net:

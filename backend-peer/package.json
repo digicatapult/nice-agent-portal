@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/nice-agent-portal-backend-peer",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "OpenAPI service to manage profiles for the NICE agent and communication with veritable-cloudagent",
   "main": "src/index.ts",
   "type": "module",
@@ -13,8 +13,8 @@
     "start": "node build/index.js",
     "dev": "concurrently \"NODE_ENV=dev nodemon | pino-colada\" \"nodemon -x tsoa spec-and-routes --ignore src/routes.ts --ignore src/swagger.json\"",
     "test": "npm run build && npm run test:integration && npm run test:unit",
-    "test:integration": "NODE_ENV=test mocha --config ./test/mocharc.json ./test/integration/**/*.test.ts",
-    "test:unit": "NODE_ENV=test mocha --config ./test/mocharc.json ./src/**/*.test.ts",
+    "test:integration": "dotenv -e ../.env.nice-agent-alice.dev -- npx prisma migrate deploy && NODE_ENV=test mocha --config ./test/mocharc.json ./test/integration/**/*.test.ts",
+    "test:unit": "npm run build && NODE_ENV=test mocha --config ./test/mocharc.json ./src/**/*.test.ts",
     "coverage": "c8 npm run test",
     "db:deploy": "dotenv -e ../.env.nice-agent-alice.dev -- npx prisma migrate deploy",
     "db:dev": "dotenv -e ../.env.nice-agent-alice.dev -- npx prisma migrate dev",

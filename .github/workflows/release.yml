@@ -110,6 +110,21 @@ jobs:
         run: npm ci
       - name: Run unit tests
         run: npm run test:unit
+      - name: Copy identity values to mountable .env files
+        env:
+          ALICE_DID: ${{ vars.ALICE_DID }}
+          ALICE_PRIVATE_KEY: ${{ secrets.ALICE_PRIVATE_KEY}}
+          BOB_DID: ${{ vars.BOB_DID }}
+          BOB_PRIVATE_KEY: ${{ secrets.BOB_PRIVATE_KEY}}
+          ISSUER_DID: ${{ vars.ISSUER_DID }}
+          ISSUER_PRIVATE_KEY: ${{ secrets.ISSUER_PRIVATE_KEY}}
+        run: |
+          for persona in ALICE BOB ISSUER; do
+            for varname in DID PRIVATE_KEY; do
+              envvarname=${persona}_${varname}
+              echo "${varname}=${!envvarname}" >> ".env.nice-agent-${persona,,}.local"
+            done
+          done
       - name: Setup dependencies
         run: npm run compose:up:deps:test
       - name: Run integration tests

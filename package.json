@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/nice-agent-portal",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "NICE agent portal",
   "homepage": "https://github.com/digicatapult/nice-agent-portal",
   "type": "module",
@@ -58,7 +58,7 @@
   "devDependencies": {
     "@types/chai": "^4.3.12",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.20",
+    "@types/node": "^20.11.24",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "depcheck": "^1.4.7",

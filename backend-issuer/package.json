@@ -14,7 +14,7 @@
     "dev": "concurrently \"NODE_ENV=dev nodemon | pino-pretty\" \"nodemon -x tsoa spec-and-routes --ignore src/routes.ts --ignore src/swagger.json\"",
     "test": "npm run build && npm run test:integration && npm run test:unit",
     "test:integration": "NODE_ENV=test mocha --config ./test/mocharc.json ./test/integration/**/*.test.ts",
-    "test:unit": "NODE_ENV=test mocha --config ./test/mocharc.json ./src/**/*.test.ts",
+    "test:unit": "npm run build && NODE_ENV=test mocha --config ./test/mocharc.json ./src/**/*.test.ts",
     "coverage": "c8 npm run test",
     "db:deploy": "dotenv -e ../.env.nice-agent-issuer.dev -- npx prisma migrate deploy",
     "db:dev": "dotenv -e ../.env.nice-agent-issuer.dev -- npx prisma migrate dev",

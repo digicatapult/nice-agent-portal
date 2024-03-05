@@ -1,11 +1,12 @@
 import { Controller, Body, Post, Route, SuccessResponse, Tags } from 'tsoa'
 import { injectable } from 'tsyringe'
 
-import { logger } from '../../lib/logger.js'
 import { BadRequest } from '../../lib/error-handler/index.js'
-import CloudagentManager from '../../lib/services/cloudagent.js'
-import Database from '../../lib/db.js'
+import { CloudagentManager } from '../../lib/services/cloudagent.js'
+import { Database } from '../../lib/db.js'
 import type { MemberCreate, ConfirmApplication } from '../types.js'
+import { logger } from '../../lib/logger.js'
+const log = logger.child({ context: 'ApplicationController' })
 
 @Route('api')
 @Tags('application')
@@ -24,13 +25,17 @@ export class ApplicationController extends Controller {
   @SuccessResponse(204)
   @Post('/submit-application')
   public async submitApplication(@Body() member: MemberCreate) {
-    logger.info({
+    log.info({
       msg: 'new request received',
       controller: '/submit-application',
       payload: member,
     })
 
-    await this.db.addMember(member)
+    try {
+      await this.db.addMember(member)
+    } catch (e) {
+      throw new BadRequest('Member already exists')
+    }
   }
 
   /**
@@ -39,7 +44,7 @@ export class ApplicationController extends Controller {
   @SuccessResponse(204)
   @Post('/confirm-application')
   public async confirmApplication(@Body() body: ConfirmApplication) {
-    logger.info({
+    log.info({
       msg: 'new request received',
       controller: '/confirm-application',
       payload: body,

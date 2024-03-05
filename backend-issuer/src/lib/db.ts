@@ -1,7 +1,7 @@
-import { singleton } from 'tsyringe'
+import { singleton, container, injectable, inject } from 'tsyringe'
 import { PrismaClient, Prisma } from '@prisma/client'
 
-import env from '../env.js'
+import type { Env } from '../env.js'
 
 export type MemberCreate = Pick<
   Prisma.MemberCreateInput,
@@ -11,14 +11,24 @@ export type MemberConfirm = Required<
   Pick<Prisma.MemberWhereUniqueInput, 'id' | 'verificationCode' | 'status'>
 >
 
+@injectable()
 @singleton()
-export default class Database {
+export class PrismaWrapper {
+  public prismaClient: PrismaClient
+
+  constructor(@inject('env') private env: Env) {
+    this.prismaClient = new PrismaClient({
+      datasourceUrl: `postgresql://${this.env.DB_USERNAME}:${this.env.DB_PASSWORD}@${env.DB_HOST}:${this.env.DB_PORT}/${this.env.DB_NAME}`,
+    })
+  }
+}
+
+@singleton()
+export class Database {
   private db: PrismaClient
 
   constructor() {
-    this.db = new PrismaClient({
-      datasourceUrl: `postgresql://${env.DB_USERNAME}:${env.DB_PASSWORD}@${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`,
-    })
+    this.db = container.resolve(PrismaWrapper).prismaClient
   }
 
   getMember = async (where: Prisma.MemberWhereUniqueInput) => {
@@ -37,5 +47,33 @@ export default class Database {
     data: Prisma.MemberUpdateInput
   ) => {
     return this.db.member.update({ where, data })
+  }
+
+  deleteMember = async (where: Prisma.MemberWhereUniqueInput) => {
+    return this.db.member.delete({ where })
+  }
+
+  getConfig = async () => {
+    // Converts key/value pairs into javascript object
+    return (await this.db.config.findMany()).reduce(
+      (acc, configPair) => {
+        acc[configPair.key] = configPair.value
+        return acc
+      },
+      {} as { [key: string]: string }
+    )
+  }
+
+  // Upsert handled by delete and createMany atomic transaction
+  updateConfig = async (config: { [key: string]: string }) => {
+    await this.db.$transaction([
+      this.db.config.deleteMany({
+        where: { key: { in: Object.keys(config) } },
+      }),
+      this.db.config.createMany({
+        // Converts javascript object in key/value pairs
+        data: Object.entries(config).map(([key, value]) => ({ key, value })),
+      }),
+    ])
   }
 }

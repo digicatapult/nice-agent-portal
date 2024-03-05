@@ -10,13 +10,19 @@ datasource db {
 model Member {
   id                    Int           @id @default(autoincrement())
   companyName           String
-  companiesHouseNumber  String
+  companiesHouseNumber  String        @unique
   email                 String
   status                MemberStatus  @default(pending)
   did                   String        @unique
   verificationCode      String        @default(uuid())
+  connectionId          String?       @unique
   createdAt             DateTime      @default(now()) @db.Timestamptz(6)
   updatedAt             DateTime      @updatedAt @db.Timestamptz(6)
+}
+
+model Config {
+  key                   String        @id @unique
+  value                 String
 }
 
 enum MemberStatus {

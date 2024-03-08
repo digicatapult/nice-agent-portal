@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import express, { Express } from 'express'
 import { setup, serve } from 'swagger-ui-express'
 import cors from 'cors'

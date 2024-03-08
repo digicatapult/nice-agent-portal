@@ -1,4 +1,5 @@
-import '../../env.js'
+import 'reflect-metadata'
+import './env.js'
 import { Express } from 'express'
 import { container } from 'tsyringe'
 

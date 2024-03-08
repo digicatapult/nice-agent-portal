@@ -196,4 +196,41 @@ export class CloudagentManager {
 
     return id
   }
+
+  sendCredentialOffer = async (
+    connectionId: string,
+    credDefId: string,
+    claims: IClaims
+  ) => {
+    const credentialOffer = {
+      protocolVersion: 'v2',
+      credentialFormats: {
+        anoncreds: {
+          credentialDefinitionId: credDefId,
+          attributes: Object.entries(claims).map(([name, value]) => ({
+            name,
+            value,
+          })),
+        },
+      },
+      autoAcceptCredential: 'always',
+      connectionId,
+    }
+
+    const res = await fetch(`${this.url_prefix}/credentials/offer-credential`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentialOffer),
+    })
+
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
+    }
+
+    const { id } = (await res.json()) as ObjectWithId
+
+    log.info(`Credential offer sent ${id} to connection ${connectionId}`)
+  }
 }

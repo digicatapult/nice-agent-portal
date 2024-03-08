@@ -114,6 +114,13 @@ jobs:
         run: npm run compose:up:deps:test
       - name: Run integration tests
         run: npm run test:integration
+      - name: Clean up dependencies
+        run: npm run compose:down:clean:all
+      - name: Set up cluster
+        run: npm run compose:up:test
+      - name: Run end-to-end tests
+        run: npm run test:e2e:wait4peers
+        timeout-minutes: 2
 
   build-docker:
     name: 'Build docker image'

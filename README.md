@@ -173,7 +173,11 @@ The onboarding process for NICE allows users to enroll as members, verify their 
 
 4. **Chained Onboarding**: In this process, a fully-onboarded member is able to invite elements of their supply chain to NICE, and verify them once these participants are onboarded.
 
-![](./docs/images/nice-onboarding-flow-chained.png)
+![Onboarding flow diagram](./docs/images/nice-onboarding-flow-chained.png)
+
+#### Onboarding sequence diagram
+
+![Onboarding sequence diagram](./docs/images/nice-arch-onboarding-sequence.png)
 
 ## Repo structure
 

@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/nice-agent-portal",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "NICE agent portal",
   "homepage": "https://github.com/digicatapult/nice-agent-portal",
   "type": "module",
@@ -56,9 +56,9 @@
     "docker:build:issuer":  "docker build -f issuer.Dockerfile -t digicatapult/nice-agent-portal-issuer ."
   },
   "devDependencies": {
-    "@types/chai": "^4.3.12",
+    "@types/chai": "^4.3.13",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.29",
+    "@types/node": "^20.11.30",
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",

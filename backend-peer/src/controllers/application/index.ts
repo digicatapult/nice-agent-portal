@@ -2,12 +2,13 @@ import { Controller, Post, Route, SuccessResponse, Tags, Body } from 'tsoa'
 import { injectable } from 'tsyringe'
 import { KeyType } from '@aries-framework/core'
 
-import { logger } from '../../lib/logger.js'
-import CloudagentManager from '../../lib/services/cloudagent.js'
+import { CloudagentManager } from '../../lib/services/cloudagent.js'
 import type { MemberCreateWithSecret } from '../types.js'
 
-import IssuerManager from '../../lib/services/issuer.js'
+import { IssuerManager } from '../../lib/services/issuer.js'
 import { HttpResponse } from '../../lib/error-handler/index.js'
+import { logger } from '../../lib/logger.js'
+const log = logger.child({ context: 'HealthController' })
 
 @Route('api/application')
 @Tags('application')
@@ -26,7 +27,7 @@ export class ApplicationController extends Controller {
   @SuccessResponse(204)
   @Post('/')
   public async post(@Body() body: MemberCreateWithSecret) {
-    logger.debug({
+    log.debug({
       msg: 'new request received',
       controller: '/application',
       payload: body,

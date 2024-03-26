@@ -1,4 +1,4 @@
-import { singleton } from 'tsyringe'
+import { singleton, container } from 'tsyringe'
 import type {
   DidResolutionMetadata,
   DidDocumentMetadata,
@@ -9,10 +9,8 @@ import type {
 } from '@aries-framework/core'
 import type { DIDDocument } from 'did-resolver'
 
-import env from '../../env.js'
-import { HttpResponse } from '../error-handler/index.js'
-
-const URL_PREFIX = `http://${env.CLOUDAGENT_HOST}:${env.CLOUDAGENT_PORT}`
+import type { Env } from '../../env.js'
+import { ServiceUnavailable } from '../error-handler/index.js'
 
 interface AgentInfo {
   label: string
@@ -44,24 +42,29 @@ type ImportDid = Omit<ImportDidOptions, 'privateKeys'> & {
 export type RecordId = string
 
 @singleton()
-export default class CloudagentManager {
-  constructor() {}
+export class CloudagentManager {
+  private url_prefix: string
+
+  constructor() {
+    const env = container.resolve<Env>('env')
+    this.url_prefix = `http://${env.CLOUDAGENT_HOST}:${env.CLOUDAGENT_PORT}`
+  }
 
   getAgent = async (): Promise<AgentInfo> => {
-    const res = await fetch(`${URL_PREFIX}/agent`)
+    const res = await fetch(`${this.url_prefix}/agent`)
 
-    if (res.ok) {
-      const agentInfo = await res.json()
-      return agentInfo as AgentInfo
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
     }
 
-    throw new HttpResponse({ message: 'Error fetching cloud agent' })
+    const agentInfo = await res.json()
+    return agentInfo as AgentInfo
   }
 
   createDid = async (
     body: DidCreateOptions
   ): Promise<DidResolutionResultProps> => {
-    const res = await fetch(`${URL_PREFIX}/dids/create`, {
+    const res = await fetch(`${this.url_prefix}/dids/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -71,17 +74,15 @@ export default class CloudagentManager {
 
     const responseBody = await res.json()
 
-    if (res.ok) {
-      return responseBody as DidResolutionResultProps
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
     }
 
-    throw new HttpResponse({
-      message: `Error fetching cloud agent - ${responseBody}`,
-    })
+    return responseBody as DidResolutionResultProps
   }
 
   importDid = async (body: ImportDid): Promise<DidResolutionResultProps> => {
-    const res = await fetch(`${URL_PREFIX}/dids/import`, {
+    const res = await fetch(`${this.url_prefix}/dids/import`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -91,20 +92,18 @@ export default class CloudagentManager {
 
     const responseBody = await res.json()
 
-    if (res.ok) {
-      return responseBody as DidResolutionResultProps
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
     }
 
-    throw new HttpResponse({
-      message: `Error fetching cloud agent - ${responseBody}`,
-    })
+    return responseBody as DidResolutionResultProps
   }
 
   acceptConnectionRequest = async (
     connectionId: string
   ): Promise<ConnectionRecord> => {
     const res = await fetch(
-      `${URL_PREFIX}/connections/${connectionId}/accept-request`,
+      `${this.url_prefix}/connections/${connectionId}/accept-request`,
       {
         method: 'POST',
         headers: {
@@ -115,34 +114,30 @@ export default class CloudagentManager {
 
     const responseBody = await res.json()
 
-    if (res.ok) {
-      return responseBody as ConnectionRecord
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
     }
 
-    throw new HttpResponse({
-      message: `Error fetching cloud agent - ${responseBody}`,
-    })
+    return responseBody as ConnectionRecord
   }
 
   getCredentials = async (): Promise<CredentialExchangeRecord[]> => {
-    const res = await fetch(`${URL_PREFIX}/credentials`)
+    const res = await fetch(`${this.url_prefix}/credentials`)
 
     const responseBody = await res.json()
 
-    if (res.ok) {
-      return responseBody as CredentialExchangeRecord[]
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
     }
 
-    throw new HttpResponse({
-      message: `Error fetching cloud agent - ${responseBody}`,
-    })
+    return responseBody as CredentialExchangeRecord[]
   }
 
   acceptCredentialOffer = async (
     credentialRecordId: RecordId
   ): Promise<DidResolutionResultProps> => {
     const res = await fetch(
-      `${URL_PREFIX}/credentials/${credentialRecordId}/accept-offer`,
+      `${this.url_prefix}/credentials/${credentialRecordId}/accept-offer`,
       {
         method: 'POST',
         headers: {
@@ -154,12 +149,10 @@ export default class CloudagentManager {
 
     const responseBody = await res.json()
 
-    if (res.ok) {
-      return responseBody as DidResolutionResultProps
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
     }
 
-    throw new HttpResponse({
-      message: `Error fetching cloud agent - ${responseBody}`,
-    })
+    return responseBody as DidResolutionResultProps
   }
 }

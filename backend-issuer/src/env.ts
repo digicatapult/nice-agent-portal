@@ -6,6 +6,8 @@ if (process.env.NODE_ENV === 'test') {
   dotenv.config({ path: 'test/test.env' })
 } else if (process.env.DOTENV_FILE_PATHS) {
   dotenv.config({ path: process.env.DOTENV_FILE_PATHS.split(' ') })
+} else {
+  dotenv.config({ path: process.env.DOTENV_CONFIG_PATH })
 }
 
 const env = envalid.cleanEnv(process.env, {

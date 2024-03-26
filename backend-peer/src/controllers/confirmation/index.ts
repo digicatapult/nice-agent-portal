@@ -4,7 +4,7 @@ import { injectable } from 'tsyringe'
 import { logger } from '../../lib/logger.js'
 import type { VerificationCode } from '../types.js'
 
-import IssuerManager from '../../lib/services/issuer.js'
+import { IssuerManager } from '../../lib/services/issuer.js'
 
 @Route('api/confirmation')
 @Tags('confirmation')

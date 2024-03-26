@@ -1,1 +1,1 @@
-ignores: ['concurrently', 'pino-colada', 'nodemon', 'multer', 'pg', 'tsimp']
+ignores: ['concurrently', 'pino-pretty', 'nodemon', 'multer', 'pg', 'tsimp']

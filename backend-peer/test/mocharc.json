@@ -1,6 +1,15 @@
 {
   "timeout": 5000,
   "exit": true,
-  "extension": "ts",
-  "node-option": ["import=tsimp/import"]
+  "node-option": ["import=tsimp/import"],
+  "require": ["reflect-metadata", "src/env.ts"],
+  "extension": ["test.ts"],
+  "bail": false,
+  "package": "./package.json",
+  "watch": false,
+  "fullTrace": false,
+  "ui": "bdd",
+  "color": true,
+  "recursive": true,
+  "reporter": "spec"
 }

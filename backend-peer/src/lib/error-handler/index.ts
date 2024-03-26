@@ -6,6 +6,7 @@ import {
 import { ValidateError } from 'tsoa'
 
 import { logger } from '../logger.js'
+const log = logger.child({ context: 'ErrorHandler' })
 
 interface INotFound {
   message?: string
@@ -77,7 +78,7 @@ export const errorHandler = function errorHandler(
   next: NextFunction
 ): ExResponse | void {
   if (err instanceof ValidateError) {
-    logger.warn(
+    log.warn(
       `Handled Validation Error for ${req.path}: %s`,
       JSON.stringify(err.fields)
     )
@@ -90,12 +91,12 @@ export const errorHandler = function errorHandler(
     })
   }
   if (err instanceof HttpResponse) {
-    logger.warn('Error thrown in handler: %s', err.message)
+    log.warn('Error thrown in handler: %s', err.message)
 
     return res.status(err.code).json(err.message)
   }
   if (err instanceof Error) {
-    logger.error('Unexpected error thrown in handler: %s', err.stack)
+    log.error('Unexpected error thrown in handler: %s', err.stack)
 
     return res.status(500).json(err)
   }

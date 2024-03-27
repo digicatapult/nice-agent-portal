@@ -1,16 +1,26 @@
-import { singleton } from 'tsyringe'
+import { singleton, container, injectable, inject } from 'tsyringe'
 import { PrismaClient } from '@prisma/client'
 
-import env from '../env.js'
+import type { Env } from '../env.js'
+
+@injectable()
+@singleton()
+export class PrismaWrapper {
+  public prismaClient: PrismaClient
+
+  constructor(@inject('env') private env: Env) {
+    this.prismaClient = new PrismaClient({
+      datasourceUrl: `postgresql://${this.env.DB_USERNAME}:${this.env.DB_PASSWORD}@${env.DB_HOST}:${this.env.DB_PORT}/${this.env.DB_NAME}`,
+    })
+  }
+}
 
 @singleton()
-export default class Database {
+export class Database {
   private db: PrismaClient
 
   constructor() {
-    this.db = new PrismaClient({
-      datasourceUrl: `postgresql://${env.DB_USERNAME}:${env.DB_PASSWORD}@${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`,
-    })
+    this.db = container.resolve(PrismaWrapper).prismaClient
   }
 
   // example query

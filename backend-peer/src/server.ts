@@ -5,16 +5,18 @@ import bodyParser from 'body-parser'
 import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import env from './env.js'
+import { container } from 'tsyringe'
 
+import type { Env } from './env.js'
 import { errorHandler } from './lib/error-handler/index.js'
 import { RegisterRoutes } from './routes.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const static_root_abs = path.resolve(env.STATIC_ROOT)
-
 export default async (): Promise<Express> => {
+  const __filename = fileURLToPath(import.meta.url)
+  const __dirname = path.dirname(__filename)
+  const env = container.resolve<Env>('env')
+  const static_root_abs = path.resolve(env.STATIC_ROOT)
+
   const swaggerBuffer = await fs.readFile(
     path.join(__dirname, './swagger.json')
   )

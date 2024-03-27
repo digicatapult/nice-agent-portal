@@ -15,6 +15,14 @@ The [Network Insight Collaboration Environment](https://digitalsupplychainhub.uk
 - npm 10.0.0+
 - node 20.0.0+
 
+#### Getting Started
+
+To install all project requirements, use:
+
+```
+npm i
+```
+
 #### Single Agent
 
 To run a full Peer agent stack, use:

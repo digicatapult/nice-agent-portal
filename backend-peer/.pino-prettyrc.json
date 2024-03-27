@@ -1,0 +1,16 @@
+{
+  "colorize": true,
+  "colorizeObjects": true,
+  "crlf": false,
+  "errorLikeObjectKeys": ["err", "error"],
+  "levelFirst": false,
+  "messageKey": "msg",
+  "levelKey": "level",
+  "messageFormat": false,
+  "timestampKey": "time",
+  "translateTime": true,
+  "hideObject": false,
+  "singleLine": false,
+  "levelLabel": "levelLabel",
+  "destination": 1
+}

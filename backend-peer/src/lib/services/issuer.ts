@@ -1,17 +1,20 @@
-import { singleton } from 'tsyringe'
+import { singleton, container } from 'tsyringe'
 
-import env from '../../env.js'
+import type { Env } from '../../env.js'
 import { BadRequest, HttpResponse } from '../error-handler/index.js'
 import type { MemberCreate, VerificationCode } from '../../controllers/types.js'
 
-const URL_PREFIX = `http://${env.ISSUER_HOST}:${env.ISSUER_PORT}/api`
-
 @singleton()
-export default class IssuerManager {
-  constructor() {}
+export class IssuerManager {
+  private url_prefix: string
+
+  constructor() {
+    const env = container.resolve<Env>('env')
+    this.url_prefix = `http://${env.ISSUER_HOST}:${env.ISSUER_PORT}/api`
+  }
 
   submitApplication = async (body: MemberCreate) => {
-    const res = await fetch(`${URL_PREFIX}/submit-application`, {
+    const res = await fetch(`${this.url_prefix}/submit-application`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -26,7 +29,7 @@ export default class IssuerManager {
   }
 
   confirmApplication = async (body: VerificationCode) => {
-    const res = await fetch(`${URL_PREFIX}/confirm-application`, {
+    const res = await fetch(`${this.url_prefix}/confirm-application`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

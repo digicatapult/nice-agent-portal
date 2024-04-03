@@ -77,7 +77,7 @@ services:
 
   opa:
     container_name: ${COMPOSE_PROJECT_NAME}-opa
-    image: openpolicyagent/opa:0.61.0-static
+    image: openpolicyagent/opa:0.63.0-static
     restart: on-failure
     #ports:
     #  - '8181:8181'

@@ -16,7 +16,7 @@ RUN npm run build
 
 ##################################################################################################
 
-FROM nginx:1.25.3-alpine AS runtime
+FROM nginx:1.25.4-alpine AS runtime
 
 WORKDIR /nice-agent-portal
 

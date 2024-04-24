@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/nice-agent-portal-backend-issuer",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "description": "OpenAPI service to manage profiles for the NICE agent and communication with veritable-cloudagent",
   "main": "src/index.ts",
   "type": "module",
@@ -62,7 +62,7 @@
     "prisma": "^5.12.1",
     "reflect-metadata": "^0.2.1",
     "sinon": "^17.0.1",
-    "supertest": "^6.3.4",
+    "supertest": "^7.0.0",
     "tsimp": "^2.0.11",
     "typescript": "^5.4.5"
   },

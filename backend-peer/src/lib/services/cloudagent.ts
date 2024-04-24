@@ -61,6 +61,27 @@ export class CloudagentManager {
     return agentInfo as AgentInfo
   }
 
+  receiveImplicitInvitation = async (did: string) => {
+    const requestBody = {
+      did,
+      handshakeProtocols: ['https://didcomm.org/connections/1.0'],
+      autoAcceptConnection: true,
+    }
+
+    const res = await fetch(
+      `${this.url_prefix}/oob/receive-implicit-invitation`,
+      {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+        method: 'POST',
+      }
+    )
+
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error accepting implicit invitation')
+    }
+  }
+
   createDid = async (
     body: DidCreateOptions
   ): Promise<DidResolutionResultProps> => {
@@ -154,5 +175,27 @@ export class CloudagentManager {
     }
 
     return responseBody as DidResolutionResultProps
+  }
+
+  getConnections = async (): Promise<ConnectionRecord[]> => {
+    const res = await fetch(`${this.url_prefix}/connections`)
+
+    const responseBody = await res.json()
+
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
+    }
+
+    return responseBody as ConnectionRecord[]
+  }
+
+  deleteConnection = async (connectionId: string) => {
+    const res = await fetch(`${this.url_prefix}/connections/${connectionId}`, {
+      method: 'DELETE',
+    })
+
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
+    }
   }
 }

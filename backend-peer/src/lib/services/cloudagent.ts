@@ -11,7 +11,7 @@ import type {
 import type { DIDDocument } from 'did-resolver'
 
 import type { Env } from '../../env.js'
-import { ServiceUnavailable } from '../error-handler/index.js'
+import { BadRequest, ServiceUnavailable } from '../error-handler/index.js'
 
 interface AgentInfo {
   label: string
@@ -86,6 +86,12 @@ export class CloudagentManager {
         method: 'POST',
       }
     )
+
+    const responseBody = await res.json()
+
+    if (res.status === 500) {
+      throw new BadRequest(responseBody.message)
+    }
 
     if (!res.ok) {
       throw new ServiceUnavailable('Error accepting implicit invitation')

@@ -4,7 +4,7 @@ import { injectable } from 'tsyringe'
 import { CloudagentManager } from '../../lib/services/cloudagent.js'
 
 import { logger } from '../../lib/logger.js'
-const log = logger.child({ context: 'HealthController' })
+const log = logger.child({ context: 'ConnectionController' })
 
 @Route('api/connection')
 @Tags('connection')
@@ -16,7 +16,7 @@ export class ConnectionController extends Controller {
 
   /**
    * @summary Create a new connection.
-   * If any existing connections for the did exists, delete and replace them with a single new one.
+   * @description If any existing connections for the did exists, delete and replace them with a single new one.
    */
   @SuccessResponse(204)
   @Post('/')
@@ -29,10 +29,12 @@ export class ConnectionController extends Controller {
 
     const { did } = body
 
-    const connections = await this.cloudagent.getConnections({ theirDid: did })
+    const connections = await this.cloudagent.getConnections()
 
-    for (const { id } of connections) {
-      await this.cloudagent.deleteConnection(id)
+    for (const { id, invitationDid } of connections) {
+      if (invitationDid === did) {
+        await this.cloudagent.deleteConnection(id)
+      }
     }
 
     await this.cloudagent.receiveImplicitInvitation(did)

@@ -29,12 +29,10 @@ export class ConnectionController extends Controller {
 
     const { did } = body
 
-    const connections = await this.cloudagent.getConnections()
+    const connections = await this.cloudagent.getConnections({ theirDid: did })
 
-    for (const { id, invitationDid } of connections) {
-      if (invitationDid === did) {
-        await this.cloudagent.deleteConnection(id)
-      }
+    for (const { id } of connections) {
+      await this.cloudagent.deleteConnection(id)
     }
 
     await this.cloudagent.receiveImplicitInvitation(did)

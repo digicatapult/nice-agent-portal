@@ -6,6 +6,7 @@ import type {
   CredentialExchangeRecord,
   ImportDidOptions,
   ConnectionRecord,
+  DidExchangeState,
 } from '@aries-framework/core'
 import type { DIDDocument } from 'did-resolver'
 
@@ -34,6 +35,15 @@ interface DidCreateOptions {
 
 type ImportDid = Omit<ImportDidOptions, 'privateKeys'> & {
   privateKeys: { keyType: string; privateKey: string }[]
+}
+
+interface GetConnectionParams {
+  outOfBandId?: string
+  alias?: string
+  state?: DidExchangeState
+  myDid?: string
+  theirDid?: string
+  theirLabel?: string
 }
 
 /**
@@ -177,8 +187,12 @@ export class CloudagentManager {
     return responseBody as DidResolutionResultProps
   }
 
-  getConnections = async (): Promise<ConnectionRecord[]> => {
-    const res = await fetch(`${this.url_prefix}/connections`)
+  getConnections = async (
+    params?: GetConnectionParams
+  ): Promise<ConnectionRecord[]> => {
+    const query = new URLSearchParams(params?.toString())
+
+    const res = await fetch(`${this.url_prefix}/connections?${query}`)
 
     const responseBody = await res.json()
 

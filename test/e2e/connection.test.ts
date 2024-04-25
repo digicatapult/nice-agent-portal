@@ -45,14 +45,6 @@ describe('Connection', async function () {
       .expect(200)
   })
 
-  // beforeEach(function (done) {
-  //   failed && this.skip()
-  //   // pause between tests/retries to allow state to resolve on peers
-  //   setTimeout(function () {
-  //     done()
-  //   }, 1000)
-  // })
-
   afterEach(async function () {
     // clear all connections
     const { body: aliceConns } = await aliceVeritableClient.get(`/connections`)

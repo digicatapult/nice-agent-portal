@@ -2,13 +2,13 @@ import { expect } from 'chai'
 import request from 'supertest'
 import { describe } from 'mocha'
 import { KeyType, ConnectionRecord } from '@aries-framework/core'
+import { setTimeout } from 'timers/promises'
 
 import { getConfig } from './fixtures/config.js'
 
-describe('Onboarding', async function () {
+describe('Connection', async function () {
   const config = getConfig()
   const aliceClient = request(config.alice.portalUrl)
-  const bobClient = request(config.bob.portalUrl)
   const aliceVeritableClient = request(config.alice.veritableUrl)
   const bobVeritableCLient = request(config.bob.veritableUrl)
 
@@ -72,6 +72,8 @@ describe('Onboarding', async function () {
         .send({ did: config.bob.did })
         .expect(204)
 
+      await setTimeout(1000) // wait for connection to complete
+
       const { body: aliceConnections } = await request(
         config.alice.veritableUrl
       )
@@ -99,6 +101,8 @@ describe('Onboarding', async function () {
         .send({ did: config.bob.did })
         .expect(204)
 
+      await setTimeout(1000) // wait for connection to complete
+
       const { body: aliceConnectionsFirst } = await request(
         config.alice.veritableUrl
       )
@@ -113,6 +117,8 @@ describe('Onboarding', async function () {
         .post('/connection')
         .send({ did: config.bob.did })
         .expect(204)
+
+      await setTimeout(1000) // wait for connection to complete
 
       const { body: aliceConnectionsSecond } = await request(
         config.alice.veritableUrl

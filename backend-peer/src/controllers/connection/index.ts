@@ -37,6 +37,6 @@ export class ConnectionController extends Controller {
       }
     }
 
-    await this.cloudagent.receiveImplicitInvitation(did)
+    return this.cloudagent.receiveImplicitInvitation(did)
   }
 }

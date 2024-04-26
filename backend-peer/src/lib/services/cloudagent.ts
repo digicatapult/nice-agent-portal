@@ -7,6 +7,7 @@ import type {
   ImportDidOptions,
   ConnectionRecord,
   DidExchangeState,
+  AriesFrameworkError,
 } from '@aries-framework/core'
 import type { DIDDocument } from 'did-resolver'
 
@@ -87,10 +88,9 @@ export class CloudagentManager {
       }
     )
 
-    const responseBody = await res.json()
-
     if (res.status === 500) {
-      return new InternalError(responseBody.message)
+      const responseBody = (await res.json()) as AriesFrameworkError
+      throw new InternalError(responseBody.message)
     }
 
     if (!res.ok) {

@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/nice-agent-portal-frontend",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "description": "NICE agent portal",
   "homepage": "https://github.com/digicatapult/nice-agent-portal",
   "main": "src/index.js",
@@ -74,7 +74,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-qr-code": "^2.0.12",
-    "react-router-dom": "^6.22.3",
+    "react-router-dom": "^6.23.0",
     "styled-components": "^6.1.8"
   }
 }

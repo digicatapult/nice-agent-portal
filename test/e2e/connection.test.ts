@@ -2,7 +2,6 @@ import { expect } from 'chai'
 import request from 'supertest'
 import { describe } from 'mocha'
 import { KeyType, ConnectionRecord } from '@aries-framework/core'
-import { setTimeout } from 'timers/promises'
 
 import { getConfig } from './fixtures/config.js'
 
@@ -53,7 +52,7 @@ describe('Connection', async function () {
     }
     const { body: bobConns } = await bobVeritableCLient.get(`/connections`)
     for (const { id } of bobConns) {
-      await aliceVeritableClient.delete(`/connections/${id}`)
+      await bobVeritableCLient.delete(`/connections/${id}`)
     }
   })
 
@@ -64,22 +63,30 @@ describe('Connection', async function () {
         .send({ did: config.bob.did })
         .expect(204)
 
-      await setTimeout(1000) // wait for connection to complete
+      // poll until a completed connection appears
+      await pollGetConnections(
+        config.alice.veritableUrl,
+        (connections) =>
+          connections.length === 1 && connections[0].state === 'completed'
+      )
 
       const { body: aliceConnections } = await request(
         config.alice.veritableUrl
-      )
-        .get('/connections')
-        .expect(200)
+      ).get('/connections')
 
-      expect(aliceConnections).to.have.lengthOf(1)
       const aliceConnectionRecord = aliceConnections[0] as ConnectionRecord
       expect(aliceConnectionRecord.invitationDid).to.equal(config.bob.did)
-      expect(aliceConnectionRecord.state).to.equal('completed')
 
-      const { body: bobConnections } = await request(config.bob.veritableUrl)
-        .get(`/connections?theirDid=${aliceConnectionRecord.did}`)
-        .expect(200)
+      // poll until a completed connection appears
+      await pollGetConnections(
+        config.bob.veritableUrl,
+        (connections) =>
+          connections.length === 1 && connections[0].state === 'completed'
+      )
+
+      const { body: bobConnections } = await request(
+        config.bob.veritableUrl
+      ).get(`/connections`)
 
       const bobConnectionRecord = bobConnections[0] as ConnectionRecord
       expect(bobConnectionRecord.state).to.equal('completed')
@@ -93,16 +100,16 @@ describe('Connection', async function () {
         .send({ did: config.bob.did })
         .expect(204)
 
-      await setTimeout(1000) // wait for connection to complete
+      await pollGetConnections(
+        config.alice.veritableUrl,
+        (connections) =>
+          connections.length === 1 && connections[0].state === 'completed'
+      )
 
       const { body: aliceConnectionsFirst } = await request(
         config.alice.veritableUrl
-      )
-        .get('/connections')
-        .expect(200)
-
-      expect(aliceConnectionsFirst).to.have.lengthOf(1)
-      expect(aliceConnectionsFirst[0].state).to.equal('completed')
+      ).get('/connections')
+      expect(aliceConnectionsFirst[0].invitationDid).to.equal(config.bob.did)
 
       // replace the connection
       await aliceClient
@@ -110,26 +117,41 @@ describe('Connection', async function () {
         .send({ did: config.bob.did })
         .expect(204)
 
-      await setTimeout(1000) // wait for connection to complete
+      await pollGetConnections(
+        config.alice.veritableUrl,
+        (connections) =>
+          connections.length === 1 &&
+          connections[0].id !== aliceConnectionsFirst[0].id &&
+          connections[0].state === 'completed'
+      )
 
       const { body: aliceConnectionsSecond } = await request(
         config.alice.veritableUrl
-      )
-        .get('/connections')
-        .expect(200)
-
-      expect(aliceConnectionsSecond).to.have.lengthOf(1)
-      expect(aliceConnectionsSecond[0].state).to.equal('completed')
-
-      expect(aliceConnectionsFirst[0].id).to.not.equal(
-        aliceConnectionsSecond[0]
-      )
+      ).get('/connections')
+      expect(aliceConnectionsSecond[0].invitationDid).to.equal(config.bob.did)
     })
   })
 
   describe('sad path', async function () {
-    it('400s if invalid DID', async function () {
-      await aliceClient.post('/connection').send({ did: 'bla' }).expect(400)
+    it('500s if invalid DID', async function () {
+      await aliceClient.post('/connection').send({ did: 'bla' }).expect(500)
     })
   })
 })
+
+const pollGetConnections = async (
+  baseUrl: string,
+  stopPollCondition: (connections: ConnectionRecord[]) => boolean,
+  delay: number = 1000
+) => {
+  const poll = async (): Promise<void> => {
+    const { body: connections } = await request(baseUrl).get('/connections')
+    if (connections.length > 0 && stopPollCondition(connections)) {
+      return
+    }
+    await new Promise((resolve) => setTimeout(resolve, delay))
+    await poll()
+  }
+
+  await poll()
+}

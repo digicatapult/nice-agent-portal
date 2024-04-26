@@ -11,7 +11,7 @@ import type {
 import type { DIDDocument } from 'did-resolver'
 
 import type { Env } from '../../env.js'
-import { BadRequest, ServiceUnavailable } from '../error-handler/index.js'
+import { ServiceUnavailable, InternalError } from '../error-handler/index.js'
 
 interface AgentInfo {
   label: string
@@ -90,7 +90,7 @@ export class CloudagentManager {
     const responseBody = await res.json()
 
     if (res.status === 500) {
-      throw new BadRequest(responseBody.message)
+      return new InternalError(responseBody.message)
     }
 
     if (!res.ok) {

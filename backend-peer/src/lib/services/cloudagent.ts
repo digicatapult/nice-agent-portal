@@ -6,11 +6,13 @@ import type {
   CredentialExchangeRecord,
   ImportDidOptions,
   ConnectionRecord,
+  DidExchangeState,
+  AriesFrameworkError,
 } from '@aries-framework/core'
 import type { DIDDocument } from 'did-resolver'
 
 import type { Env } from '../../env.js'
-import { ServiceUnavailable } from '../error-handler/index.js'
+import { ServiceUnavailable, InternalError } from '../error-handler/index.js'
 
 interface AgentInfo {
   label: string
@@ -36,6 +38,15 @@ type ImportDid = Omit<ImportDidOptions, 'privateKeys'> & {
   privateKeys: { keyType: string; privateKey: string }[]
 }
 
+interface GetConnectionParams {
+  outOfBandId?: string
+  alias?: string
+  state?: DidExchangeState
+  myDid?: string
+  theirDid?: string
+  theirLabel?: string
+}
+
 /**
  * @example "821f9b26-ad04-4f56-89b6-e2ef9c72b36e"
  */
@@ -59,6 +70,32 @@ export class CloudagentManager {
 
     const agentInfo = await res.json()
     return agentInfo as AgentInfo
+  }
+
+  receiveImplicitInvitation = async (did: string) => {
+    const requestBody = {
+      did,
+      handshakeProtocols: ['https://didcomm.org/connections/1.0'],
+      autoAcceptConnection: true,
+    }
+
+    const res = await fetch(
+      `${this.url_prefix}/oob/receive-implicit-invitation`,
+      {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+        method: 'POST',
+      }
+    )
+
+    if (res.status === 500) {
+      const responseBody = (await res.json()) as AriesFrameworkError
+      throw new InternalError(responseBody.message)
+    }
+
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error accepting implicit invitation')
+    }
   }
 
   createDid = async (
@@ -154,5 +191,31 @@ export class CloudagentManager {
     }
 
     return responseBody as DidResolutionResultProps
+  }
+
+  getConnections = async (
+    params?: GetConnectionParams
+  ): Promise<ConnectionRecord[]> => {
+    const query = new URLSearchParams(params?.toString())
+
+    const res = await fetch(`${this.url_prefix}/connections?${query}`)
+
+    const responseBody = await res.json()
+
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
+    }
+
+    return responseBody as ConnectionRecord[]
+  }
+
+  deleteConnection = async (connectionId: string) => {
+    const res = await fetch(`${this.url_prefix}/connections/${connectionId}`, {
+      method: 'DELETE',
+    })
+
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
+    }
   }
 }

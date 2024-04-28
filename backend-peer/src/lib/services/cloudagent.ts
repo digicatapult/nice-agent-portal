@@ -8,11 +8,13 @@ import type {
   ConnectionRecord,
   DidExchangeState,
   AriesFrameworkError,
+  BasicMessageRecord,
 } from '@aries-framework/core'
 import type { DIDDocument } from 'did-resolver'
 
 import type { Env } from '../../env.js'
 import { ServiceUnavailable, InternalError } from '../error-handler/index.js'
+import { Message } from 'src/controllers/types.js'
 
 interface AgentInfo {
   label: string
@@ -217,5 +219,36 @@ export class CloudagentManager {
     if (!res.ok) {
       throw new ServiceUnavailable('Error fetching cloud agent')
     }
+  }
+  sendMessage = async (connectionId: string, body: Message) => {
+    const res = await fetch(
+      `${this.url_prefix}/basic-messages/${connectionId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      }
+    )
+
+    const responseBody = await res.json()
+
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
+    }
+
+    return responseBody
+  }
+  getMessages = async (connectionId: string): Promise<BasicMessageRecord[]> => {
+    const res = await fetch(`${this.url_prefix}/basic-messages?${connectionId}`)
+
+    const responseBody = await res.json()
+
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
+    }
+
+    return responseBody as BasicMessageRecord[]
   }
 }

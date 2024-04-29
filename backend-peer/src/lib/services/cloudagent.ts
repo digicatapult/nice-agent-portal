@@ -1,5 +1,5 @@
-import { singleton, container } from 'tsyringe'
-import type {
+import { singleton, injectable } from 'tsyringe'
+import {
   DidResolutionMetadata,
   DidDocumentMetadata,
   DidDocument,
@@ -9,12 +9,14 @@ import type {
   DidExchangeState,
   AriesFrameworkError,
   BasicMessageRecord,
+  OutOfBandRecord,
 } from '@aries-framework/core'
 import type { DIDDocument } from 'did-resolver'
 
 import type { Env } from '../../env.js'
 import { ServiceUnavailable, InternalError } from '../error-handler/index.js'
 import { Message } from 'src/controllers/types.js'
+import { NiceEventEmitter } from '../eventEmitter.js'
 
 interface AgentInfo {
   label: string
@@ -48,18 +50,24 @@ interface GetConnectionParams {
   theirDid?: string
   theirLabel?: string
 }
+type ImplicitInvitationResponse = {
+  outOfBandRecord: OutOfBandRecord
+  connectionRecord: ConnectionRecord
+}
 
 /**
  * @example "821f9b26-ad04-4f56-89b6-e2ef9c72b36e"
  */
 export type RecordId = string
-
+@injectable()
 @singleton()
 export class CloudagentManager {
   private url_prefix: string
 
-  constructor() {
-    const env = container.resolve<Env>('env')
+  constructor(
+    private eventEmitter: NiceEventEmitter,
+    private env: Env
+  ) {
     this.url_prefix = `http://${env.CLOUDAGENT_HOST}:${env.CLOUDAGENT_PORT}`
   }
 
@@ -74,7 +82,41 @@ export class CloudagentManager {
     return agentInfo as AgentInfo
   }
 
-  receiveImplicitInvitation = async (did: string) => {
+  receiveImplicitInvitation = async (
+    did: string,
+    waitUntilCompleted: boolean = false
+  ) => {
+    let connectionId: string
+    let connectionRecordPromise: Promise<ConnectionRecord>
+    if (waitUntilCompleted) {
+      connectionRecordPromise = new Promise<ConnectionRecord>(
+        (resolve, reject) => {
+          const timeout = setTimeout(() => {
+            reject(new InternalError(`Could not create a connection`))
+          }, this.env.CONNECTION_REQUEST_TIMEOUT_MS)
+          const connectionEventListener = (
+            connectionRecord: ConnectionRecord
+          ) => {
+            if (
+              connectionRecord.id === connectionId &&
+              connectionRecord.state === 'completed'
+            ) {
+              clearTimeout(timeout)
+              this.eventEmitter.off(
+                NiceEventEmitter.EventType.Connection,
+                connectionEventListener
+              )
+              return resolve(connectionRecord)
+            }
+          }
+          this.eventEmitter.on(
+            NiceEventEmitter.EventType.Connection,
+            connectionEventListener
+          )
+        }
+      )
+    }
+
     const requestBody = {
       did,
       handshakeProtocols: ['https://didcomm.org/connections/1.0'],
@@ -97,6 +139,12 @@ export class CloudagentManager {
 
     if (!res.ok) {
       throw new ServiceUnavailable('Error accepting implicit invitation')
+    }
+    const responseBody: ImplicitInvitationResponse = await res.json()
+    if (waitUntilCompleted) {
+      return connectionRecordPromise
+    } else {
+      return responseBody.connectionRecord
     }
   }
 

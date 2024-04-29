@@ -6,6 +6,7 @@ import { CloudagentManager } from '../../lib/services/cloudagent.js'
 import { logger } from '../../lib/logger.js'
 import { Message } from '../types.js'
 import { DidExchangeState } from '@aries-framework/core'
+
 const log = logger.child({ context: 'MessagesController' })
 
 @Route('api/messages')
@@ -31,21 +32,21 @@ export class MessagesController extends Controller {
     try {
       const { did, message } = body
       const connections = await this.cloudagent.getConnections()
-      let connectionId: string | null = null
+      let connectionId: string | undefined
 
       for (const { id, theirDid, state } of connections) {
         if (theirDid === did && state == 'completed') {
           connectionId = id
         }
       }
-      if (connectionId == null) {
+      if (connectionId === undefined) {
         //create a connection if one does not exist
-        await this.cloudagent.receiveImplicitInvitation(did)
+        connectionId = await this.cloudagent.receiveImplicitInvitation(
+          did,
+          true
+        )
       }
-      //we need to pool for connection to check if it created?
-      if (connectionId == null) {
-        throw new Error('Connection not found and failed to create.')
-      }
+
       return this.cloudagent.sendMessage(connectionId, message)
     } catch (e) {
       throw new Error(`${e}`) //Remove this before pushing as we do not want to propagate errors to users

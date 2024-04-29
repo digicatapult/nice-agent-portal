@@ -32,6 +32,7 @@ const env = envalid.cleanEnv(process.env, {
     devDefault: 'localhost',
   }),
   ISSUER_PORT: envalid.port({ default: 3000, devDefault: 3002 }),
+  CONNECTION_REQUEST_TIMEOUT_MS: envalid.num({ default: 10000 }),
 })
 
 export type Env = typeof env

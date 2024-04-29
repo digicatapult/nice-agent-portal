@@ -33,8 +33,8 @@ export class MessagesController extends Controller {
       const connections = await this.cloudagent.getConnections()
       let connectionId: string | null = null
 
-      for (const { id, invitationDid, state } of connections) {
-        if (invitationDid === did && state == 'completed') {
+      for (const { id, theirDid, state } of connections) {
+        if (theirDid === did && state == 'completed') {
           connectionId = id
         }
       }
@@ -60,15 +60,20 @@ export class MessagesController extends Controller {
   @Get('/')
   public async get() {
     log.info({ msg: 'Getting all messages', controller: '/messages' })
-    let allMessages: Message[] = []
+    const allMessages: Message[] = []
     try {
       const params = { state: DidExchangeState.Completed }
       const connections = await this.cloudagent.getConnections(params)
-      for (const { id, did } of connections) {
+      for (const { id, theirDid } of connections) {
         const messagesperId = await this.cloudagent.getMessages(id)
-        console.log(messagesperId)
-        for (const { content } of messagesperId) {
-          allMessages.push({ content: content, senderDid: did })
+        for (const { content, role } of messagesperId) {
+          if (role == 'sender') {
+            allMessages.push({ content: content, recipientDid: theirDid })
+          } else if (role == 'receiver') {
+            allMessages.push({ content: content, senderDid: theirDid })
+          } else {
+            allMessages.push({ content: content, senderDid: 'none found' }) //this ok?
+          }
         }
       }
       return allMessages

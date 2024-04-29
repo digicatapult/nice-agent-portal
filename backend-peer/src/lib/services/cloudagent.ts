@@ -16,7 +16,7 @@ import type { DIDDocument } from 'did-resolver'
 import type { Env } from '../../env.js'
 import { ServiceUnavailable, InternalError } from '../error-handler/index.js'
 import { Message } from 'src/controllers/types.js'
-import { NiceEventEmitter } from '../eventEmitter.js'
+import { EventType, NiceEventEmitter } from '../eventEmitter.js'
 
 interface AgentInfo {
   label: string
@@ -103,16 +103,13 @@ export class CloudagentManager {
             ) {
               clearTimeout(timeout)
               this.eventEmitter.off(
-                NiceEventEmitter.EventType.Connection,
+                EventType.Connection,
                 connectionEventListener
               )
               return resolve(connectionRecord)
             }
           }
-          this.eventEmitter.on(
-            NiceEventEmitter.EventType.Connection,
-            connectionEventListener
-          )
+          this.eventEmitter.on(EventType.Connection, connectionEventListener)
         }
       )
     }

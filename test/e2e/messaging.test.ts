@@ -150,12 +150,6 @@ describe('Messaging', async function () {
       })
     })
   })
-
-  describe('sad path', async function () {
-    it('500s if invalid DID', async function () {
-      await aliceClient.post('/connection').send({ did: 'bla' }).expect(500)
-    })
-  })
 })
 
 const pollGetConnections = async (

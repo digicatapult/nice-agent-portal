@@ -5,7 +5,7 @@ import { CloudagentManager } from '../../lib/services/cloudagent.js'
 
 import { logger } from '../../lib/logger.js'
 import { Message } from '../types.js'
-import { DidExchangeState } from '@aries-framework/core'
+import { ConnectionRecord, DidExchangeState } from '@aries-framework/core'
 
 const log = logger.child({ context: 'MessagesController' })
 
@@ -33,6 +33,7 @@ export class MessagesController extends Controller {
       const { did, message } = body
       const connections = await this.cloudagent.getConnections()
       let connectionId: string | undefined
+      let connectionRecord: ConnectionRecord
 
       for (const { id, theirDid, state } of connections) {
         if (theirDid === did && state == 'completed') {
@@ -41,10 +42,11 @@ export class MessagesController extends Controller {
       }
       if (connectionId === undefined) {
         //create a connection if one does not exist
-        connectionId = await this.cloudagent.receiveImplicitInvitation(
+        connectionRecord = await this.cloudagent.receiveImplicitInvitation(
           did,
           true
         )
+        connectionId = connectionRecord.id
       }
 
       return this.cloudagent.sendMessage(connectionId, message)

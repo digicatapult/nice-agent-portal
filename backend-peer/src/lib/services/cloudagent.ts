@@ -87,7 +87,8 @@ export class CloudagentManager {
     waitUntilCompleted: boolean = false
   ) => {
     let connectionId: string
-    let connectionRecordPromise: Promise<ConnectionRecord>
+    let connectionRecordPromise: Promise<ConnectionRecord> | undefined =
+      undefined
     if (waitUntilCompleted) {
       connectionRecordPromise = new Promise<ConnectionRecord>(
         (resolve, reject) => {

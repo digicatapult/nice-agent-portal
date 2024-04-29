@@ -33,7 +33,7 @@ export class MessagesController extends Controller {
       const { did, message } = body
       const connections = await this.cloudagent.getConnections()
       let connectionId: string | undefined
-      let connectionRecord: ConnectionRecord
+      let connectionRecord: ConnectionRecord | undefined
 
       for (const { id, theirDid, state } of connections) {
         if (theirDid === did && state == 'completed') {
@@ -46,6 +46,9 @@ export class MessagesController extends Controller {
           did,
           true
         )
+        if (!connectionRecord) {
+          throw new Error('Failed to create connection record') // Handle the case where connectionRecord is undefined
+        }
         connectionId = connectionRecord.id
       }
 

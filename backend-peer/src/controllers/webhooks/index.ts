@@ -11,7 +11,7 @@ import { injectable } from 'tsyringe'
 
 import { CloudagentManager } from '../../lib/services/cloudagent.js'
 import { logger } from '../../lib/logger.js'
-import { type NiceEventEmitter } from 'src/lib/eventEmitter.js'
+import { NiceEventEmitter } from '../../lib/eventEmitter.js'
 const log = logger.child({ context: 'WebhooksController' })
 
 @Route('api/webhooks')

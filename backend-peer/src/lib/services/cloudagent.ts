@@ -1,4 +1,4 @@
-import { singleton, injectable } from 'tsyringe'
+import { singleton, injectable, container } from 'tsyringe'
 import {
   DidResolutionMetadata,
   DidDocumentMetadata,
@@ -63,12 +63,11 @@ export type RecordId = string
 @singleton()
 export class CloudagentManager {
   private url_prefix: string
+  private env: Env
 
-  constructor(
-    private eventEmitter: NiceEventEmitter,
-    private env: Env
-  ) {
-    this.url_prefix = `http://${env.CLOUDAGENT_HOST}:${env.CLOUDAGENT_PORT}`
+  constructor(private eventEmitter: NiceEventEmitter) {
+    this.env = container.resolve<Env>('env')
+    this.url_prefix = `http://${this.env.CLOUDAGENT_HOST}:${this.env.CLOUDAGENT_PORT}`
   }
 
   getAgent = async (): Promise<AgentInfo> => {
@@ -143,7 +142,7 @@ export class CloudagentManager {
     }
     const responseBody: ImplicitInvitationResponse = await res.json()
     if (waitUntilCompleted) {
-      return connectionRecordPromise
+      return await connectionRecordPromise
     } else {
       return responseBody.connectionRecord
     }

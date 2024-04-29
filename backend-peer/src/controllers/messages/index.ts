@@ -28,27 +28,28 @@ export class MessagesController extends Controller {
       controller: '/messages',
       payload: body,
     })
+    try {
+      const { did, message } = body
+      const connections = await this.cloudagent.getConnections()
+      let connectionId: string | null = null
 
-    const { did, message } = body
-    const connections = await this.cloudagent.getConnections()
-    let connectionId: string | null = null
-
-    for (const { id, invitationDid, state } of connections) {
-      if (invitationDid === did && state == 'completed') {
-        connectionId = id
+      for (const { id, invitationDid, state } of connections) {
+        if (invitationDid === did && state == 'completed') {
+          connectionId = id
+        }
       }
+      if (connectionId == null) {
+        //create a connection if one does not exist
+        await this.cloudagent.receiveImplicitInvitation(did)
+      }
+      //we need to pool for connection to check if it created?
+      if (connectionId == null) {
+        throw new Error('Connection not found and failed to create.')
+      }
+      return this.cloudagent.sendMessage(connectionId, message)
+    } catch (e) {
+      throw new Error(`${e}`) //Remove this before pushing as we do not want to propagate errors to users
     }
-    if (connectionId == null) {
-      //create a connection if one does not exist
-      await this.cloudagent.receiveImplicitInvitation(did)
-    }
-    console.log('-------------------')
-    console.log(connectionId)
-    //we need to pool for connection to check if it created?
-    if (connectionId == null) {
-      throw new Error('Connection not found and failed to create.')
-    }
-    return await this.cloudagent.sendMessage(connectionId, message)
   }
 
   /**
@@ -61,22 +62,19 @@ export class MessagesController extends Controller {
     log.info({ msg: 'Getting all messages', controller: '/messages' })
     let allMessages: Message[] = []
     try {
-      const connections = await this.cloudagent.getConnections({
-        state: DidExchangeState.Completed,
-      })
-      const completedConnections = connections.filter(
-        (obj) => obj.state === 'completed'
-      )
-      console.log(completedConnections)
-      for (const { id, did } of completedConnections) {
+      const params = { state: DidExchangeState.Completed }
+      const connections = await this.cloudagent.getConnections(params)
+      for (const { id, did } of connections) {
         const messagesperId = await this.cloudagent.getMessages(id)
+        console.log(messagesperId)
         for (const { content } of messagesperId) {
           allMessages.push({ content: content, senderDid: did })
         }
       }
       return allMessages
     } catch (e) {
-      throw new Error('There has been an issue when getting messages.')
+      log.info({ msg: `${e}`, controller: '/messages' })
+      throw new Error(`There has been an issue when getting messages: ${e}`) //Remove this before pushing
     }
   }
 }

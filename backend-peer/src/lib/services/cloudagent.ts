@@ -232,16 +232,18 @@ export class CloudagentManager {
       }
     )
 
-    const responseBody = await res.json()
+    // const responseBody = await res.json()
 
+    if (res.status === 500) {
+      const responseBody = (await res.json()) as AriesFrameworkError
+      throw new InternalError(responseBody.message)
+    }
     if (!res.ok) {
       throw new ServiceUnavailable('Error fetching cloud agent')
     }
-
-    return responseBody
   }
   getMessages = async (connectionId: string): Promise<BasicMessageRecord[]> => {
-    const res = await fetch(`${this.url_prefix}/basic-messages?${connectionId}`)
+    const res = await fetch(`${this.url_prefix}/basic-messages/${connectionId}`)
 
     const responseBody = await res.json()
 

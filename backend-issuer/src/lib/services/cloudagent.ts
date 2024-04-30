@@ -58,7 +58,7 @@ export class CloudagentManager {
   receiveImplicitInvitation = async (did: string) => {
     const requestBody = {
       did,
-      handshakeProtocols: ['https://didcomm.org/connections/1.0'],
+      handshakeProtocols: ['https://didcomm.org/connections/1.x'],
       autoAcceptConnection: true,
     }
 

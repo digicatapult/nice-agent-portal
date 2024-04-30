@@ -11,7 +11,7 @@ import { injectable } from 'tsyringe'
 
 import { CloudagentManager } from '../../lib/services/cloudagent.js'
 import { logger } from '../../lib/logger.js'
-import { NiceEventEmitter } from '../../lib/eventEmitter.js'
+import { EventType, NiceEventEmitter } from '../../lib/eventEmitter.js'
 const log = logger.child({ context: 'WebhooksController' })
 
 @Route('api/webhooks')
@@ -38,7 +38,7 @@ export class WebhooksController extends Controller {
       controller: '/webhooks/basic-messages',
       payload,
     })
-    this.eventEmitter.emit(NiceEventEmitter.EventType.BasicMessage, payload)
+    this.eventEmitter.emit(EventType.BasicMessage, payload)
   }
 
   /**
@@ -54,7 +54,7 @@ export class WebhooksController extends Controller {
       controller: '/webhooks/connections',
       payload,
     })
-    this.eventEmitter.emit(NiceEventEmitter.EventType.Connection, payload)
+    this.eventEmitter.emit(EventType.Connection, payload)
 
     if (payload.state === 'request-received' && payload.id) {
       await this.cloudagent.acceptConnectionRequest(payload.id)
@@ -74,7 +74,7 @@ export class WebhooksController extends Controller {
       controller: '/webhooks/credentials',
       payload,
     })
-    this.eventEmitter.emit(NiceEventEmitter.EventType.Credential, payload)
+    this.eventEmitter.emit(EventType.Credential, payload)
   }
 
   /**
@@ -90,6 +90,6 @@ export class WebhooksController extends Controller {
       controller: '/webhooks/proofs',
       payload,
     })
-    this.eventEmitter.emit(NiceEventEmitter.EventType.Proof, payload)
+    this.eventEmitter.emit(EventType.Proof, payload)
   }
 }

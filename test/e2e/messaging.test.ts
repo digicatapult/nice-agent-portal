@@ -151,4 +151,16 @@ describe('Messaging', async function () {
       })
     })
   })
+  describe('sad path', async function () {
+    it('500s if invalid DID', async function () {
+      const res = await bobClient.post('/messages').send({
+        message: {
+          content: 'Bob says hi back!',
+        },
+        did: 'blah',
+      })
+
+      expect(res.statusCode).to.be.equal(500)
+    })
+  })
 })

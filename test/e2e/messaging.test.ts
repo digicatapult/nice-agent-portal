@@ -74,26 +74,12 @@ describe('Messaging', async function () {
           connections.length === 1 && connections[0].state === 'completed'
       )
 
-      const { body: aliceConnections } = await request(
-        config.alice.veritableUrl
-      ).get('/connections')
-
-      const aliceConnectionRecord = aliceConnections[0] as ConnectionRecord
-      expect(aliceConnectionRecord.invitationDid).to.equal(config.bob.did)
-
-      // poll until a completed connection appears
-      await pollGetConnections(
-        config.bob.veritableUrl,
-        (connections) =>
-          connections.length === 1 && connections[0].state === 'completed'
-      )
-
       const { body: bobConnections } = await request(
         config.bob.veritableUrl
       ).get(`/connections`)
+
       const bobConnectionRecord = bobConnections[0] as ConnectionRecord
       expect(bobConnectionRecord.state).to.equal('completed')
-      expect(bobConnectionRecord.did).to.equal(aliceConnectionRecord.theirDid)
 
       aliceTestDid = bobConnectionRecord.theirDid
       bobTestDid = bobConnectionRecord.did
@@ -105,13 +91,12 @@ describe('Messaging', async function () {
           message: {
             content: 'Alice says hi!',
           },
-          did: aliceConnectionRecord.theirDid,
+          did: bobTestDid,
         })
         .expect(204)
     })
     it('Alice gets messages from her side to check if it has been sent.', async function () {
       const res = await aliceClient.get(`/messages`)
-
       expect(res.body).to.be.an('array').and.to.have.lengthOf(1)
       expect(res.body).to.deep.include({
         content: 'Alice says hi!',

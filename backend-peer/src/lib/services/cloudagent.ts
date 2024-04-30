@@ -139,6 +139,7 @@ export class CloudagentManager {
     }
     const responseBody: ImplicitInvitationResponse =
       (await res.json()) as ImplicitInvitationResponse
+    connectionId = responseBody.connectionRecord.id
     if (waitUntilCompleted) {
       return await connectionRecordPromise
     } else {

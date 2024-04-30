@@ -35,11 +35,13 @@ export class MessagesController extends Controller {
     let connectionId: string | undefined
     let connectionRecord: ConnectionRecord | undefined
 
-    for (const { id, theirDid, state } of connections) {
-      if (theirDid === did && state == 'completed') {
-        connectionId = id
-      }
+    const connection = connections.find(({ theirDid, state }) => {
+      return theirDid === did && state === 'completed'
+    })
+    if (connection) {
+      connectionId = connection.id
     }
+
     if (connectionId === undefined) {
       //create a connection if one does not exist
       connectionRecord = await this.cloudagent.receiveImplicitInvitation(

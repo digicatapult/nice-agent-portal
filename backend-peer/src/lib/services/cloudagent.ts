@@ -15,7 +15,7 @@ import type { DIDDocument } from 'did-resolver'
 
 import type { Env } from '../../env.js'
 import { ServiceUnavailable, InternalError } from '../error-handler/index.js'
-import { Message } from 'src/controllers/types.js'
+import { Message } from '../../controllers/types.js'
 import { EventType, NiceEventEmitter } from '../eventEmitter.js'
 
 interface AgentInfo {

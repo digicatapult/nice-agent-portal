@@ -1,10 +1,11 @@
 import { expect } from 'chai'
 import request from 'supertest'
 import { describe } from 'mocha'
-import { KeyType, ConnectionRecord } from '@aries-framework/core'
+import { ConnectionRecord } from '@aries-framework/core'
 import { getConfig } from './fixtures/config.js'
 
 import { pollGetConnections } from './utils/shared.js'
+import { importDids } from './utils/setup.js'
 
 describe('Messaging', async function () {
   const config = getConfig()
@@ -17,35 +18,7 @@ describe('Messaging', async function () {
 
   before(async function () {
     // import dids on Alice and Bob
-    await request(config.alice.veritableUrl)
-      .post('/dids/import')
-      .send({
-        did: config.alice.did,
-        privateKeys: [
-          {
-            keyType: KeyType.Ed25519,
-            privateKey: config.alice.privateKey,
-          },
-        ],
-        overwrite: true,
-      })
-      .set('Accept', 'application/json')
-      .expect(200)
-
-    await request(config.bob.veritableUrl)
-      .post('/dids/import')
-      .send({
-        did: config.bob.did,
-        privateKeys: [
-          {
-            keyType: KeyType.Ed25519,
-            privateKey: config.bob.privateKey,
-          },
-        ],
-        overwrite: true,
-      })
-      .set('Accept', 'application/json')
-      .expect(200)
+    await importDids()
   })
 
   after(async function () {

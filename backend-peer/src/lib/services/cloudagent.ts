@@ -85,35 +85,6 @@ export class CloudagentManager {
     did: string,
     waitUntilCompleted: boolean = false
   ) => {
-    let connectionId: string | undefined = undefined
-    let connectionRecordPromise: Promise<ConnectionRecord> | undefined =
-      undefined
-    if (waitUntilCompleted) {
-      connectionRecordPromise = new Promise<ConnectionRecord>(
-        (resolve, reject) => {
-          const timeout = setTimeout(() => {
-            reject(new InternalError(`Could not create a connection`))
-          }, this.env.CONNECTION_REQUEST_TIMEOUT_MS)
-          const connectionEventListener = (
-            connectionRecord: ConnectionRecord
-          ) => {
-            if (
-              connectionRecord.id === connectionId &&
-              connectionRecord.state === 'completed'
-            ) {
-              clearTimeout(timeout)
-              this.eventEmitter.off(
-                EventType.Connection,
-                connectionEventListener
-              )
-              return resolve(connectionRecord)
-            }
-          }
-          this.eventEmitter.on(EventType.Connection, connectionEventListener)
-        }
-      )
-    }
-
     const requestBody = {
       did,
       handshakeProtocols: ['https://didcomm.org/connections/1.x'],
@@ -139,9 +110,26 @@ export class CloudagentManager {
     }
     const responseBody: ImplicitInvitationResponse =
       (await res.json()) as ImplicitInvitationResponse
-    connectionId = responseBody.connectionRecord.id
+    const connectionId = responseBody.connectionRecord.id
     if (waitUntilCompleted) {
-      return await connectionRecordPromise
+      new Promise<ConnectionRecord>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new InternalError(`Could not create a connection`))
+        }, this.env.CONNECTION_REQUEST_TIMEOUT_MS)
+        const connectionEventListener = (
+          connectionRecord: ConnectionRecord
+        ) => {
+          if (
+            connectionRecord.id === connectionId &&
+            connectionRecord.state === 'completed'
+          ) {
+            clearTimeout(timeout)
+            this.eventEmitter.off(EventType.Connection, connectionEventListener)
+            return resolve(connectionRecord)
+          }
+        }
+        this.eventEmitter.on(EventType.Connection, connectionEventListener)
+      })
     } else {
       return responseBody.connectionRecord
     }

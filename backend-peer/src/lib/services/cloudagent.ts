@@ -112,7 +112,7 @@ export class CloudagentManager {
       (await res.json()) as ImplicitInvitationResponse
     const connectionId = responseBody.connectionRecord.id
     if (waitUntilCompleted) {
-      new Promise<ConnectionRecord>((resolve, reject) => {
+      return new Promise<ConnectionRecord>((resolve, reject) => {
         const timeout = setTimeout(() => {
           reject(new InternalError(`Could not create a connection`))
         }, this.env.CONNECTION_REQUEST_TIMEOUT_MS)

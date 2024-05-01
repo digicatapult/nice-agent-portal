@@ -4,7 +4,6 @@ import { describe } from 'mocha'
 import { ConnectionRecord } from '@aries-framework/core'
 import { getConfig } from './fixtures/config.js'
 
-import { pollGetConnections } from './utils/shared.js'
 import { importDids } from './utils/setup.js'
 
 describe('Messaging', async function () {
@@ -36,17 +35,14 @@ describe('Messaging', async function () {
   describe('happy path', async function () {
     it('Alice creates a connection with Bob & sends him a message.', async function () {
       await aliceClient
-        .post('/connection')
-        .send({ did: config.bob.did })
+        .post('/messages')
+        .send({
+          message: {
+            content: 'Alice says hi!',
+          },
+          did: config.bob.did,
+        })
         .expect(204)
-
-      // poll until a completed connection appears
-      await pollGetConnections(
-        config.alice.veritableUrl,
-        (connections) =>
-          connections.length === 1 && connections[0].state === 'completed'
-      )
-
       const { body: bobConnections } = await request(
         config.bob.veritableUrl
       ).get(`/connections`)
@@ -56,17 +52,6 @@ describe('Messaging', async function () {
 
       aliceTestDid = bobConnectionRecord.theirDid
       bobTestDid = bobConnectionRecord.did
-
-      //send message to Bob from alice
-      await aliceClient
-        .post('/messages')
-        .send({
-          message: {
-            content: 'Alice says hi!',
-          },
-          did: bobTestDid,
-        })
-        .expect(204)
     })
     it('Alice gets messages from her side to check if it has been sent.', async function () {
       const res = await aliceClient.get(`/messages`)

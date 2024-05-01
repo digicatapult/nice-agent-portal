@@ -1,5 +1,5 @@
-import { singleton, container } from 'tsyringe'
-import type {
+import { singleton, injectable, container } from 'tsyringe'
+import {
   DidResolutionMetadata,
   DidDocumentMetadata,
   DidDocument,
@@ -8,11 +8,15 @@ import type {
   ConnectionRecord,
   DidExchangeState,
   AriesFrameworkError,
+  BasicMessageRecord,
+  OutOfBandRecord,
 } from '@aries-framework/core'
 import type { DIDDocument } from 'did-resolver'
 
 import type { Env } from '../../env.js'
 import { ServiceUnavailable, InternalError } from '../error-handler/index.js'
+import { Message } from '../../controllers/types.js'
+import { EventType, NiceEventEmitter } from '../eventEmitter.js'
 
 interface AgentInfo {
   label: string
@@ -46,19 +50,24 @@ interface GetConnectionParams {
   theirDid?: string
   theirLabel?: string
 }
+type ImplicitInvitationResponse = {
+  outOfBandRecord: OutOfBandRecord
+  connectionRecord: ConnectionRecord
+}
 
 /**
  * @example "821f9b26-ad04-4f56-89b6-e2ef9c72b36e"
  */
 export type RecordId = string
-
+@injectable()
 @singleton()
 export class CloudagentManager {
   private url_prefix: string
+  private env: Env
 
-  constructor() {
-    const env = container.resolve<Env>('env')
-    this.url_prefix = `http://${env.CLOUDAGENT_HOST}:${env.CLOUDAGENT_PORT}`
+  constructor(private eventEmitter: NiceEventEmitter) {
+    this.env = container.resolve<Env>('env')
+    this.url_prefix = `http://${this.env.CLOUDAGENT_HOST}:${this.env.CLOUDAGENT_PORT}`
   }
 
   getAgent = async (): Promise<AgentInfo> => {
@@ -72,10 +81,13 @@ export class CloudagentManager {
     return agentInfo as AgentInfo
   }
 
-  receiveImplicitInvitation = async (did: string) => {
+  receiveImplicitInvitation = async (
+    did: string,
+    waitUntilCompleted: boolean = false
+  ) => {
     const requestBody = {
       did,
-      handshakeProtocols: ['https://didcomm.org/connections/1.0'],
+      handshakeProtocols: ['https://didcomm.org/connections/1.x'],
       autoAcceptConnection: true,
     }
 
@@ -95,6 +107,31 @@ export class CloudagentManager {
 
     if (!res.ok) {
       throw new ServiceUnavailable('Error accepting implicit invitation')
+    }
+    const responseBody: ImplicitInvitationResponse =
+      (await res.json()) as ImplicitInvitationResponse
+    const connectionId = responseBody.connectionRecord.id
+    if (waitUntilCompleted) {
+      return new Promise<ConnectionRecord>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new InternalError(`Could not create a connection`))
+        }, this.env.CONNECTION_REQUEST_TIMEOUT_MS)
+        const connectionEventListener = (
+          connectionRecord: ConnectionRecord
+        ) => {
+          if (
+            connectionRecord.id === connectionId &&
+            connectionRecord.state === 'completed'
+          ) {
+            clearTimeout(timeout)
+            this.eventEmitter.off(EventType.Connection, connectionEventListener)
+            return resolve(connectionRecord)
+          }
+        }
+        this.eventEmitter.on(EventType.Connection, connectionEventListener)
+      })
+    } else {
+      return responseBody.connectionRecord
     }
   }
 
@@ -217,5 +254,39 @@ export class CloudagentManager {
     if (!res.ok) {
       throw new ServiceUnavailable('Error fetching cloud agent')
     }
+  }
+  sendMessage = async (connectionId: string, body: Message) => {
+    const res = await fetch(
+      `${this.url_prefix}/basic-messages/${connectionId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      }
+    )
+
+    if (res.status === 500) {
+      const responseBody = (await res.json()) as AriesFrameworkError
+      throw new InternalError(responseBody.message)
+    }
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
+    }
+  }
+  getMessages = async (connectionId: string): Promise<BasicMessageRecord[]> => {
+    const res = await fetch(`${this.url_prefix}/basic-messages/${connectionId}`)
+
+    const responseBody = await res.json()
+    if (res.status === 500) {
+      const responseBody = (await res.json()) as AriesFrameworkError
+      throw new InternalError(responseBody.message)
+    }
+    if (!res.ok) {
+      throw new ServiceUnavailable('Error fetching cloud agent')
+    }
+
+    return responseBody as BasicMessageRecord[]
   }
 }

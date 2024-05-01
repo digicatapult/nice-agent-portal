@@ -46,3 +46,9 @@ export interface MemberCreateWithSecret extends MemberCreate {
  */
 export interface VerificationCode
   extends Required<Pick<Member, 'verificationCode'>> {}
+
+export type Message = {
+  content: string
+  recipientDid?: string
+  senderDid?: string
+}

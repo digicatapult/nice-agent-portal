@@ -279,8 +279,6 @@ export class CloudagentManager {
       }
     )
 
-    // const responseBody = await res.json()
-
     if (res.status === 500) {
       const responseBody = (await res.json()) as AriesFrameworkError
       throw new InternalError(responseBody.message)

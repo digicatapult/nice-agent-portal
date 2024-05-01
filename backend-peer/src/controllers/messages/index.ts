@@ -78,7 +78,11 @@ export class MessagesController extends Controller {
         } else if (role == 'receiver') {
           allMessages.push({ content: content, senderDid: theirDid })
         } else {
-          allMessages.push({ content: content, senderDid: 'none found' }) //this ok?
+          allMessages.push({
+            content: content,
+            senderDid: 'unknown',
+            recipientDid: 'unknown',
+          })
         }
       }
     }

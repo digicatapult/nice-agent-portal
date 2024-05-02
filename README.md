@@ -59,6 +59,8 @@ With the default configurations defined in this repo's `.env.*` files, the porta
 
 To form out of band connections between personas, `nice-agent-portal` uses implicit invitations that resolve via public web DIDs. Each persona needs a separate public DID hosted somewhere on the internet. You will need to generate three DIDs, one for each persona.
 
+**The following assumes all personas are running in Docker using `npm run compose:up:test`**
+
 #### Generating and publishing a did:web
 
 An example DID (Alice):
@@ -98,13 +100,13 @@ An example DID (Alice):
 }
 ```
 
-`"serviceEndpoint": "http://nice-agent-alice-veritable:5002"` matches the hostname of Alice's cloudagent container when started with `npm run compose:up:test`. The endpoint is used when resolving the DID.
+`"serviceEndpoint": "http://nice-agent-alice-veritable:5002"` matches the hostname of Alice's cloudagent container. The endpoint is used when resolving the DID.
 
 The service endpoint for each persona is:
 
-- http://nice-agent-alice-veritable:5002 (Alice)
-- http://nice-agent-bob-veritable:5002 (Bob)
-- http://nice-agent-issuer-veritable:5002 (Charlie)
+- http://nice-agent-alice-veritable:5002
+- http://nice-agent-bob-veritable:5002
+- http://nice-agent-issuer-veritable:5002
 
 Use https://mkjwk.org/ with `key type: OKP` and `curve: Ed25519` to generate a key-pair for each DID.
 
@@ -161,6 +163,8 @@ Individual personas can also be imported:
 
 ```bash
 ./scripts/import.sh alice
+./scripts/import.sh bob
+./scripts/import.sh issuer
 ```
 
 ### Development Mode
@@ -250,6 +254,8 @@ npm run test:integration
 ```
 
 ### End-to-end testing
+
+E2E tests require correctly configured DIDs for each persona. See [here](#dids).
 
 To run E2E tests a full cluster of 2 peers and an issuer must be set up in test mode using
 

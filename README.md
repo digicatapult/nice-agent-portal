@@ -6,16 +6,16 @@ This repository contains the code for the front-end portal to the NICE (Network 
 
 The [Network Insight Collaboration Environment](https://digitalsupplychainhub.uk/showcase/critical-minerals-flagship/) aims to demonstrate that an innovative approach, based on new and existing technology, will allow supply chains to share insights and data across multiple data platforms, enhancing the efficiency of the supply chain network. It forms part of Critical Minerals, one of the flagships of the Digital Supply Chain Hub run by Made Smarter Innovation.
 
-### Usage
+## Usage
 
-#### Prerequisites
+### Prerequisites
 
 - docker 19.03.0+
 - docker-compose v2.23.0+
 - npm 10.0.0+
 - node 20.0.0+
 
-#### Getting Started
+### Getting Started
 
 To install all project requirements, use:
 
@@ -23,7 +23,7 @@ To install all project requirements, use:
 npm i
 ```
 
-#### Single Agent
+### Single Agent
 
 To run a full Peer agent stack, use:
 
@@ -35,7 +35,7 @@ Once running, the agent frontend is available at http://localhost:3000 and the A
 
 Configuration options are set using environment variables defined in a `.env` file in the project root.
 
-#### Multiple Agents
+### Multiple Agents
 
 To run more than one agent at a time, docker compose project names must be set, and configuration options for each agent defined through `.env.${PROJECT_NAME}` files at the project root.
 
@@ -55,7 +55,115 @@ With the default configurations defined in this repo's `.env.*` files, the porta
 
 **Note:** Although many Peer nodes can be run simultaneously, only a single Issuer node can be run at a time.
 
-#### Development Mode
+### DIDs
+
+To form out of band connections between personas, `nice-agent-portal` uses implicit invitations that resolve via public web DIDs. Each persona needs a separate public DID hosted somewhere on the internet. You will need to generate three DIDs, one for each persona.
+
+#### Generating and publishing a did:web
+
+An example DID (Alice):
+
+```json
+{
+  "@context": [
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/security/suites/jws-2020/v1"
+  ],
+  "id": "did:web:jonmattgray.github.io:dids:test:alice",
+  "verificationMethod": [
+    {
+      "id": "did:web:jonmattgray.github.io:dids:test:alice#owner",
+      "type": "JsonWebKey2020",
+      "controller": "did:web:jonmattgray.github.io:dids:test:alice",
+      "publicKeyJwk": {
+        "kty": "OKP",
+        "crv": "Ed25519",
+        "x": "PUBLIC_KEY"
+      }
+    }
+  ],
+  "authentication": ["did:web:jonmattgray.github.io:dids:test:alice#owner"],
+  "assertionMethod": ["did:web:jonmattgray.github.io:dids:test:alice#owner"],
+  "service": [
+    {
+      "id": "did:web:jonmattgray.github.io:dids:test:alice#did-communication",
+      "type": "did-communication",
+      "priority": 0,
+      "recipientKeys": ["did:web:jonmattgray.github.io:dids:test:alice#owner"],
+      "routingKeys": [],
+      "accept": ["didcomm/aip1"],
+      "serviceEndpoint": "http://nice-agent-alice-veritable:5002"
+    }
+  ]
+}
+```
+
+`"serviceEndpoint": "http://nice-agent-alice-veritable:5002"` matches the hostname of Alice's cloudagent container when started with `npm run compose:up:test`. The endpoint is used when resolving the DID.
+
+The service endpoint for each persona is:
+
+- http://nice-agent-alice-veritable:5002 (Alice)
+- http://nice-agent-bob-veritable:5002 (Bob)
+- http://nice-agent-issuer-veritable:5002 (Charlie)
+
+Use https://mkjwk.org/ with `key type: OKP` and `curve: Ed25519` to generate a key-pair for each DID.
+
+```json
+{
+  "kty": "OKP",
+  "d": "PRIVATE_KEY",
+  "crv": "Ed25519",
+  "x": "PUBLIC_KEY"
+}
+```
+
+Use the `x` value for `"x": "PUBLIC_KEY"` in the DID. Save the private `d` value to be used later.
+
+GitHub Pages can be used to host web DIDs for free:
+
+1.  Create a public repo called `YOUR_USERNAME.github.io`
+2.  In the repo, create your desired directory structure e.g. `dids/test/alice`
+3.  Add a `did.json` in the nested directory.
+4.  After pushing to GitHub, the DID can be viewed e.g. https://jonmattgray.github.io/dids/test/alice/did.json. Note the directory structure matches the did `did:web:jonmattgray.github.io:dids:test:alice`.
+
+The DID and PRIVATE_KEY of each persona is then set using env files at the root of this repo. For example:
+
+`.env.nice-agent-alice.local`
+
+```
+DID=did:web:jonmattgray.github.io:dids:test:alice
+PRIVATE_KEY=PRIVATE_KEY
+```
+
+`.env.nice-agent-bob.local`
+
+```
+DID=did:web:jonmattgray.github.io:dids:test:bob
+PRIVATE_KEY=PRIVATE_KEY
+```
+
+`.env.nice-agent-issuer.local`
+
+```
+DID=did:web:jonmattgray.github.io:dids:test:charlie
+PRIVATE_KEY=PRIVATE_KEY
+```
+
+#### Importing DIDs
+
+Finally, before forming connections, each DID needs to be imported to its cloudagent using the `dids/import` endpoint. Run the following script, which automatically uses DIDs and private keys from the `.local` env files to import all three personas:
+
+```bash
+./scripts/import.sh
+```
+
+Individual personas can also be imported:
+
+```bash
+./scripts/import.sh alice
+```
+
+### Development Mode
 
 To build the agent, use the following command at the project root:
 
@@ -70,7 +178,7 @@ npm run compose:up:deps:dev:<alice|bob|issuer>
 npm run dev:<alice|bob|issuer>
 ```
 
-#### Development Mode with Multiple Agents
+### Development Mode with Multiple Agents
 
 To run an agent in development mode against other agents, the steps are:
 
@@ -110,16 +218,18 @@ npm run dev:bob
 #### Terminating a cluster
 
 To bring down the entire cluster, use the command
+
 ```
 npm run compose:down
 ```
 
 And to reset the state of the cluster (**warning**: this will delete **all** data) use the command
+
 ```
 npm run compose:down:clean
 ```
 
-#### Testing
+## Testing
 
 ### Unit tests
 
@@ -128,11 +238,13 @@ To run unit test suites use the command `npm run test:unit`
 ### Integration testing
 
 To run integration test suites, dependencies must be brought up in test mode using
+
 ```
 npm run compose:up:deps:test
 ```
 
 This will start the dependencies up in a clean ephemeral state. Now tests can be run for using
+
 ```
 npm run test:integration
 ```
@@ -140,19 +252,22 @@ npm run test:integration
 ### End-to-end testing
 
 To run E2E tests a full cluster of 2 peers and an issuer must be set up in test mode using
+
 ```
 npm run compose:up:test
 ```
+
 This will start the cluster in a clean ephemeral state. Tests can now be run using
 
 ```
 npm run test:e2e:wait4peers
 ```
+
 (this script waits until the IPFS nodes have successfully formed a swarm before beginning tests).
 
 **Note:** If successful, the E2E tests will clean up any resources they create. If the tests fail, howevere, the cluster could be left in a dirty state, and so `npm run compose:up:test` should be run again before tests are re-run.
 
-### Architecture
+## Architecture
 
 The NICE Agent is built on top of the Veritable agent, and this repo describes the portal that allows the Veritable agent to be utilized. The following diagram shows the entire architecture, although the NICE Agent will include different components depending on role (Issuer vs Peer).
 
@@ -166,7 +281,7 @@ Below is the specific architecture for a Peer node (NICE participant, Supplier o
 
 ![NICE Peer node architecture](./docs/images/nice-arch-node-peer.png)
 
-### NICE Onboarding Processes
+## NICE Onboarding Processes
 
 The onboarding process for NICE allows users to enroll as members, verify their credentials, and add elements of their supply chain. There are 4 processes documented:
 

@@ -71,12 +71,12 @@ An example DID (Alice):
     "https://www.w3.org/ns/did/v1",
     "https://w3id.org/security/suites/jws-2020/v1"
   ],
-  "id": "did:web:jonmattgray.github.io:dids:test:alice",
+  "id": "did:web:YOUR_USERNAME.github.io:dids:test:alice",
   "verificationMethod": [
     {
-      "id": "did:web:jonmattgray.github.io:dids:test:alice#owner",
+      "id": "did:web:YOUR_USERNAME.github.io:dids:test:alice#owner",
       "type": "JsonWebKey2020",
-      "controller": "did:web:jonmattgray.github.io:dids:test:alice",
+      "controller": "did:web:YOUR_USERNAME.github.io:dids:test:alice",
       "publicKeyJwk": {
         "kty": "OKP",
         "crv": "Ed25519",
@@ -84,14 +84,16 @@ An example DID (Alice):
       }
     }
   ],
-  "authentication": ["did:web:jonmattgray.github.io:dids:test:alice#owner"],
-  "assertionMethod": ["did:web:jonmattgray.github.io:dids:test:alice#owner"],
+  "authentication": ["did:web:YOUR_USERNAME.github.io:dids:test:alice#owner"],
+  "assertionMethod": ["did:web:YOUR_USERNAME.github.io:dids:test:alice#owner"],
   "service": [
     {
-      "id": "did:web:jonmattgray.github.io:dids:test:alice#did-communication",
+      "id": "did:web:YOUR_USERNAME.github.io:dids:test:alice#did-communication",
       "type": "did-communication",
       "priority": 0,
-      "recipientKeys": ["did:web:jonmattgray.github.io:dids:test:alice#owner"],
+      "recipientKeys": [
+        "did:web:YOUR_USERNAME.github.io:dids:test:alice#owner"
+      ],
       "routingKeys": [],
       "accept": ["didcomm/aip1"],
       "serviceEndpoint": "http://nice-agent-alice-veritable:5002"
@@ -126,34 +128,34 @@ GitHub Pages can be used to host web DIDs for free:
 1.  Create a public repo called `YOUR_USERNAME.github.io`
 2.  In the repo, create your desired directory structure e.g. `dids/test/alice`
 3.  Add a `did.json` in the nested directory.
-4.  After pushing to GitHub, the DID can be viewed e.g. https://jonmattgray.github.io/dids/test/alice/did.json. Note the directory structure matches the did `did:web:jonmattgray.github.io:dids:test:alice`.
+4.  After pushing to GitHub, the DID can be viewed e.g. https://YOUR_USERNAME.github.io/dids/test/alice/did.json. Note the directory structure matches the did `did:web:YOUR_USERNAME.github.io:dids:test:alice`.
 
 The DID and PRIVATE_KEY of each persona is then set using env files at the root of this repo. For example:
 
 `.env.nice-agent-alice.local`
 
 ```
-DID=did:web:jonmattgray.github.io:dids:test:alice
+DID=did:web:YOUR_USERNAME.github.io:dids:test:alice
 PRIVATE_KEY=PRIVATE_KEY
 ```
 
 `.env.nice-agent-bob.local`
 
 ```
-DID=did:web:jonmattgray.github.io:dids:test:bob
+DID=did:web:YOUR_USERNAME.github.io:dids:test:bob
 PRIVATE_KEY=PRIVATE_KEY
 ```
 
 `.env.nice-agent-issuer.local`
 
 ```
-DID=did:web:jonmattgray.github.io:dids:test:charlie
+DID=did:web:YOUR_USERNAME.github.io:dids:test:charlie
 PRIVATE_KEY=PRIVATE_KEY
 ```
 
 #### Importing DIDs
 
-Finally, before forming connections, each DID needs to be imported to its cloudagent using the `dids/import` endpoint. Run the following script, which automatically uses DIDs and private keys from the `.local` env files to import all three personas:
+Finally, before forming connections, each DID needs to be imported to its cloudagent using the `dids/import` endpoint. With containers up using `npm run compose:up:test`, run the following script, which automatically uses DIDs and private keys from the `.local` env files to import all three personas:
 
 ```bash
 ./scripts/import.sh

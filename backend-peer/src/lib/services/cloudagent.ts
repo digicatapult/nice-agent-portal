@@ -73,11 +73,9 @@ const wrappedFetch = async (
 ): Promise<Response> => {
   try {
     const res = await fetch(url, {
-      method: options?.method ? options.method.toUpperCase() : 'get',
+      method: options?.method ? options.method.toUpperCase() : 'GET',
       body: options?.body ? JSON.stringify(options.body) : undefined,
       headers: {
-        'Content-type': 'application/json',
-        Accept: 'application/json',
         ...(options?.headers ? options.headers : {}),
       },
     })

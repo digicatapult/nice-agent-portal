@@ -52,7 +52,7 @@ services:
     environment:
       - AFJ_REST_LOG_LEVEL=1
     # or via command line arguments
-    command: --endpoint "http://${COMPOSE_PROJECT_NAME}-veritable:5002" "ws://${COMPOSE_PROJECT_NAME}-veritable:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --webhook-url "${PORTAL_BASE_URL}/api/webhooks" --auto-accept-connections true --auto-accept-credentials always --config /config.json
+    command: --endpoint "http://${COMPOSE_PROJECT_NAME}-veritable:5002" "ws://${COMPOSE_PROJECT_NAME}-veritable:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --webhook-url "${PORTAL_BASE_URL}/api/webhooks" --auto-accept-connections true --auto-accept-credentials always --config /config.json --postgres-port 5432 --postgres-host localhost
     networks: ['nice-net', 'agent-net']
 
   ipfs:

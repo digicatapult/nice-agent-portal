@@ -32,11 +32,20 @@ interface IInternalError {
 export class HttpResponse extends Error {
   public code: number
   public message: string
+  public details: string
+  public trace: string
 
-  constructor({ code = 500, message = 'Internal server error' }) {
+  constructor({
+    code = 500,
+    message = 'Internal server error',
+    details = '',
+    trace = '',
+  }) {
     super(message)
     this.code = code
     this.message = message
+    this.details = details
+    this.trace = trace
   }
 }
 
@@ -60,14 +69,14 @@ export class ServiceUnavailable
   extends HttpResponse
   implements IServiceUnavailable
 {
-  constructor(message = 'service unavailable') {
-    super({ code: 503, message })
+  constructor(message = 'service unavailable', details = '') {
+    super({ code: 503, message, details })
   }
 }
 
 export class InternalError extends HttpResponse implements IInternalError {
-  constructor(message = 'internal server error') {
-    super({ code: 500, message })
+  constructor(message = 'internal server error', details = '', trace = '') {
+    super({ code: 500, message, details, trace })
   }
 }
 
@@ -92,6 +101,8 @@ export const errorHandler = function errorHandler(
   }
   if (err instanceof HttpResponse) {
     log.warn('Error thrown in handler: %s', err.message)
+    log.debug(err.details)
+    log.debug(err.stack)
 
     return res.status(err.code).json(err.message)
   }

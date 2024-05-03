@@ -7,14 +7,17 @@ import {
   ImportDidOptions,
   ConnectionRecord,
   DidExchangeState,
-  AriesFrameworkError,
   BasicMessageRecord,
   OutOfBandRecord,
 } from '@aries-framework/core'
 import type { DIDDocument } from 'did-resolver'
 
 import type { Env } from '../../env.js'
-import { ServiceUnavailable, InternalError } from '../error-handler/index.js'
+import {
+  ServiceUnavailable,
+  InternalError,
+  BadRequest,
+} from '../error-handler/index.js'
 import { Message } from '../../controllers/types.js'
 import { EventType, NiceEventEmitter } from '../eventEmitter.js'
 
@@ -59,6 +62,31 @@ type ImplicitInvitationResponse = {
  * @example "821f9b26-ad04-4f56-89b6-e2ef9c72b36e"
  */
 export type RecordId = string
+
+const wrappedFetch = async (
+  url: string,
+  options?: {
+    method?: string
+    body?: object | undefined
+    headers?: object
+  }
+): Promise<Response> => {
+  try {
+    const res = await fetch(url, {
+      method: options?.method ? options.method.toUpperCase() : 'get',
+      body: options?.body ? JSON.stringify(options.body) : undefined,
+      headers: {
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        ...(options?.headers ? options.headers : {}),
+      },
+    })
+    return res
+  } catch (err) {
+    throw new ServiceUnavailable('Error fetching cloud agent')
+  }
+}
+
 @injectable()
 @singleton()
 export class CloudagentManager {
@@ -71,13 +99,15 @@ export class CloudagentManager {
   }
 
   getAgent = async (): Promise<AgentInfo> => {
-    const res = await fetch(`${this.url_prefix}/agent`)
+    const res = await wrappedFetch(`${this.url_prefix}/agent`)
+
+    const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new ServiceUnavailable('Error fetching cloud agent')
+      throw new InternalError('Unknown error from cloud agent', responseBody)
     }
 
-    const agentInfo = await res.json()
+    const agentInfo = responseBody
     return agentInfo as AgentInfo
   }
 
@@ -91,30 +121,27 @@ export class CloudagentManager {
       autoAcceptConnection: true,
     }
 
-    const res = await fetch(
+    const res = await wrappedFetch(
       `${this.url_prefix}/oob/receive-implicit-invitation`,
       {
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody),
+        body: requestBody,
         method: 'POST',
       }
     )
 
-    if (res.status === 500) {
-      const responseBody = (await res.json()) as AriesFrameworkError
-      throw new InternalError(responseBody.message)
-    }
+    const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new ServiceUnavailable('Error accepting implicit invitation')
+      throw new InternalError('Unknown error in cloud agent', responseBody)
     }
-    const responseBody: ImplicitInvitationResponse =
-      (await res.json()) as ImplicitInvitationResponse
-    const connectionId = responseBody.connectionRecord.id
+    const implicitInvitationResponse =
+      responseBody as ImplicitInvitationResponse
+    const connectionId = implicitInvitationResponse.connectionRecord.id
     if (waitUntilCompleted) {
       return new Promise<ConnectionRecord>((resolve, reject) => {
         const timeout = setTimeout(() => {
-          reject(new InternalError(`Could not create a connection`))
+          reject(new InternalError(`Could not create a connection - timed out`))
         }, this.env.CONNECTION_REQUEST_TIMEOUT_MS)
         const connectionEventListener = (
           connectionRecord: ConnectionRecord
@@ -131,43 +158,47 @@ export class CloudagentManager {
         this.eventEmitter.on(EventType.Connection, connectionEventListener)
       })
     } else {
-      return responseBody.connectionRecord
+      return implicitInvitationResponse.connectionRecord
     }
   }
 
   createDid = async (
     body: DidCreateOptions
   ): Promise<DidResolutionResultProps> => {
-    const res = await fetch(`${this.url_prefix}/dids/create`, {
+    const res = await wrappedFetch(`${this.url_prefix}/dids/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body,
     })
 
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new ServiceUnavailable('Error fetching cloud agent')
+      throw new InternalError('Unknown error in cloud agent', responseBody)
     }
 
     return responseBody as DidResolutionResultProps
   }
 
   importDid = async (body: ImportDid): Promise<DidResolutionResultProps> => {
-    const res = await fetch(`${this.url_prefix}/dids/import`, {
+    const res = await wrappedFetch(`${this.url_prefix}/dids/import`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body,
     })
 
     const responseBody = await res.json()
 
+    if (res.status === 400) {
+      throw new BadRequest(responseBody)
+    }
+
     if (!res.ok) {
-      throw new ServiceUnavailable('Error fetching cloud agent')
+      throw new InternalError('Unknown error in cloud agent', responseBody)
     }
 
     return responseBody as DidResolutionResultProps
@@ -176,7 +207,7 @@ export class CloudagentManager {
   acceptConnectionRequest = async (
     connectionId: string
   ): Promise<ConnectionRecord> => {
-    const res = await fetch(
+    const res = await wrappedFetch(
       `${this.url_prefix}/connections/${connectionId}/accept-request`,
       {
         method: 'POST',
@@ -189,19 +220,19 @@ export class CloudagentManager {
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new ServiceUnavailable('Error fetching cloud agent')
+      throw new InternalError('Unknown error in cloud agent', responseBody)
     }
 
     return responseBody as ConnectionRecord
   }
 
   getCredentials = async (): Promise<CredentialExchangeRecord[]> => {
-    const res = await fetch(`${this.url_prefix}/credentials`)
+    const res = await wrappedFetch(`${this.url_prefix}/credentials`)
 
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new ServiceUnavailable('Error fetching cloud agent')
+      throw new InternalError('Unknown error in cloud agent', responseBody)
     }
 
     return responseBody as CredentialExchangeRecord[]
@@ -210,21 +241,21 @@ export class CloudagentManager {
   acceptCredentialOffer = async (
     credentialRecordId: RecordId
   ): Promise<DidResolutionResultProps> => {
-    const res = await fetch(
+    const res = await wrappedFetch(
       `${this.url_prefix}/credentials/${credentialRecordId}/accept-offer`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ autoAcceptCredential: 'always' }),
+        body: { autoAcceptCredential: 'always' },
       }
     )
 
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new ServiceUnavailable('Error fetching cloud agent')
+      throw new InternalError('Unknown error in cloud agent', responseBody)
     }
 
     return responseBody as DidResolutionResultProps
@@ -235,56 +266,54 @@ export class CloudagentManager {
   ): Promise<ConnectionRecord[]> => {
     const query = new URLSearchParams(params?.toString())
 
-    const res = await fetch(`${this.url_prefix}/connections?${query}`)
+    const res = await wrappedFetch(`${this.url_prefix}/connections?${query}`)
 
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new ServiceUnavailable('Error fetching cloud agent')
+      throw new InternalError('Unknown error in cloud agent', responseBody)
     }
 
     return responseBody as ConnectionRecord[]
   }
 
   deleteConnection = async (connectionId: string) => {
-    const res = await fetch(`${this.url_prefix}/connections/${connectionId}`, {
-      method: 'DELETE',
-    })
+    const res = await wrappedFetch(
+      `${this.url_prefix}/connections/${connectionId}`,
+      {
+        method: 'DELETE',
+      }
+    )
 
     if (!res.ok) {
-      throw new ServiceUnavailable('Error fetching cloud agent')
+      throw new InternalError('Unknown error in cloud agent', await res.json())
     }
   }
   sendMessage = async (connectionId: string, body: Message) => {
-    const res = await fetch(
+    const res = await wrappedFetch(
       `${this.url_prefix}/basic-messages/${connectionId}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body),
+        body,
       }
     )
 
-    if (res.status === 500) {
-      const responseBody = (await res.json()) as AriesFrameworkError
-      throw new InternalError(responseBody.message)
-    }
     if (!res.ok) {
-      throw new ServiceUnavailable('Error fetching cloud agent')
+      throw new InternalError('Unknown error in cloud agent', await res.json())
     }
   }
   getMessages = async (connectionId: string): Promise<BasicMessageRecord[]> => {
-    const res = await fetch(`${this.url_prefix}/basic-messages/${connectionId}`)
+    const res = await wrappedFetch(
+      `${this.url_prefix}/basic-messages/${connectionId}`
+    )
 
     const responseBody = await res.json()
-    if (res.status === 500) {
-      const responseBody = (await res.json()) as AriesFrameworkError
-      throw new InternalError(responseBody.message)
-    }
+
     if (!res.ok) {
-      throw new ServiceUnavailable('Error fetching cloud agent')
+      throw new InternalError('Unknown error in cloud agent', responseBody)
     }
 
     return responseBody as BasicMessageRecord[]

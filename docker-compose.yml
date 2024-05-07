@@ -52,7 +52,7 @@ services:
     environment:
       - AFJ_REST_LOG_LEVEL=1
     # or via command line arguments
-    command: --endpoint "http://${COMPOSE_PROJECT_NAME}-veritable:5002" "ws://${COMPOSE_PROJECT_NAME}-veritable:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --webhook-url "${PORTAL_BASE_URL}/api/webhooks" --auto-accept-connections true --auto-accept-credentials always --config /config.json --postgres-port 5432 --postgres-host localhost
+    command: --endpoint "http://${COMPOSE_PROJECT_NAME}-veritable:5002" "ws://${COMPOSE_PROJECT_NAME}-veritable:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --webhook-url "${PORTAL_BASE_URL}/api/webhooks" --auto-accept-connections true --auto-accept-credentials always --config /config.json --postgres-port 5432 --postgres-host veritable-postgres
     networks: ['nice-net', 'agent-net']
 
   ipfs:
@@ -104,12 +104,25 @@ services:
       retries: 20
       start_period: 0s
     networks: ['agent-net']
-
+  postgres-veritable:
+    container_name: ${VERITABLE_PG_HOST}
+    image: postgres:16.2-alpine
+    restart: on-failure
+    ports:
+      - ${VERITABLE_PG_PORT}:5432
+    volumes:
+      - veritable-postgres-cloudagent-storage:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - nice-net
 volumes:
   pg-data:
   ipfs-data:
   ipfs-cluster-data:
   veritable-storage:
+  veritable-postgres-cloudagent-storage:
 
 networks:
   nice-net:

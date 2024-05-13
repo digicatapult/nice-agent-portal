@@ -28,7 +28,7 @@ services:
       - ISSUER_PORT
     env_file:
       - .env.${COMPOSE_PROJECT_NAME}.local
-    command: [sh, -c, 'npx prisma migrate deploy && npm start']
+    command: [sh, -c, 'npx prisma migrate deploy && node index.js']
     networks: ['nice-net', 'agent-net']
 
   veritable:
@@ -41,6 +41,8 @@ services:
       opa:
         condition: service_started
       postgres:
+        condition: service_healthy
+      postgres-veritable:
         condition: service_healthy
     volumes:
       - ./cloudagentConfig.json:/config.json
@@ -104,6 +106,7 @@ services:
       retries: 20
       start_period: 0s
     networks: ['agent-net']
+
   postgres-veritable:
     image: postgres:16.2-alpine
     restart: on-failure
@@ -112,6 +115,12 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: ['CMD-SHELL', 'PGUSER=postgres', 'pg_isready']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 0s
     networks:
       - agent-net
 volumes:

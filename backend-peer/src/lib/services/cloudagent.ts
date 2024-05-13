@@ -201,7 +201,7 @@ export class CloudagentManager {
     const responseBody = await res.json()
 
     if (res.status === 400) {
-      throw new BadRequest(responseBody)
+      throw new BadRequest(responseBody as string)
     }
 
     if (!res.ok) {

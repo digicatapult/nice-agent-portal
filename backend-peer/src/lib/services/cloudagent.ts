@@ -102,7 +102,10 @@ export class CloudagentManager {
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new InternalError('Unknown error from cloud agent', responseBody)
+      throw new InternalError(
+        'Unknown error from cloud agent',
+        responseBody as string
+      )
     }
 
     const agentInfo = responseBody
@@ -131,7 +134,10 @@ export class CloudagentManager {
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new InternalError('Unknown error in cloud agent', responseBody)
+      throw new InternalError(
+        'Unknown error in cloud agent',
+        responseBody as string
+      )
     }
     const implicitInvitationResponse =
       responseBody as ImplicitInvitationResponse
@@ -174,7 +180,10 @@ export class CloudagentManager {
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new InternalError('Unknown error in cloud agent', responseBody)
+      throw new InternalError(
+        'Unknown error in cloud agent',
+        responseBody as string
+      )
     }
 
     return responseBody as DidResolutionResultProps
@@ -196,7 +205,10 @@ export class CloudagentManager {
     }
 
     if (!res.ok) {
-      throw new InternalError('Unknown error in cloud agent', responseBody)
+      throw new InternalError(
+        'Unknown error in cloud agent',
+        responseBody as string
+      )
     }
 
     return responseBody as DidResolutionResultProps
@@ -218,7 +230,10 @@ export class CloudagentManager {
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new InternalError('Unknown error in cloud agent', responseBody)
+      throw new InternalError(
+        'Unknown error in cloud agent',
+        responseBody as string
+      )
     }
 
     return responseBody as ConnectionRecord
@@ -230,7 +245,10 @@ export class CloudagentManager {
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new InternalError('Unknown error in cloud agent', responseBody)
+      throw new InternalError(
+        'Unknown error in cloud agent',
+        responseBody as string
+      )
     }
 
     return responseBody as CredentialExchangeRecord[]
@@ -253,7 +271,10 @@ export class CloudagentManager {
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new InternalError('Unknown error in cloud agent', responseBody)
+      throw new InternalError(
+        'Unknown error in cloud agent',
+        responseBody as string
+      )
     }
 
     return responseBody as DidResolutionResultProps
@@ -269,7 +290,10 @@ export class CloudagentManager {
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new InternalError('Unknown error in cloud agent', responseBody)
+      throw new InternalError(
+        'Unknown error in cloud agent',
+        responseBody as string
+      )
     }
 
     return responseBody as ConnectionRecord[]
@@ -284,7 +308,10 @@ export class CloudagentManager {
     )
 
     if (!res.ok) {
-      throw new InternalError('Unknown error in cloud agent', await res.json())
+      throw new InternalError(
+        'Unknown error in cloud agent',
+        (await res.json()) as string
+      )
     }
   }
   sendMessage = async (connectionId: string, body: Message) => {
@@ -300,7 +327,10 @@ export class CloudagentManager {
     )
 
     if (!res.ok) {
-      throw new InternalError('Unknown error in cloud agent', await res.json())
+      throw new InternalError(
+        'Unknown error in cloud agent',
+        (await res.json()) as string
+      )
     }
   }
   getMessages = async (connectionId: string): Promise<BasicMessageRecord[]> => {
@@ -311,7 +341,10 @@ export class CloudagentManager {
     const responseBody = await res.json()
 
     if (!res.ok) {
-      throw new InternalError('Unknown error in cloud agent', responseBody)
+      throw new InternalError(
+        'Unknown error in cloud agent',
+        responseBody as string
+      )
     }
 
     return responseBody as BasicMessageRecord[]

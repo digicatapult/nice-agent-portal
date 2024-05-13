@@ -33,19 +33,12 @@ export class HttpResponse extends Error {
   public code: number
   public message: string
   public details: string
-  public stack: string
 
-  constructor({
-    code = 500,
-    message = 'Internal server error',
-    details = '',
-    stack = '',
-  }) {
+  constructor({ code = 500, message = 'Internal server error', details = '' }) {
     super(message)
     this.code = code
     this.message = message
     this.details = details
-    this.stack = stack
   }
 }
 
@@ -75,8 +68,8 @@ export class ServiceUnavailable
 }
 
 export class InternalError extends HttpResponse implements IInternalError {
-  constructor(message = 'internal server error', details = '', stack = '') {
-    super({ code: 500, message, details, stack })
+  constructor(message = 'internal server error', details = '') {
+    super({ code: 500, message, details })
   }
 }
 

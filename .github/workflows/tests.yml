@@ -112,6 +112,10 @@ jobs:
           done
       - name: Setup dependencies
         run: npm run compose:up:deps:test
+      - name: Sleep
+        uses: kibertoad/wait-action@1.0.1
+        with:
+          time: '10s'
       - name: Run integration tests
         run: npm run test:integration
       - name: Clean up dependencies

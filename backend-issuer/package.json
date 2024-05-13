@@ -10,7 +10,7 @@
     "build:tsoa": "tsoa spec-and-routes",
     "build:prisma": "prisma generate",
     "build": "npm run build:prisma && npm run build:tsoa && tsc",
-    "start": "node build/index.js",
+    "start": "node index.js",
     "dev": "concurrently \"NODE_ENV=dev nodemon | pino-pretty\" \"nodemon -x tsoa spec-and-routes --ignore src/routes.ts --ignore src/swagger.json\"",
     "test": "npm run build && npm run test:integration && npm run test:unit",
     "test:integration": "npm run db:reset -- --force && npm run db:dev && NODE_ENV=test mocha --config ./test/mocharc.json ./test/integration/**/*.test.ts",

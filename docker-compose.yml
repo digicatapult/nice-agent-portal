@@ -42,6 +42,8 @@ services:
         condition: service_started
       postgres:
         condition: service_healthy
+      postgres-veritable:
+        condition: service_healthy
     volumes:
       - ./cloudagentConfig.json:/config.json
       - veritable-filesystem:/root/.afj
@@ -104,6 +106,7 @@ services:
       retries: 20
       start_period: 0s
     networks: ['agent-net']
+
   postgres-veritable:
     image: postgres:16.2-alpine
     restart: on-failure
@@ -112,6 +115,13 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test:
+        ['CMD-SHELL', 'PGUSER=${DB_USERNAME}', pg_isready", '-d', '${DB_NAME}']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 0s
     networks:
       - agent-net
 volumes:

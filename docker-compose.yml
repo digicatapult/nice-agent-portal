@@ -116,8 +116,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     healthcheck:
-      test:
-        ['CMD-SHELL', 'PGUSER=${DB_USERNAME}', pg_isready", '-d', '${DB_NAME}']
+      test: ['CMD-SHELL', 'PGUSER=postgres', 'pg_isready']
       interval: 5s
       timeout: 5s
       retries: 20

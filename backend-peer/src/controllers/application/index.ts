@@ -6,7 +6,6 @@ import { CloudagentManager } from '../../lib/services/cloudagent.js'
 import type { MemberCreateWithSecret } from '../types.js'
 
 import { IssuerManager } from '../../lib/services/issuer.js'
-import { HttpResponse } from '../../lib/error-handler/index.js'
 import { logger } from '../../lib/logger.js'
 const log = logger.child({ context: 'HealthController' })
 
@@ -46,11 +45,7 @@ export class ApplicationController extends Controller {
       overwrite: true,
     }
 
-    const { didDocument } = await this.cloudagent.importDid(didImport)
-
-    if (!didDocument) {
-      throw new HttpResponse({ message: 'Failed to create DID document' })
-    }
+    await this.cloudagent.importDid(didImport)
 
     await this.issuer.submitApplication({
       ...member,

@@ -23,7 +23,8 @@ export class IssuerManager {
     })
     if (!res.ok) {
       throw new HttpResponse({
-        message: `Error submitting application to issuer agent. ${res.status} - ${await res.text()}`,
+        message: `Error submitting application to issuer agent`,
+        details: `${res.status} - ${await res.text()}`,
       })
     }
   }
@@ -43,7 +44,8 @@ export class IssuerManager {
 
     if (!res.ok) {
       throw new HttpResponse({
-        message: `Error confirmation application to issuer agent. ${res.status} - ${await res.text()}`,
+        message: `Error confirming application to issuer agent`,
+        details: `${res.status} - ${await res.text()}`,
       })
     }
   }

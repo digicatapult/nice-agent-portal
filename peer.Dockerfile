@@ -58,4 +58,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=5s --timeout=5s --retries=20 \
     CMD curl -f http://localhost:3000/api/health || exit 1
 
-CMD ["node", "index.js"]
+CMD ["npm", "start"]

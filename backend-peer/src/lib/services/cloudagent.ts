@@ -112,24 +112,15 @@ export class CloudagentManager {
     return agentInfo as AgentInfo
   }
 
-  receiveImplicitInvitation = async (
+  createConnection = async (
     did: string,
     waitUntilCompleted: boolean = false
   ) => {
-    const requestBody = {
-      did,
-      handshakeProtocols: ['https://didcomm.org/connections/1.x'],
-      autoAcceptConnection: true,
-    }
-
-    const res = await wrappedFetch(
-      `${this.url_prefix}/oob/receive-implicit-invitation`,
-      {
-        headers: { 'Content-Type': 'application/json' },
-        body: requestBody,
-        method: 'POST',
-      }
-    )
+    const res = await wrappedFetch(`${this.url_prefix}/connections`, {
+      headers: { 'Content-Type': 'application/json' },
+      body: { did },
+      method: 'POST',
+    })
 
     const responseBody = await res.json()
 

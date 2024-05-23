@@ -43,10 +43,7 @@ export class MessagesController extends Controller {
 
     if (connectionId === undefined) {
       //create a connection if one does not exist
-      const connectionRecord = await this.cloudagent.receiveImplicitInvitation(
-        did,
-        true
-      )
+      const connectionRecord = await this.cloudagent.createConnection(did, true)
       if (!connectionRecord) {
         throw new Error('Failed to create connection record.') // Handle the case where connectionRecord is undefined
       }

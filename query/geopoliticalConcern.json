@@ -3,34 +3,28 @@
     "attestation": {
       "signers": [
         "0xD8B04Fc7d03B0eFfC080028eEC3A5Ee239714B68",
-        "0x5C74B1F7eAc0Fb8a4Ce43F0d1202e3C47d71DcA6"
+        "0x1R2S3T4U5V6W7X8Y9Z0A1B2C3D4E5F6G7H8I9J0K1L"
       ],
       "location": {
-        "street": ["Vika 1"],
-        "zip": "0252",
-        "city": "Oslo",
-        "state": "Oslo Municipality",
-        "country": "Norway"
+        "zip": "75002",
+        "country": "France"
       }
     },
-    "tags": ["Certificate of Origin"],
-    "entities": ["0xD8B04Fc7d03B0eFfC080028eEC3A5Ee239714B68"]
+    "tags": ["Validation Contract"],
+    "entities": ["0x1R2S3T4U5V6W7X8Y9Z0A1B2C3D4E5F6G7H8I9J0K1L"]
   },
   {
     "attestation": {
       "signers": [
-        "0xD8B04Fc7d03B0eFfC080028eEC3A5Ee239714B68",
-        "0x5C74B1F7eAc0Fb8a4Ce43F0d1202e3C47d71DcA6"
+        "0x7N8O9P0Q1R2S3T4U5V6W7X8Y9Z0A1B2C3D4E5F6G7H",
+        "0x3J4K5L6M7N8O9P0Q1R2S3T4U5V6W7X8Y9Z0A1B2C3D"
       ],
       "location": {
-        "street": ["Vika 1"],
-        "zip": "0252",
-        "city": "Oslo",
-        "state": "Oslo Municipality",
-        "country": "Norway"
+        "zip": "01305-000",
+        "country": "Brazil"
       }
     },
-    "tags": ["Certificate of Analysis"],
-    "entities": ["0xD8B04Fc7d03B0eFfC080028eEC3A5Ee239714B68"]
+    "tags": ["Verification Contract"],
+    "entities": ["0x7N8O9P0Q1R2S3T4U5V6W7X8Y9Z0A1B2C3D4E5F6G7H"]
   }
 ]

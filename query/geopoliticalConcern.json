@@ -1,0 +1,36 @@
+[
+  {
+    "attestation": {
+      "signers": [
+        "0xD8B04Fc7d03B0eFfC080028eEC3A5Ee239714B68",
+        "0x5C74B1F7eAc0Fb8a4Ce43F0d1202e3C47d71DcA6"
+      ],
+      "location": {
+        "street": ["Vika 1"],
+        "zip": "0252",
+        "city": "Oslo",
+        "state": "Oslo Municipality",
+        "country": "Norway"
+      }
+    },
+    "tags": ["Certificate of Origin"],
+    "entities": ["0xD8B04Fc7d03B0eFfC080028eEC3A5Ee239714B68"]
+  },
+  {
+    "attestation": {
+      "signers": [
+        "0xD8B04Fc7d03B0eFfC080028eEC3A5Ee239714B68",
+        "0x5C74B1F7eAc0Fb8a4Ce43F0d1202e3C47d71DcA6"
+      ],
+      "location": {
+        "street": ["Vika 1"],
+        "zip": "0252",
+        "city": "Oslo",
+        "state": "Oslo Municipality",
+        "country": "Norway"
+      }
+    },
+    "tags": ["Certificate of Analysis"],
+    "entities": ["0xD8B04Fc7d03B0eFfC080028eEC3A5Ee239714B68"]
+  }
+]

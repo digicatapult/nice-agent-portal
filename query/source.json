@@ -1,0 +1,12 @@
+[
+  {
+    "attestation": {
+      "signers": [
+        "0xD8B04Fc7d03B0eFfC080028eEC3A5Ee239714B68",
+        "0x5C74B1F7eAc0Fb8a4Ce43F0d1202e3C47d71DcA6"
+      ]
+    },
+    "tags": ["Purchase Order"],
+    "entities": ["0xD8B04Fc7d03B0eFfC080028eEC3A5Ee239714B68"]
+  }
+]

@@ -37,7 +37,7 @@ export interface DrpcEvent {
   state: DrpcState
   threadId: string
   id: string
-  _tags: {}
+  _tags: object
 }
 export enum DrpcRole {
   Client = 'client',

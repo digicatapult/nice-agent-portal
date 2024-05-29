@@ -46,7 +46,6 @@ export class DrpcController extends Controller {
       payload: body,
     })
     const { drpcResponse } = body
-    console.log(drpcResponse)
 
     return drpcResponse
   }

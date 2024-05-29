@@ -18,6 +18,14 @@ const env = envalid.cleanEnv(process.env, {
     devDefault: 'localhost',
   }),
   CLOUDAGENT_PORT: envalid.port({ default: 3000, devDefault: 3010 }),
+  NICE_FETCH_AI_ADAPTER_HOST: envalid.host({
+    default: 'nice-fetch-ai-adapter',
+    devDefault: 'localhost',
+  }),
+  NICE_FETCH_AI_ADAPTER_PORT_HOST: envalid.port({
+    default: 8000,
+    devDefault: 8000,
+  }),
   DB_HOST: envalid.str({ default: 'postgres', devDefault: 'localhost' }),
   DB_PORT: envalid.port({ default: 5432, devDefault: 3021 }),
   DB_USERNAME: envalid.str({ devDefault: 'postgres' }),

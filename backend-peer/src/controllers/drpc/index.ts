@@ -4,6 +4,7 @@ import { injectable } from 'tsyringe'
 import { logger } from '../../lib/logger.js'
 import { DrpcRequestObject, DrpcResponseObject } from './types.js'
 import { FetchAiAdapterManager } from '../../lib/services/adapter.js'
+import axios from 'axios'
 
 const log = logger.child({ context: 'DrpcController' })
 
@@ -27,11 +28,9 @@ export class DrpcController extends Controller {
       payload: body,
     })
     const { drpcRequest } = body
-    await this.adapter.sendRequestToAdapter(drpcRequest)
+    const res = await this.adapter.sendRequestToAdapter(drpcRequest)
 
-    //do sth here
-
-    return 'sth'
+    return res.body
   }
   /**
    * @summary Receive response from external platform.
@@ -49,8 +48,26 @@ export class DrpcController extends Controller {
     })
     const { drpcResponse } = body
     console.log(drpcResponse)
-    //send response to postman
 
-    return 'sth'
+    try {
+      // Send response to Postman mock server
+      const postmanEndpoint =
+        'https://4cf5192a-bb86-449b-b1fe-9c816ddd4412.mock.pstmn.io/receive-response' // Replace with actual Postman mock server URL
+      const response = await axios.post(postmanEndpoint, drpcResponse)
+      log.debug({
+        msg: 'Successfully sent response to Postman',
+        controller: '/drpc',
+        response: response.data,
+      })
+    } catch (error) {
+      log.error({
+        msg: 'Failed to send response to Postman',
+        controller: '/drpc',
+        error: error,
+      })
+      return error
+    }
+
+    return 'success'
   }
 }

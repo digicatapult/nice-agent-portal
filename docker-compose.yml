@@ -57,7 +57,7 @@ services:
     command: --endpoint "http://${COMPOSE_PROJECT_NAME}-veritable:5002" "ws://${COMPOSE_PROJECT_NAME}-veritable:5003" --ipfs-origin http://ipfs:5001 --opa-origin http://opa:8181 --webhook-url "${PORTAL_BASE_URL}/api/webhooks" --auto-accept-connections true --auto-accept-credentials always --config /config.json --postgres-port ${VERITABLE_PG_PORT} --postgres-host ${VERITABLE_PG_HOST}
     networks: ['nice-net', 'agent-net']
 
-  nice-fetch-ai-adapter:
+  fetch-ai-adapter:
     container_name: ${COMPOSE_PROJECT_NAME}-nice-fetch-ai-adapter
     image: digicatapult/nice-fetch-ai-adapter:${NICE_FETCH_AI_ADAPTER-latest}
     restart: on-failure
@@ -65,8 +65,6 @@ services:
       - '${NICE_FETCH_AI_ADAPTER_PORT_HOST-8000}:8000'
     environment:
       - AFJ_REST_LOG_LEVEL=1
-    # or via command line arguments
-    # command: --endpoint "http://${COMPOSE_PROJECT_NAME}-nice-fetch-ai-adapter:5004" "ws://${COMPOSE_PROJECT_NAME}-nice-fetch-ai-adapter:5004"
     networks: ['nice-net', 'agent-net']
 
   ipfs:

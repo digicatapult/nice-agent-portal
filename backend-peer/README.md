@@ -18,6 +18,8 @@ Use a `.env` at root of this directory to set values for the following environme
 | DB_USERNAME                   |    Y     |          -          | The database username                                                                |
 | DB_PASSWORD                   |    Y     |          -          | The database password                                                                |
 | CONNECTION_REQUEST_TIMEOUT_MS |    N     |       '10000'       | Timeout to be used for establishing a connection.                                    |
+| CHAINVINE_HOST                |    N     |     `chainvine`     | The hostname / host of `chainvine-expanse` API                                       |
+| CHAINVINE_PORT                |    N     |       `3145`        | The port of `chainvine-expanse` API                                                  |
 
 ## Database
 

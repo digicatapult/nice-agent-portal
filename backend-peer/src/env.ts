@@ -33,6 +33,10 @@ const env = envalid.cleanEnv(process.env, {
   }),
   ISSUER_PORT: envalid.port({ default: 3000, devDefault: 3002 }),
   CONNECTION_REQUEST_TIMEOUT_MS: envalid.num({ default: 10000 }),
+  CHAINVINE_HOST: envalid.host({
+    default: 'chainvine',
+  }),
+  CHAINVINE_PORT: envalid.port({ default: 3145 }),
 })
 
 export type Env = typeof env

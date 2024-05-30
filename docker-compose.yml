@@ -123,6 +123,15 @@ services:
       start_period: 0s
     networks:
       - agent-net
+
+  chainvine:
+    container_name: ${COMPOSE_PROJECT_NAME}-chainvine
+    image: slafazan/chainvine-expanse:latest
+    restart: on-failure
+    ports:
+      - 3145:3145
+    networks: ['agent-net']
+
 volumes:
   pg-data:
   ipfs-data:

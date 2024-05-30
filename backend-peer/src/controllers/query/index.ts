@@ -42,12 +42,11 @@ export class QueryController extends Controller {
   @SuccessResponse(200)
   @Post('/receive')
   public async post(@Body() query: Query): Promise<QueryResponse> {
-    console.log(query)
     const documents = await this.chainvine.getDocuments()
-
     const entities = await this.chainvine.getEntities()
     const attestations = await this.chainvine.getAttestations()
     const locations = await this.chainvine.getLocations()
+
     const attestationsWithLocations = attestations.reduce(
       (acc: FullAttestation[], attestation) => {
         const location = locations.find(({ id }) => id === attestation.location)
@@ -62,8 +61,9 @@ export class QueryController extends Controller {
         const found = entities.find(({ id }) => id === entityId)
         return found ? [...acc, found] : acc
       }, []),
-      attestation: attestationsWithLocations.find(({ signers }) =>
-        signers.includes(document.entities[0])
+      attestation: attestationsWithLocations.find(
+        // attestation foreign key is missing - instead find any attestation signed by the first entity of the doc
+        ({ signers }) => signers.includes(document.entities[0])
       ),
     }))
 

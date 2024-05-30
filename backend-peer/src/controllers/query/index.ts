@@ -9,28 +9,23 @@ import {
   Location,
 } from '../../lib/services/chainvine.js'
 
-// type DeepPartial<T> = {
-//   [P in keyof T]?: DeepPartial<T[P]>
-// }
-
 interface FullAttestation extends Omit<Attestation, 'location'> {
-  location: Location | undefined
+  location: Location
 }
 
-interface FullDocument extends Omit<Document, 'entities' | 'attestation'> {
-  entities: (Entity | undefined)[]
-  attestation: FullAttestation | undefined
+interface FullDocument extends Omit<Document, 'attestation'> {
+  fullEntities: Entity[]
+  attestation?: FullAttestation
 }
 
 interface QueryResponse {
-  data: FullDocument[]
+  data: (FullDocument | undefined)[]
   errors?: string
   metadata: {
     numberFound: string
   }
 }
 
-//type Query = DeepPartial<FullDocument>[]
 type Query = Partial<Document>[]
 
 @Route('api/query')
@@ -53,50 +48,46 @@ export class QueryController extends Controller {
     const entities = await this.chainvine.getEntities()
     const attestations = await this.chainvine.getAttestations()
     const locations = await this.chainvine.getLocations()
-    const attestationsWithLocations = attestations.map((attestation) => ({
-      ...attestation,
-      location: locations.find(({ id }) => id === attestation.location),
-    }))
+    const attestationsWithLocations = attestations.reduce(
+      (acc: FullAttestation[], attestation) => {
+        const location = locations.find(({ id }) => id === attestation.location)
+        return location ? [...acc, { ...attestation, location }] : acc
+      },
+      []
+    )
 
     const fullDocs = documents.map((document) => ({
       ...document,
-      entities: document.entities.map((entityId) =>
-        entities.find(({ id }) => id === entityId)
-      ),
+      fullEntities: document.entities.reduce((acc: Entity[], entityId) => {
+        const found = entities.find(({ id }) => id === entityId)
+        return found ? [...acc, found] : acc
+      }, []),
       attestation: attestationsWithLocations.find(({ signers }) =>
         signers.includes(document.entities[0])
       ),
     }))
 
-    const findDocuments = (query: Query, documents: Document[]): Document[] => {
-      return query.reduce((result, q) => {
-        const filtered = documents.filter((doc) => {
-          for (const key in q) {
-            if (Object.prototype.hasOwnProperty.call(q, key)) {
-              if (doc[key] !== q[key]) {
-                return false
-              }
+    const matchingDocs = query
+      .map((queryDoc) =>
+        fullDocs.find((doc) =>
+          Object.keys(queryDoc).every((key) => {
+            const queryValue = queryDoc[key as keyof Document]
+            const docValue = doc[key as keyof Document]
+
+            if (Array.isArray(queryValue) && Array.isArray(docValue)) {
+              return queryValue.every((value) => docValue.includes(value))
             }
-          }
-          return true
-        })
-        return result.concat(filtered)
-      }, [])
-    }
-    const found = query.map((docToFind) =>
-      fullDocs.filter((doc) =>
-        docToFind.id
-          ? doc.id === docToFind.id
-          : true && doc.createdAt
-            ? doc.createdAt === docToFind.createdAt
-            : true
+
+            return docValue === queryValue
+          })
+        )
       )
-    )
+      .filter((doc) => doc !== undefined)
 
     return {
-      data: fullDocs,
+      data: matchingDocs,
       metadata: {
-        numberFound: `${documents.length}/${query.length}`,
+        numberFound: `${matchingDocs.length}/${query.length}`,
       },
     }
   }

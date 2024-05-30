@@ -14,7 +14,6 @@ export interface Document {
   tags: string[]
   url: string
   entities: Address[]
-  [key: string]: string | string[] | Address
 }
 
 interface AddressDetails {

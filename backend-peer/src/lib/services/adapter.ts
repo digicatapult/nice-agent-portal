@@ -1,4 +1,4 @@
-import { Env } from '../../env'
+import { Env } from '../../env.js'
 import { container, injectable, singleton } from 'tsyringe'
 import { DrpcRequestObject } from '../../controllers/drpc/types.js'
 import {

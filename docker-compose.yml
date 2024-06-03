@@ -26,6 +26,8 @@ services:
       - DATABASE_URL
       - ISSUER_HOST
       - ISSUER_PORT
+      - CHAINVINE_HOST
+      - CHAINVINE_PORT
     env_file:
       - .env.${COMPOSE_PROJECT_NAME}.local
     command: [sh, -c, 'npx prisma migrate deploy && npm start']
@@ -133,6 +135,15 @@ services:
       start_period: 0s
     networks:
       - agent-net
+
+  chainvine:
+    container_name: ${COMPOSE_PROJECT_NAME}-chainvine
+    image: slafazan/chainvine-expanse:latest
+    restart: on-failure
+    ports:
+      - '${CHAINVINE_PORT-3145}:3145'
+    networks: ['agent-net']
+
 volumes:
   pg-data:
   ipfs-data:

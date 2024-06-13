@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/nice-agent-portal-backend-peer",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "OpenAPI service to manage profiles for the NICE agent and communication with veritable-cloudagent",
   "main": "src/index.ts",
   "type": "module",
@@ -47,7 +47,7 @@
     "@types/swagger-ui-express": "^4.1.6",
     "@typescript-eslint/eslint-plugin": "^7.7.1",
     "@typescript-eslint/parser": "^7.7.1",
-    "c8": "^9.1.0",
+    "c8": "^10.1.2",
     "chai": "^5.1.0",
     "concurrently": "^8.2.2",
     "depcheck": "^1.4.7",

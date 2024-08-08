@@ -35,7 +35,7 @@ services:
 
   veritable:
     container_name: ${COMPOSE_PROJECT_NAME}-veritable
-    image: digicatapult/veritable-cloudagent:${VERITABLE_AGENT_VER-latest}
+    image: digicatapult/veritable-cloudagent:v0.8.2
     restart: on-failure
     depends_on:
       ipfs:

@@ -89,7 +89,6 @@ jobs:
         uses: digicatapult/check-version@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fail_on_same_version: false
 
   tests:
     name: Run tests

@@ -91,7 +91,7 @@ services:
 
   opa:
     container_name: ${COMPOSE_PROJECT_NAME}-opa
-    image: openpolicyagent/opa:0.65.0-static
+    image: openpolicyagent/opa:0.67.1-static
     restart: on-failure
     #ports:
     #  - '8181:8181'
@@ -100,7 +100,7 @@ services:
 
   postgres:
     container_name: ${COMPOSE_PROJECT_NAME}-postgres
-    image: postgres:16.3-alpine
+    image: postgres:16.4-alpine
     restart: on-failure
     ports:
       - ${DB_PORT_HOST}:5432
@@ -120,7 +120,7 @@ services:
     networks: ['agent-net']
 
   postgres-veritable:
-    image: postgres:16.3-alpine
+    image: postgres:16.4-alpine
     restart: on-failure
     volumes:
       - veritable-postgres:/var/lib/postgresql/data
